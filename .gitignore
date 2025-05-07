@@ -1,26 +1,24 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# ─────────── Vite / TypeScript ───────────
+node_modules/
+dist/                       # vite build 산출물
+*.tsbuildinfo               # incremental build 캐시 (tsBuildInfoFile)
 
-node_modules
-dist
-dist-ssr
-*.local
+# ─────────── 환경 변수 ───────────
+.env
+.env.*                      # .env.production 등 모든 변형
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# ─────────── 테스트 & 커버리지 ───────────
+coverage/                   # Vitest/Jest 커버리지 리포트
+*.lcov
+
+# ─────────── 에디터 & OS ───────────
+.vscode/
+.idea/
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
 
-*storybook.log
+# ─────────── Storybook (언젠가 도입 시) ───────────
+storybook-static/
+
+# ─────────── Husky 실행 파일 권한 변경 방지 ───────────
+.husky/_/                    # Husky 내부 스크립트 (자동 생성)
