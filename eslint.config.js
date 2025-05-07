@@ -6,12 +6,15 @@ import tseslint from 'typescript-eslint'
 import prettier from 'eslint-config-prettier' assert { type: 'json' }
 
 export default tseslint.config(
+  // ① 무시 폴더
   { ignores: ['dist'] },
+
+  // ② 기본 권장 규칙 (JS, TS)
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+
+  // ③ 프로젝트 전용 설정
   {
-    extends: [
-      js.configs.recommended, 
-      ...tseslint.configs.recommended,
-    ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -29,5 +32,7 @@ export default tseslint.config(
       ],
     },
   },
+
+  // ④ 마지막에 Prettier ― 스타일 규칙 off
   ...prettier
 )
