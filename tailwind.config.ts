@@ -10,7 +10,8 @@ export default <Partial<Config>>{
       brand: {
         50: '#FFF0EC',
         300: '#F2895C',
-        500: '#E85C28'      // 메인 오렌지
+        500: '#E85C28',      // 메인 오렌지
+        700: '#9F2C0B'       // 화살표 버튼
       }
     },
     borderRadius: {
