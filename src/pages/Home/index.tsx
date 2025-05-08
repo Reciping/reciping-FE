@@ -1,122 +1,137 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import Container from '../../components/Container'
 
 const Home = () => {
-  const navigate = useNavigate()
+  const [selectedFilter, setSelectedFilter] = useState('menu') // 기본 메뉴 필터
+  const [ads, setAds] = useState<string[]>([])
+  const [popularRecipes, setPopularRecipes] = useState<string[]>([])
 
-  // 🔽 검색 필터 상태 추가
-  const [selectedFilter, setSelectedFilter] = useState<string>('')
-  const handleFilterClick = (filter: string) => setSelectedFilter(filter)
-
-  // 🔽 광고 더미 데이터 상태
-  const [ads, setAds] = useState<{ imageUrl: string; link: string }[]>([])
+  // 광고 더미 데이터 불러오기
   useEffect(() => {
+    // 추후 실제 API 연동 예정
     setAds([
-      { imageUrl: '/ad1.png', link: 'https://example.com/1' },
-      { imageUrl: '/ad2.png', link: 'https://example.com/2' },
+      '/ads/ad1.png',
+      '/ads/ad2.png',
+      '/ads/ad3.png'
     ])
   }, [])
 
-  // 🔽 인기 레시피 더미
-  const [popularRecipes, setPopularRecipes] = useState<string[]>([])
+  // 인기 레시피 더미 데이터 불러오기
   useEffect(() => {
-    setPopularRecipes(['김치라면', '부대찌개', '청국장', '밤타리아누', '양념갈비'])
+    setPopularRecipes([
+      '김치라면',
+      '부대찌개',
+      '청국장',
+      '밤타리아누',
+      '양념갈비'
+    ])
   }, [])
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
-      {/* 🔶 최상단 메뉴바 */}
-      <div className="bg-[#F15A24] text-white flex justify-end px-6 py-2 text-sm gap-6">
-        <button>레시피 남기기</button>
-        <button>이벤트 확인하기</button>
-        <button>QnA</button>
-        <button>Profile</button>
-      </div>
-
-      {/* 🔶 제목 및 검색 필터 */}
-      <div className="flex flex-col items-center py-6">
-        <h1 className="text-4xl font-bold text-[#F15A24]">
-          <span className="inline-block w-4 h-4 rounded-full bg-[#F15A24] mr-2 align-middle"></span>
+    <div className="bg-[#FEEFEF] min-h-screen py-8">
+      <Container>
+        {/* 로고 타이틀 */}
+        <div className="text-4xl font-bold text-[#F15A24] mb-4">
+          <span className="bg-[#F15A24] text-white rounded-full w-4 h-4 inline-block mr-2" />
           reciping.
-        </h1>
-        <div className="text-sm mt-4">: 어떤 메뉴의 레시피가 궁금하니?</div>
+        </div>
 
-        {/* 🔶 필터 버튼 */}
-        <div className="flex gap-2 mt-4">
+        {/* 필터 버튼 */}
+        <div className="flex gap-2 text-sm mb-6">
           {['category', 'ingredient', 'menu'].map((filter) => (
             <button
               key={filter}
-              onClick={() => handleFilterClick(filter)}
-              className={`rounded-full px-4 py-1 text-sm ${
-                selectedFilter === filter ? 'bg-[#F15A24] text-white' : 'bg-[#FDD9B5]'
+              onClick={() => setSelectedFilter(filter)}
+              className={`rounded-full px-4 py-1 ${
+                selectedFilter === filter
+                  ? 'bg-[#F15A24] text-white'
+                  : 'bg-[#FDD9B5] text-[#F15A24]'
               }`}
             >
-              # {filter === 'category' ? '카테고리 필터' : filter === 'ingredient' ? '재료기반 검색' : '메뉴기반 검색'}
+              {filter === 'category' && '# 카테고리 필터'}
+              {filter === 'ingredient' && '# 재료기반 검색'}
+              {filter === 'menu' && '# 메뉴기반 검색'}
             </button>
           ))}
         </div>
 
-        {/* 🔶 검색창 */}
-        <input
-          type="text"
-          placeholder="Search"
-          className="mt-4 w-[300px] px-4 py-2 rounded-full bg-[#EABF9F] placeholder-white text-white"
-        />
-      </div>
-
-      {/* 🔶 이벤트 및 광고 섹션 */}
-      <div className="flex justify-center gap-6 px-6">
-        <div className="bg-white rounded-xl p-4 w-[300px] h-[180px] flex items-center justify-center font-bold text-center text-[#7B3F00]">
-          매일 자정!<br />선착순 10명 마켓컬리 상품권 증정<br />[이벤트 블럭]
+        {/* 검색창 */}
+        <div className="mb-6">
+          <input
+            placeholder="Search"
+            className="w-full bg-[#F8CBA6] text-white px-4 py-3 rounded-full placeholder-white"
+          />
         </div>
 
-        <div className="bg-white rounded-xl p-4 w-[600px] h-[180px] flex items-center justify-center overflow-x-auto gap-4">
-          {ads.map((ad, idx) => (
-            <a key={idx} href={ad.link} target="_blank" rel="noopener noreferrer">
-              <img src={ad.imageUrl} alt={`광고 ${idx}`} className="w-40 h-28 rounded-lg" />
-            </a>
-          ))}
-        </div>
-      </div>
+        {/* 광고 + 이벤트 */}
+        <div className="flex gap-4 mb-6">
+          {/* 이벤트 영역 */}
+          <div className="bg-white p-4 rounded-lg flex-1 text-sm font-semibold text-[#5C2E1E]">
+            <p className="mb-2">매일 자정!<br />선착순 10명!<br />마켓컬리 상품권 증정</p>
+            <button className="text-xs underline">확인하기 &gt;</button>
+          </div>
 
-      {/* 🔶 인기 레시피 및 AI 추천 */}
-      <div className="flex gap-6 mt-8 px-6">
-        <div className="bg-white rounded-xl p-4 w-[300px]">
-          <h2 className="font-bold mb-2">인기 급상승 레시피 🔥</h2>
+          {/* 광고 영역 */}
+          <div className="bg-white p-4 rounded-lg flex-1 flex items-center overflow-x-auto gap-4">
+            {ads.length === 0 ? (
+              <p>광고를 불러오는 중...</p>
+            ) : (
+              ads.map((src, idx) => (
+                <img key={idx} src={src} alt={`ad-${idx}`} className="h-24 rounded" />
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* 인기 레시피 */}
+        <div className="bg-white p-4 rounded-lg mb-6">
+          <h3 className="font-bold mb-2">인기 급상승 레시피 🔥</h3>
           <ol className="list-decimal pl-4">
-            {popularRecipes.map((item, idx) => (
-              <li key={idx}>{item}</li>
+            {popularRecipes.map((recipe, idx) => (
+              <li key={idx}>{recipe}</li>
             ))}
           </ol>
         </div>
 
-        <div className="bg-white rounded-xl p-4 flex-1">
-          <h2 className="font-bold mb-2">AI 추천 | 40대 여성이 좋아하는 reciping</h2>
-          <div className="flex gap-4 overflow-x-auto">
-            {['연어구이', '베트남식 밥', '고단백 정식', '탕수육'].map((label, idx) => (
-              <div key={idx} className="bg-[#FFF5EC] p-3 rounded-xl w-28 text-center">{label}</div>
-            ))}
+        {/* AI 추천 섹션 */}
+        <div className="flex flex-col lg:flex-row gap-6 mb-6">
+          {/* 왼쪽 - 재료기반 추천 */}
+          <div className="bg-white p-4 rounded-lg flex-1">
+            <h3 className="font-bold mb-2">
+              AI 추천 <span className="text-sm font-normal">| 최근 검색한 재료 기반</span>
+            </h3>
+            <p className="text-sm mb-2">
+              최근 <span className="text-[#F15A24] font-semibold">당근</span>을 재료로 검색하셨네요!<br />
+              유사 재료를 활용한 레시피를 추천해드릴게요.
+            </p>
+            <div className="flex gap-4 mt-2">
+              {['당근 라페 샌드위치', '당근 볶음밥', '당근 주스'].map((item, idx) => (
+                <div key={idx} className="bg-[#FFF5EC] p-3 rounded-xl w-28 text-center shrink-0">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 오른쪽 - 카테고리 기반 추천 */}
+          <div className="bg-white p-4 rounded-lg flex-1">
+            <h3 className="font-bold mb-2">
+              AI 추천 <span className="text-sm font-normal">| 자주 열람한 카테고리 기반</span>
+            </h3>
+            <p className="text-sm mb-2">
+              최근 <span className="text-[#F15A24] font-semibold">일식</span>을 자주 열람하셨네요!<br />
+              다른 유저들도 선호한 <span className="font-semibold">일식 레시피</span>를 추천해드릴게요 :-)
+            </p>
+            <div className="flex gap-4 mt-2">
+              {['가츠동', '연어덮밥', '규동'].map((item, idx) => (
+                <div key={idx} className="bg-[#FFF5EC] p-3 rounded-xl w-28 text-center shrink-0">
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* 🔶 최근 검색 및 사용자 기반 추천 */}
-      <div className="flex gap-6 mt-8 px-6 pb-10">
-        <div className="bg-white rounded-xl p-4 w-[300px]">
-          <h2 className="font-bold mb-2">📌 근래 당근을 가장 많이 검색하셨네요!</h2>
-          <p className="text-sm">*당근을 재료로 하는 인기 많은 레시피를 추천해드릴게요.</p>
-          <p className="text-sm mt-2">[ 당근 라페 샌드위치 ]</p>
-        </div>
-
-        <div className="bg-white rounded-xl p-4 flex-1">
-          <h2 className="font-bold mb-2">AI 추천 | 최근 일식을 자주 열람하셨네요!</h2>
-          <div className="flex gap-4 overflow-x-auto">
-            {['연어구이', '베트남식 밥', '고단백 정식', '탕수육'].map((label, idx) => (
-              <div key={idx} className="bg-[#FFF5EC] p-3 rounded-xl w-28 text-center">{label}</div>
-            ))}
-          </div>
-        </div>
-      </div>
+      </Container>
     </div>
   )
 }
