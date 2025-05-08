@@ -1,4 +1,3 @@
-// src/pages/Splash/index.tsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -12,13 +11,6 @@ import splash3 from '../../assets/splash3.png'
 
 const Splash = () => {
   const navigate = useNavigate()
-
-  // 슬라이드 종료 후 자동 이동
-  const handleSlideEnd = () => {
-    setTimeout(() => {
-      navigate('/login')
-    }, 500)
-  }
 
   return (
     <div className="w-full h-screen bg-[#F15A24] flex flex-col justify-between items-center px-4 py-6 relative text-white">
@@ -36,9 +28,6 @@ const Splash = () => {
         modules={[Pagination]}
         pagination={{ clickable: true }}
         loop={false}
-        onSlideChange={(swiper) => {
-          if (swiper.activeIndex === 2) handleSlideEnd()
-        }}
         className="flex-1 w-full mt-10"
       >
         <SwiperSlide>
@@ -60,6 +49,12 @@ const Splash = () => {
             <img src={splash3} alt="splash3" className="w-40 h-40 mb-6 mx-auto" />
             <p>회원들과 내 레시피를 공유하고</p>
             <p className="font-semibold mt-1">AI기반 개인 맞춤 추천 레시피를 받아봐요</p>
+            <button
+              onClick={() => navigate('/login')}
+              className="mt-6 px-6 py-2 bg-white text-[#F15A24] font-semibold rounded-full"
+            >
+              시작하기
+            </button>
           </div>
         </SwiperSlide>
       </Swiper>
