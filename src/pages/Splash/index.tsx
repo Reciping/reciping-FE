@@ -14,6 +14,11 @@ import splash3 from '../../assets/splash3.png'
 const Splash = () => {
   const navigate = useNavigate()
 
+  const handleStart = () => {
+    localStorage.setItem('hasSeenSplash', 'true')
+    navigate('/home')
+  }
+
   return (
     <div className="w-full h-screen bg-[#F15A24] flex flex-col justify-between items-center px-4 py-6 relative text-white">
       {/* 로고 + skip */}
@@ -39,6 +44,7 @@ const Splash = () => {
             <p>보다 쉽게 레시피를 검색하는</p>
           </div>
         </SwiperSlide>
+        
         <SwiperSlide>
           <div className="h-full flex flex-col justify-center items-center text-center">
             <img src={splash2} alt="splash2" className="w-40 h-40 mb-6 mx-auto" />
@@ -46,13 +52,14 @@ const Splash = () => {
             <p className="font-semibold mt-1">만들 수 있는 레시피를 추천해줘요</p>
           </div>
         </SwiperSlide>
+
         <SwiperSlide>
           <div className="h-full flex flex-col justify-center items-center text-center">
             <img src={splash3} alt="splash3" className="w-40 h-40 mb-6 mx-auto" />
             <p>회원들과 내 레시피를 공유하고</p>
             <p className="font-semibold mt-1">AI기반 개인 맞춤 추천 레시피를 받아봐요</p>
             <button
-              onClick={() => navigate('/login')}
+              onClick={handleStart}
               className="mt-6 px-6 py-2 bg-white text-[#F15A24] font-semibold rounded-full"
             >
               시작하기
