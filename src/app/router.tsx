@@ -1,12 +1,10 @@
-import React from 'react'
+// src/app/router.tsx
 import { createBrowserRouter } from 'react-router-dom'
-import Splash from '../pages/Splash'
-import LoginSelect from '../pages/LoginSelect'
-import SignIn from '../pages/SignIn'
-import SignUp from '../pages/SignUp'
+import { mainRoutes } from './routes/mainRoutes'
+import { authRoutes } from './routes/authRoutes'
+
+// ✅ splash 조건은 App.tsx에서 처리하고, router는 구조만 유지
 export const router = createBrowserRouter([
-  { path: '/', element: <Splash /> },
-  { path: '/login', element: <LoginSelect /> },
-  { path: '/signin', element: <SignIn /> },
-  { path: '/signup', element: <SignUp /> }
+  ...mainRoutes,
+  ...authRoutes,
 ])
