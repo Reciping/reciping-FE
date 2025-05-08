@@ -110,9 +110,7 @@ const Home = () => {
               </p>
               <div className="flex gap-4 mt-2">
                 {['당근 라페 샌드위치', '당근 볶음밥', '당근 주스'].map((item, idx) => (
-                  <div key={idx} className="bg-[#FFF5EC] p-3 rounded-xl w-28 text-center shrink-0">
-                    {item}
-                  </div>
+                  <RecipeCard key={idx} label={item} />
                 ))}
               </div>
             </div>
@@ -128,9 +126,7 @@ const Home = () => {
               </p>
               <div className="flex gap-4 mt-2">
                 {['가츠동', '연어덮밥', '규동'].map((item, idx) => (
-                  <div key={idx} className="bg-[#FFF5EC] p-3 rounded-xl w-28 text-center shrink-0">
-                    {item}
-                  </div>
+                  <RecipeCard key={idx} label={item} />
                 ))}
               </div>
             </div>
