@@ -22,3 +22,6 @@ storybook-static/
 
 # ─────────── Husky 실행 파일 권한 변경 방지 ───────────
 .husky/_/                    # Husky 내부 스크립트 (자동 생성)
+
+
+/dist/
