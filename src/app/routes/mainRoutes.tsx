@@ -2,6 +2,7 @@ import React from 'react'
 import Home from '../../pages/Home'
 import Splash from '../../pages/Splash'
 import SplashRedirect from '../../pages/SplashRedirect'
+import Write from '../../pages/Write'
 
 export const mainRoutes = [
   {
@@ -15,5 +16,9 @@ export const mainRoutes = [
   {
     path: '/home',
     element: <Home />,
+  },
+  {
+    path: '/write',
+    element: <Write />,
   },
 ]
