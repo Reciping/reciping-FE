@@ -1,9 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination } from 'swiper/modules'
+import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+
 
 import splash1 from '../../assets/splash1.png'
 import splash2 from '../../assets/splash2.png'
@@ -25,27 +27,27 @@ const Splash = () => {
 
       {/* 슬라이드 */}
       <Swiper
-        modules={[Pagination]}
+        modules={[Pagination, Navigation]}
         pagination={{ clickable: true }}
+        navigation={true}
         loop={false}
         className="flex-1 w-full mt-10"
       >
         <SwiperSlide>
-          <div className="flex flex-col items-center text-center">
+          <div className="h-full flex flex-col justify-center items-center text-center">
             <img src={splash1} alt="splash1" className="w-40 h-40 mb-6 mx-auto" />
             <p>보다 쉽게 레시피를 검색하는</p>
-            <p className="font-semibold mt-1">통합 레시피 검색 플랫폼</p>
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="flex flex-col items-center text-center">
+          <div className="h-full flex flex-col justify-center items-center text-center">
             <img src={splash2} alt="splash2" className="w-40 h-40 mb-6 mx-auto" />
             <p>냉장고에 있는 재료만 입력해도</p>
             <p className="font-semibold mt-1">만들 수 있는 레시피를 추천해줘요</p>
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="flex flex-col items-center text-center">
+          <div className="h-full flex flex-col justify-center items-center text-center">
             <img src={splash3} alt="splash3" className="w-40 h-40 mb-6 mx-auto" />
             <p>회원들과 내 레시피를 공유하고</p>
             <p className="font-semibold mt-1">AI기반 개인 맞춤 추천 레시피를 받아봐요</p>
