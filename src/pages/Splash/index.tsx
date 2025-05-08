@@ -1,97 +1,70 @@
-import { useState } from 'react'
+// src/pages/Splash/index.tsx
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import clsx from 'clsx'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 
-import slide1 from '@assets/splash1.png'
-import slide2 from '@assets/splash2.png'
-import slide3 from '@assets/splash3.png'
+import splash1 from '../../assets/splash1.png'
+import splash2 from '../../assets/splash2.png'
+import splash3 from '../../assets/splash3.png'
 
-const slides = [
-  {
-    image: slide1,
-    left: '보다 쉽게 레시피를 검색하는',
-    right: '통합 레시피 검색 플랫폼',
-  },
-  {
-    image: slide2,
-    left: '냉장고에 있는 재료만 입력해도',
-    right: '만들 수 있는 레시피를 추천해줘요',
-  },
-  {
-    image: slide3,
-    left: '회원들과 내 레시피를 공유하고',
-    right: 'AI 기반 개인 맞춤 레시피를 받아봐요',
-  },
-] as const
+const Splash = () => {
+  const navigate = useNavigate()
 
-export default function Splash() {
-  const [i, set] = useState(0)
-  const nav = useNavigate()
-  const next = () => (i < slides.length - 1 ? set(i + 1) : nav('/login'))
-  const back = () => set(k => Math.max(k - 1, 0))
+  // 슬라이드 종료 후 자동 이동
+  const handleSlideEnd = () => {
+    setTimeout(() => {
+      navigate('/login')
+    }, 500)
+  }
 
   return (
-    <div className="relative flex h-screen w-screen flex-col items-center justify-center bg-brand-50 text-white overflow-hidden">
+    <div className="w-full h-screen bg-[#F15A24] flex flex-col justify-between items-center px-4 py-6 relative text-white">
       {/* 로고 + skip */}
-      <header className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-2">
-        <span className="h-6 w-6 rounded-full bg-white" />
-        <h1 className="text-2xl font-bold text-brand-500">reciping.</h1>
-      </header>
-      <button onClick={() => nav('/login')} className="absolute top-6 right-6 text-sm text-brand-500">
-        skip
-      </button>
-
-      {/* 슬라이드 본문 */}
-      <div className="flex w-full max-w-5xl items-center justify-between px-12 select-none">
-        <p className="hidden md:block w-1/4 text-center text-lg text-brand-700 leading-snug">
-          {slides[i].left}
-        </p>
-
-        <img
-          src={slides[i].image}
-          alt=""
-          className="w-64 md:w-72 lg:w-80 object-contain rotate-3 shadow-xl"
-        />
-
-        <p className="hidden md:block w-1/4 text-center text-lg text-brand-700 leading-snug">
-          {slides[i].right}
-        </p>
+      <div className="flex justify-between items-center w-full">
+        <div className="text-3xl font-bold">
+          <span className="bg-white text-[#F15A24] rounded-full w-4 h-4 inline-block mr-2" />
+          reciping.
+        </div>
+        <button onClick={() => navigate('/login')} className="text-sm underline">skip</button>
       </div>
 
-      {/* 모바일 문구 */}
-      <div className="mt-6 flex flex-col gap-1 text-center text-base md:hidden text-brand-700">
-        <span>{slides[i].left}</span>
-        <span>{slides[i].right}</span>
-      </div>
-
-      {/* 인디케이터 */}
-      <div className="absolute bottom-20 flex gap-2">
-        {slides.map((_, idx) => (
-          <span
-            key={idx}
-            className={clsx(
-              'h-2 rounded-full transition-all duration-300',
-              idx === i ? 'w-8 bg-brand-700' : 'w-2 bg-white'
-            )}
-          />
-        ))}
-      </div>
-
-      {/* 화살표 */}
-      {i > 0 && (
-        <button
-          onClick={back}
-          className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 text-4xl font-bold text-brand-700"
-        >
-          &lt;
-        </button>
-      )}
-      <button
-        onClick={next}
-        className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 text-4xl font-bold text-brand-700"
+      {/* 슬라이드 */}
+      <Swiper
+        modules={[Pagination]}
+        pagination={{ clickable: true }}
+        loop={false}
+        onSlideChange={(swiper) => {
+          if (swiper.activeIndex === 2) handleSlideEnd()
+        }}
+        className="flex-1 w-full mt-10"
       >
-        &gt;
-      </button>
+        <SwiperSlide>
+          <div className="flex flex-col items-center text-center">
+            <img src={splash1} alt="splash1" className="w-40 h-40 mb-6 mx-auto" />
+            <p>보다 쉽게 레시피를 검색하는</p>
+            <p className="font-semibold mt-1">통합 레시피 검색 플랫폼</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide>
+          <div className="flex flex-col items-center text-center">
+            <img src={splash2} alt="splash2" className="w-40 h-40 mb-6 mx-auto" />
+            <p>냉장고에 있는 재료만 입력해도</p>
+            <p className="font-semibold mt-1">만들 수 있는 레시피를 추천해줘요</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide>
+          <div className="flex flex-col items-center text-center">
+            <img src={splash3} alt="splash3" className="w-40 h-40 mb-6 mx-auto" />
+            <p>회원들과 내 레시피를 공유하고</p>
+            <p className="font-semibold mt-1">AI기반 개인 맞춤 추천 레시피를 받아봐요</p>
+          </div>
+        </SwiperSlide>
+      </Swiper>
     </div>
   )
 }
+
+export default Splash

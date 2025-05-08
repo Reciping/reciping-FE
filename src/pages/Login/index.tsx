@@ -1,54 +1,19 @@
-import { useState } from 'react'
-import { Button, TextField } from '@components'
-import { useNavigate } from 'react-router-dom'
-import { api } from '@services/api'
+// src/pages/Login/index.tsx
+import React from 'react'
 
 const Login = () => {
-  const nav = useNavigate()
-  const [email, setEmail] = useState('')
-  const [pw, setPw] = useState('')
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await api.post('/auth/login', { email, pw })
-    nav('/')
-  }
-
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-brand-50 px-4">
-      <form
-        onSubmit={submit}
-        className="mx-auto w-full max-w-sm space-y-6 text-center"
-      >
-        <h2 className="text-lg font-semibold text-brand-500">
-          회원 정보를 입력하세요 : )
-        </h2>
-
-        <TextField
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <TextField
-          type="password"
-          placeholder="Password"
-          value={pw}
-          onChange={e => setPw(e.target.value)}
-        />
-
-        <Button type="submit">Sign in !</Button>
-      </form>
-
-      <footer className="absolute bottom-8 right-8 flex items-center gap-2 text-brand-500">
-        <span className="h-8 w-8 rounded-full bg-brand-500" />
-        <div>
-          <p className="text-2xl font-bold">reciping.</p>
-          <p className="text-xs text-brand-500/80">
-            AI 기반 통합 레시피 검색 플랫폼
-          </p>
-        </div>
-      </footer>
+    <div className="h-screen bg-[#F15A24] text-white flex flex-col justify-center items-center space-y-4">
+      <div className="text-4xl font-bold mb-6">
+        <span className="bg-white text-[#F15A24] rounded-full w-4 h-4 inline-block mr-2" />
+        reciping.
+      </div>
+      <button className="bg-white text-[#F15A24] font-semibold px-6 py-2 rounded-full">로그인하기</button>
+      <div className="text-sm mt-2">또는</div>
+      <p className="text-sm">아직 reciping 회원이 아니신가요?</p>
+      <p className="text-sm mb-2">회원가입하면 + 5000P !</p>
+      <button className="bg-white text-[#F15A24] px-6 py-2 rounded-full">회원가입</button>
+      <button className="underline text-sm mt-2">나중에 할게요</button>
     </div>
   )
 }
