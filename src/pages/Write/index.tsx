@@ -26,19 +26,34 @@ const Write = () => {
     setHashtags(e.target.value.split(',').map(tag => tag.trim())) // 해시태그 입력 시 쉼표로 구분
   }
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!title.trim() || !content.trim()) {
       alert('제목과 본문을 입력해주세요.')
       return
     }
-
-    const formData = new FormData()
-    formData.append('title', title)
-    formData.append('content', content)
-    if (file) formData.append('file', file)
-    hashtags.forEach(tag => formData.append('hashtags', tag))
-
-    console.log(formData)
+    try {
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('content', content)
+      if (file) formData.append('file', file)
+      hashtags.forEach(tag => formData.append('hashtags', tag))
+  
+      const token = localStorage.getItem('token')
+  
+      await axios.post('http://몰?루/recipes', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+  
+      alert('레시피가 성공적으로 등록되었습니다.')
+      navigate('/home')
+  
+    } catch (err) {
+      console.error(err)
+      alert('레시피 등록에 실패했습니다.')
+    }
   }
 
   return (
