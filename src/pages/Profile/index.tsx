@@ -21,7 +21,8 @@ const Profile = () => {
           {/* 뒤로가기 */}
           <button
             onClick={() => navigate(-1)}
-            className="mb-4 text-gray-600 hover:text-black text-lg"
+            className="mb-4 text-gray-600 hover:text-black text-lg p-2 rounded"
+            aria-label="뒤로가기"
           >
             ←
           </button>
@@ -46,7 +47,7 @@ const Profile = () => {
             <p className="text-xs">dosmarvis@gmail.com</p>
             <p className="text-xs">20대 / 남성 / 관심키워드: 자유로운</p>
           </div>
-          <div className="text-xs border px-2 py-1 rounded-full">프로필 수정</div>
+          <button onClick={() => navigate('/profile-edit')} className="text-xs border px-2 py-1 rounded-full">프로필 수정</button>
         </div>
 
         {/* 포인트 카드 */}
