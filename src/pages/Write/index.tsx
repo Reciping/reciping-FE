@@ -1,5 +1,6 @@
 import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Write = () => {
   const navigate = useNavigate()
