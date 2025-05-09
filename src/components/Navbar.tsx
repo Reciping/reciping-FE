@@ -8,19 +8,21 @@ const Navbar = () => {
   const isLoggedIn = !!token
 
   const handleWrite = () => {
-    if (isLoggedIn) {
-      navigate('/write')
-    } else {
-      alert('로그인 후 이용해주세요.')
-    }
+    navigate('/write')
+    // if (isLoggedIn) {
+    //   navigate('/write')
+    // } else {
+    //   alert('로그인 후 이용해주세요.')
+    // }
   }
 
   const handleProfile = () => {
-    if (isLoggedIn) {
-      navigate('/profile')
-    } else {
-      alert('로그인 후 이용해주세요.')
-    }
+    navigate('/profile')
+    // if (isLoggedIn) {
+    //   navigate('/profile')
+    // } else {
+    //   alert('로그인 후 이용해주세요.')
+    // }
   }
 
   return (

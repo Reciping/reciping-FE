@@ -3,7 +3,7 @@ import Home from '../../pages/Home'
 import Splash from '../../pages/Splash'
 import SplashRedirect from '../../pages/SplashRedirect'
 import Write from '../../pages/Write'
-
+import Profile from '../../pages/Profile'
 export const mainRoutes = [
   {
     path: '/',
@@ -20,5 +20,9 @@ export const mainRoutes = [
   {
     path: '/write',
     element: <Write />,
+  },
+  {
+    path: '/profile',
+    element: <Profile />,
   },
 ]
