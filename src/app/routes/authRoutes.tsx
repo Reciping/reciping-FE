@@ -1,19 +1,19 @@
-
 import LoginSelect from '../../pages/LoginSelect'
 import SignIn from '../../pages/SignIn'
 import SignUp from '../../pages/SignUp'
+import PublicRoute from '../../components/PublicRoute'
 
 export const authRoutes = [
   {
     path: '/login',
-    element: <LoginSelect />,
+    element: <PublicRoute><LoginSelect /></PublicRoute>,
   },
   {
     path: '/signin',
-    element: <SignIn />,
+    element: <PublicRoute><SignIn /></PublicRoute>,
   },
   {
     path: '/signup',
-    element: <SignUp />,
+    element: <PublicRoute><SignUp /></PublicRoute>,
   },
 ]
