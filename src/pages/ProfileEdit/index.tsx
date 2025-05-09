@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미지 경로
 import Navbar from '../../components/Navbar'
+import Footer from '../../components/Footer'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()
@@ -125,12 +126,7 @@ const ProfileEdit = () => {
                 </div>
             </div>
 
-            {/* 하단 reciping 로고 */}
-            <div className="mt-20 text-center text-[#F15A24] font-bold">
-                <span className="bg-[#F15A24] text-white rounded-full w-3 h-3 inline-block mr-2" />
-                reciping.
-                <p className="text-xs font-normal text-[#F15A24] mt-1">AI 기반 통합 레시피 검색 플랫폼</p>
-            </div>
+            <Footer />
         </div>
     )
 }
