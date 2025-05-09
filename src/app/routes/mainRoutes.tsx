@@ -2,11 +2,12 @@ import React from 'react'
 import Home from '../../pages/Home'
 import Splash from '../../pages/Splash'
 import SplashRedirect from '../../pages/SplashRedirect'
+import PrivateRoute from '../../components/PrivateRoute'
 
 export const mainRoutes = [
   {
     path: '/',
-    element: <SplashRedirect />, // ✅ '/'는 리디렉트 전용
+    element: <SplashRedirect />,
   },
   {
     path: '/splash',
@@ -14,6 +15,6 @@ export const mainRoutes = [
   },
   {
     path: '/home',
-    element: <Home />,
+    element: <PrivateRoute><Home /></PrivateRoute>,
   },
 ]
