@@ -3,6 +3,7 @@ import Home from '../../pages/Home'
 import Splash from '../../pages/Splash'
 import SplashRedirect from '../../pages/SplashRedirect'
 import PrivateRoute from '../../components/PrivateRoute'
+import Write from '../../pages/Write'
 
 export const mainRoutes = [
   {
@@ -16,5 +17,9 @@ export const mainRoutes = [
   {
     path: '/home',
     element: <PrivateRoute><Home /></PrivateRoute>,
+  },
+  {
+    path: '/write',
+    element: <Write />,
   },
 ]
