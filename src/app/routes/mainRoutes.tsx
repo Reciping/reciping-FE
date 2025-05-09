@@ -16,7 +16,7 @@ export const mainRoutes = [
   },
   {
     path: '/home',
-    element: <PrivateRoute><Home /></PrivateRoute>,
+    element: <Home />,
   },
   {
     path: '/write',
