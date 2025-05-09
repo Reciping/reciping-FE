@@ -27,6 +27,11 @@ const Write = () => {
   }
 
   const handlePublish = () => {
+    if (!title.trim() || !content.trim()) {
+      alert('제목과 본문을 입력해주세요.')
+      return
+    }
+
     const formData = new FormData()
     formData.append('title', title)
     formData.append('content', content)
