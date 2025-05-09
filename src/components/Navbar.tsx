@@ -4,8 +4,23 @@ import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
   const navigate = useNavigate()
 
+  const token = localStorage.getItem('token')
+  const isLoggedIn = !!token
+
   const handleWrite = () => {
-    navigate('/write')
+    if (isLoggedIn) {
+      navigate('/write')
+    } else {
+      alert('로그인 후 이용해주세요.')
+    }
+  }
+
+  const handleProfile = () => {
+    if (isLoggedIn) {
+      navigate('/profile')
+    } else {
+      alert('로그인 후 이용해주세요.')
+    }
   }
 
   return (
@@ -13,7 +28,7 @@ const Navbar = () => {
       <button onClick={handleWrite}>레시피 남기기</button>
       <button>이벤트 확인하기</button>
       <button>QnA</button>
-      <button className="flex items-center gap-1">
+      <button onClick={handleProfile} className="flex items-center gap-1">
         <span className="text-lg">👤</span> Profile
       </button>
     </div>
