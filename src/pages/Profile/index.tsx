@@ -1,29 +1,48 @@
+import logoutIcon from '../../assets/logout.png'
 import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
 
 const Profile = () => {
   const navigate = useNavigate()
 
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    alert('로그아웃 되었습니다.')
+    navigate('/login')
+  }
+
   return (
     <div className="bg-[#FEEFEF] min-h-screen">
       <Navbar />
 
       <div className="max-w-[700px] mx-auto mt-8 bg-white rounded-xl p-6 shadow-lg">
-        {/* 뒤로가기 */}
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-4 text-gray-600 hover:text-black text-lg"
-        >
-          ←
-        </button>
+        {/* ✅ 상단 바 (뒤로가기, 타이틀, 로그아웃) */}
+        <div className="flex justify-between items-center mb-6">
+          {/* 뒤로가기 */}
+          <button
+            onClick={() => navigate(-1)}
+            className="mb-4 text-gray-600 hover:text-black text-lg"
+          >
+            ←
+          </button>
 
-        {/* 제목 */}
-        <h2 className="text-center text-xl font-bold mb-6">My profile</h2>
+          {/* 제목 */}
+          <h2 className="text-center text-xl font-bold mb-6">My profile</h2>
+
+          {/* 로그아웃  버튼 */}
+          <button
+            onClick={handleLogout}
+            className="text-gray-600 hover:text-black p-2 rounded"
+            aria-label="로그아웃"
+          >
+            <img src={logoutIcon} alt="logout" className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* 프로필 카드 */}
         <div className="flex justify-between items-center mb-4 p-4 rounded-lg bg-gray-100">
           <div>
-            <p className="font-bold text-sm">종훈핑</p>
+            <p className="font-bold text-sm">구름핑</p>
             <p className="text-xs">dosmarvis@gmail.com</p>
             <p className="text-xs">20대 / 남성 / 관심키워드: 자유로운</p>
           </div>
@@ -32,7 +51,7 @@ const Profile = () => {
 
         {/* 포인트 카드 */}
         <div className="bg-[#FDF3E5] text-[#F15A24] font-bold p-4 rounded-lg text-center mb-6">
-          종훈핑의 포인트는? <br /> <span className="text-2xl">30000P</span>
+          구름핑의 포인트는? <br /> <span className="text-2xl">30000P</span>
         </div>
 
         {/* 탭 */}
@@ -46,7 +65,7 @@ const Profile = () => {
           {[1, 2, 3, 4, 5].map(i => (
             <div key={i} className="flex items-center justify-between bg-[#FAE7E7] px-4 py-3 rounded-md">
               <p className="text-sm font-semibold truncate">
-                {i % 2 === 0 ? '취준생을 요리하는 방법' : '구름팡 황금 레시피 만드는 법'}
+                {i % 2 === 0 ? '취준생을 요리하는 방법' : '구름핑 황금 레시피 만드는 법'}
               </p>
               <div className="text-xs text-gray-600">♥ {i * 2}</div>
             </div>
