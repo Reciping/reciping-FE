@@ -1,6 +1,9 @@
 import Navbar from '../../components/Navbar'
+import { useNavigate } from 'react-router-dom'
 
 const Write = () => {
+  const navigate = useNavigate()
+
   return (
     <div className="bg-[#FEEFEF] min-h-screen">
       {/* 상단 메뉴바 */}
@@ -9,7 +12,7 @@ const Write = () => {
       {/* 작성 폼 영역 */}
       <div className="max-w-[700px] mx-auto p-6 mt-6 bg-white rounded-xl shadow-md">
         {/* 뒤로가기 아이콘 또는 버튼 */}
-        <button className="mb-4 text-lg text-gray-600">{'←'}</button>
+        <button className="mb-4 text-lg text-gray-600" onClick={() => navigate(-1)}>{'←'}</button>
 
         {/* 제목 입력 */}
         <input
