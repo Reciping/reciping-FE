@@ -4,6 +4,7 @@ import Navbar from '../../components/Navbar'
 import RecipeCard from '../../components/RecipeCard'
 import CategoryFilter from '../../components/CategoryFilter'
 import { CategoryFilters } from '../../components/CategoryFilter.types.ts'
+import Footer from '../../components/Footer'
 
 const Home = () => {
   const [selectedFilter, setSelectedFilter] = useState('menu') // 기본 메뉴 필터
@@ -187,6 +188,7 @@ const Home = () => {
           </div>
         </Container>
       </div>
+      <Footer />
     </div>
   )
 }
