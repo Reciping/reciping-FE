@@ -84,26 +84,27 @@ const Home = () => {
               e.preventDefault()
               handleSearch()
             }}
-            className="relative flex items-center w-full mb-6"
+            className="relative w-full mb-6"
           >
             {/* 검색 input */}
             <input
               type="text"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
-              placeholder="검색어를 입력해주세요"
-              className="w-full border-2 border-green-500 rounded-full px-4 py-3 pr-12 text-white placeholder-white"
+              placeholder="search"
+              //className="w-full bg-[#F8CBA6] text-white px-4 py-3 rounded-full placeholder-white"
+              className="w-full bg-[#F8CBA6] text-white px-4 py-3 pr-12 rounded-full placeholder-white"
             />
 
             {/* 돋보기 버튼 (submit) */}
             <button
               type="submit"
-              className="absolute right-4"
+              className="absolute right-4 top-1/2 -translate-y-1/2"
               aria-label="검색"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-green-500"
+                className="h-5 w-5 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
