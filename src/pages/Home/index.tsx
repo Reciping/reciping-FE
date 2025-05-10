@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import Container from '../../components/Container'
 import Navbar from '../../components/Navbar'
 import RecipeCard from '../../components/RecipeCard'
-import CategoryFilter, { CategoryFilters } from '../../components/CategoryFilter'
+import CategoryFilter from '../../components/CategoryFilter'
+import { CategoryFilters } from '../../components/CategoryFilter.types.ts'
 
 const Home = () => {
   const [selectedFilter, setSelectedFilter] = useState('menu') // 기본 메뉴 필터
