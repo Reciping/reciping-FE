@@ -2,11 +2,18 @@ import { useEffect, useState } from 'react'
 import Container from '../../components/Container'
 import Navbar from '../../components/Navbar'
 import RecipeCard from '../../components/RecipeCard'
+import CategoryFilter, { CategoryFilters } from '../../components/CategoryFilter'
 
 const Home = () => {
   const [selectedFilter, setSelectedFilter] = useState('menu') // 기본 메뉴 필터
   const [ads, setAds] = useState<string[]>([])
   const [popularRecipes, setPopularRecipes] = useState<string[]>([])
+  const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>({
+    type: '',
+    situation: '',
+    ingredient: '',
+    method: ''
+  })
 
   // 광고 더미 데이터 불러오기
   useEffect(() => {
