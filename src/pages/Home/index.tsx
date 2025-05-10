@@ -2,11 +2,32 @@ import { useEffect, useState } from 'react'
 import Container from '../../components/Container'
 import Navbar from '../../components/Navbar'
 import RecipeCard from '../../components/RecipeCard'
+import CategoryFilter from '../../components/CategoryFilter'
+import { CategoryFilters } from '../../components/CategoryFilter.types.ts'
 
 const Home = () => {
   const [selectedFilter, setSelectedFilter] = useState('menu') // 기본 메뉴 필터
   const [ads, setAds] = useState<string[]>([])
   const [popularRecipes, setPopularRecipes] = useState<string[]>([])
+  const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>({
+    type: '',
+    situation: '',
+    ingredient: '',
+    method: ''
+  })
+  const [searchKeyword, setSearchKeyword] = useState('')
+
+  // 검색 요청 함수
+  const handleSearch = () => {
+    const query = {
+      keyword: searchKeyword,
+      ...categoryFilters
+    }
+  
+    console.log('검색 요청:', query)
+  
+    // TODO: 실제 API 호출 또는 라우팅
+  }
 
   // 광고 더미 데이터 불러오기
   useEffect(() => {
@@ -35,7 +56,7 @@ const Home = () => {
       <div className="py-8">
         <Container>
           {/* 로고 타이틀 */}
-          <div className="text-4xl font-bold text-[#F15A24] mb-4">
+          <div className="t`ext-4xl font-bold text-[#F15A24] mb-4">
             <span className="bg-[#F15A24] text-white rounded-full w-4 h-4 inline-block mr-2" />
             reciping.
           </div>
@@ -59,13 +80,45 @@ const Home = () => {
             ))}
           </div>
 
-          {/* 검색창 */}
-          <div className="mb-6">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleSearch()
+            }}
+            className="relative w-full mb-6"
+          >
+            {/* 검색 input */}
             <input
-              placeholder="Search"
-              className="w-full bg-[#F8CBA6] text-white px-4 py-3 rounded-full placeholder-white"
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              placeholder="search"
+              //className="w-full bg-[#F8CBA6] text-white px-4 py-3 rounded-full placeholder-white"
+              className="w-full bg-[#F8CBA6] text-white px-4 py-3 pr-12 rounded-full placeholder-white"
             />
-          </div>
+
+            {/* 돋보기 버튼 (submit) */}
+            <button
+              type="submit"
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+              aria-label="검색"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
+              </svg>
+            </button>
+          </form>
+          
+          {/* 카테고리 필터 */}
+          {selectedFilter === 'category' && (
+            <CategoryFilter value={categoryFilters} onChange={setCategoryFilters} />
+          )}
 
           {/* 광고 + 이벤트 */}
           <div className="flex gap-4 mb-6">
