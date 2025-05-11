@@ -1,54 +1,39 @@
 import { useEffect, useState } from 'react'
 import Container from '../../components/Container'
 import Navbar from '../../components/Navbar'
+import LogoTitle from '../../components/LogoTitle'
+import SearchPanel from '../../components/SearchPanel'
 import RecipeCard from '../../components/RecipeCard'
-import CategoryFilter from '../../components/CategoryFilter'
+import Footer from '../../components/Footer'
 import { CategoryFilters } from '../../components/CategoryFilter.types.ts'
 
 const Home = () => {
-  const [selectedFilter, setSelectedFilter] = useState('menu') // 기본 메뉴 필터
+  const [selectedMode, setSelectedMode] = useState<'category'|'ingredient'|'menu'>('menu')
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>({
+    type: '전체',
+    situation: '전체',
+    ingredient: '전체',
+    method: '전체'
+  })
   const [ads, setAds] = useState<string[]>([])
   const [popularRecipes, setPopularRecipes] = useState<string[]>([])
-  const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>({
-    type: '',
-    situation: '',
-    ingredient: '',
-    method: ''
-  })
-  const [searchKeyword, setSearchKeyword] = useState('')
 
-  // 검색 요청 함수
+  // 🔹 더미 데이터
+  useEffect(() => { setAds(['/ads/ad1.png','/ads/ad2.png','/ads/ad3.png']) }, [])
+  useEffect(() => { setPopularRecipes(['김치라면','부대찌개','청국장','밤타리아누','양념갈비']) }, [])
+
+  // 🔹 검색 호출
   const handleSearch = () => {
     const query = {
       keyword: searchKeyword,
+      mode: selectedMode,
       ...categoryFilters
     }
-  
     console.log('검색 요청:', query)
-  
-    // TODO: 실제 API 호출 또는 라우팅
+    // TODO: API 호출 or 페이지 이동
   }
 
-  // 광고 더미 데이터 불러오기
-  useEffect(() => {
-    // 추후 실제 API 연동 예정
-    setAds([
-      '/ads/ad1.png',
-      '/ads/ad2.png',
-      '/ads/ad3.png'
-    ])
-  }, [])
-
-  // 인기 레시피 더미 데이터 불러오기
-  useEffect(() => {
-    setPopularRecipes([
-      '김치라면',
-      '부대찌개',
-      '청국장',
-      '밤타리아누',
-      '양념갈비'
-    ])
-  }, [])
 
   return (
     <div className="bg-[#FEEFEF] min-h-screen">
@@ -56,69 +41,18 @@ const Home = () => {
       <div className="py-8">
         <Container>
           {/* 로고 타이틀 */}
-          <div className="t`ext-4xl font-bold text-[#F15A24] mb-4">
-            <span className="bg-[#F15A24] text-white rounded-full w-4 h-4 inline-block mr-2" />
-            reciping.
-          </div>
+          <LogoTitle />
 
-          {/* 필터 버튼 */}
-          <div className="flex gap-2 text-sm mb-6">
-            {['category', 'ingredient', 'menu'].map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setSelectedFilter(filter)}
-                className={`rounded-full px-4 py-1 ${
-                  selectedFilter === filter
-                    ? 'bg-[#F15A24] text-white'
-                    : 'bg-[#FDD9B5] text-[#F15A24]'
-                }`}
-              >
-                {filter === 'category' && '# 카테고리 필터'}
-                {filter === 'ingredient' && '# 재료기반 검색'}
-                {filter === 'menu' && '# 메뉴기반 검색'}
-              </button>
-            ))}
-          </div>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              handleSearch()
-            }}
-            className="relative w-full mb-6"
-          >
-            {/* 검색 input */}
-            <input
-              type="text"
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-              placeholder="search"
-              //className="w-full bg-[#F8CBA6] text-white px-4 py-3 rounded-full placeholder-white"
-              className="w-full bg-[#F8CBA6] text-white px-4 py-3 pr-12 rounded-full placeholder-white"
-            />
-
-            {/* 돋보기 버튼 (submit) */}
-            <button
-              type="submit"
-              className="absolute right-4 top-1/2 -translate-y-1/2"
-              aria-label="검색"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
-              </svg>
-            </button>
-          </form>
-          
-          {/* 카테고리 필터 */}
-          {selectedFilter === 'category' && (
-            <CategoryFilter value={categoryFilters} onChange={setCategoryFilters} />
-          )}
+          {/* ② 검색·필터 패널 */}
+          <SearchPanel
+            selectedMode={selectedMode}
+            onModeChange={setSelectedMode}
+            searchKeyword={searchKeyword}
+            onSearchKeywordChange={setSearchKeyword}
+            categoryFilters={categoryFilters}
+            onCategoryFiltersChange={setCategoryFilters}
+            onSearch={handleSearch}
+          />
 
           {/* 광고 + 이벤트 */}
           <div className="flex gap-4 mb-6">
@@ -187,6 +121,7 @@ const Home = () => {
           </div>
         </Container>
       </div>
+      <Footer />
     </div>
   )
 }
