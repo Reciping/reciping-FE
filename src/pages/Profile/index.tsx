@@ -2,6 +2,8 @@ import logoutIcon from '../../assets/logout.png'
 import Footer from '../../components/Footer'
 import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../../components/PageLayout'
+import ContentWrapper from '../../components/ContentWrapper'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -13,10 +15,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <PageLayout>
       <Navbar />
 
-      <div className="max-w-[700px] mx-auto mt-8 bg-white rounded-xl p-6 shadow-lg">
+      <ContentWrapper>
         {/* ✅ 상단 바 (뒤로가기, 타이틀, 로그아웃) */}
         <div className="flex justify-between items-center mb-6">
           {/* 뒤로가기 */}
@@ -76,11 +78,9 @@ const Profile = () => {
 
         {/* 페이지네이션 (예시) */}
         <div className="mt-6 text-center text-xs text-gray-500">〈 1 / 3 〉</div>
-      </div>
-
-      {/* 푸터 */}
+      </ContentWrapper>
       <Footer />
-    </div>
+    </PageLayout>
   )
 }
 

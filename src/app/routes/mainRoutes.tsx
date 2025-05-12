@@ -5,6 +5,9 @@ import SplashRedirect from '../../pages/SplashRedirect'
 import Write from '../../pages/Write'
 import Profile from '../../pages/Profile'
 import SearchResults from '../../pages/SearchResults'
+import Event from '../../pages/Event'
+
+
 export const mainRoutes = [
   {
     path: '/',
@@ -29,7 +32,12 @@ export const mainRoutes = [
   {
     path: '/profile',
     element: <Profile />,
-  },{
+  },
+  {
+    path: '/event',
+    element: <Event />,
+  },
+  {
     path: '*',
     element: <div className="p-8 text-center text-red-500">페이지를 찾을 수 없습니다.</div>
   },

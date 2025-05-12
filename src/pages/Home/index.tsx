@@ -7,6 +7,7 @@ import SearchPanel from '../../components/SearchPanel'
 import RecipeCard from '../../components/RecipeCard'
 import Footer from '../../components/Footer'
 import { CategoryFilters } from '../../components/CategoryFilter.types.ts'
+import PageLayout from '../../components/PageLayout'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -49,7 +50,7 @@ const Home = () => {
 
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <PageLayout>
       <Navbar />
 
       <div className="py-8">
@@ -130,7 +131,7 @@ const Home = () => {
         </Container>
       </div>
       <Footer />
-    </div>
+    </PageLayout>
   )
 }
 
