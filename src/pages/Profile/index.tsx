@@ -2,6 +2,7 @@ import logoutIcon from '../../assets/logout.png'
 import Footer from '../../components/Footer'
 import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../../components/PageLayout'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -13,7 +14,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <PageLayout>
       <Navbar />
 
       <div className="max-w-[700px] mx-auto mt-8 bg-white rounded-xl p-6 shadow-lg">
@@ -80,7 +81,7 @@ const Profile = () => {
 
       {/* 푸터 */}
       <Footer />
-    </div>
+    </PageLayout>
   )
 }
 

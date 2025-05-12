@@ -12,6 +12,7 @@ import ABTestBlock from '../../components/ABTestBlock'
 import NaverSearchIframe from '../../components/NaverSearchIframe'
 
 import { searchRecipes, SearchParams, SearchResponse } from '../../api/recipesApi'
+import PageLayout from '../../components/PageLayout'
 
 const SearchResults = () => {
   const [searchParams]= useSearchParams()
@@ -69,7 +70,7 @@ const SearchResults = () => {
   }
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <PageLayout>
       <Navbar />
 
       <div className="py-8">
@@ -115,6 +116,7 @@ const SearchResults = () => {
         </div>
       </div>
     </div>
+    </PageLayout>
   )
 }
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미지 경로
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import PageLayout from '../../components/PageLayout'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()
@@ -30,7 +31,7 @@ const ProfileEdit = () => {
     }
 
     return (
-        <div className="bg-[#FEEFEF] min-h-screen">
+        <PageLayout>
             <Navbar />
 
             <div className="max-w-[700px] mx-auto mt-8 bg-white rounded-xl p-6 shadow-lg">
@@ -127,7 +128,7 @@ const ProfileEdit = () => {
             </div>
 
             <Footer />
-        </div>
+        </PageLayout>
     )
 }
 

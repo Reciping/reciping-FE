@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미지
+import PageLayout from '../../components/PageLayout'
 
 // 더미 이벤트 데이터
 const DUMMY_EVENTS = [
@@ -16,7 +17,7 @@ const EventPage: React.FC = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <PageLayout>
       {/* 상단 네비게이션 바 */}
       <Navbar />
 
@@ -69,7 +70,7 @@ const EventPage: React.FC = () => {
           className="absolute -bottom-2 -right-4 w-40"
         />
       </div>
-    </div>
+    </PageLayout>
   )
 }
 

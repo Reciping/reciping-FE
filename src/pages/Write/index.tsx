@@ -2,6 +2,7 @@ import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
+import PageLayout from '../../components/PageLayout'
 
 const Write = () => {
   const navigate = useNavigate()
@@ -57,7 +58,7 @@ const Write = () => {
   }
 
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <PageLayout>
       {/* 상단 메뉴바 */}
       <Navbar />
 
@@ -108,13 +109,7 @@ const Write = () => {
         </div>
       </div>
 
-      {/* 푸터 로고 (선택 사항) */}
-      <div className="mt-12 text-center text-[#F15A24] font-bold">
-        <span className="bg-[#F15A24] text-white rounded-full w-3 h-3 inline-block mr-2" />
-        reciping.
-        <p className="text-xs font-normal text-[#F15A24] mt-1">AI 기반 통합 레시피 검색 플랫폼</p>
-      </div>
-    </div>
+    </PageLayout>
   )
 }
 
