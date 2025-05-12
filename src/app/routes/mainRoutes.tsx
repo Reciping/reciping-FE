@@ -29,5 +29,8 @@ export const mainRoutes = [
   {
     path: '/profile',
     element: <Profile />,
+  },{
+    path: '*',
+    element: <div className="p-8 text-center text-red-500">페이지를 찾을 수 없습니다.</div>
   },
 ]
