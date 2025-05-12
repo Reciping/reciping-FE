@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 import PageLayout from '../../components/PageLayout'
+import Footer from '../../components/Footer'
 
 const Write = () => {
   const navigate = useNavigate()
@@ -108,7 +109,7 @@ const Write = () => {
           </button>
         </div>
       </div>
-
+      <Footer />
     </PageLayout>
   )
 }
