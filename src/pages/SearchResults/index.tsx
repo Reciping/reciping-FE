@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import LogoTitle from '../../components/LogoTitle'
 import SearchPanel from '../../components/SearchPanel'
@@ -19,11 +19,14 @@ const SearchResults = () => {
   const initialKeyword = searchParams.get('keyword') || ''
 
   // 2) 피드백용 상태는 최초 쿼리로만 세팅 (이후 절대 바뀌지 않음)
-  const [feedbackQuery] = useState(initialKeyword)
+  const [feedbackQuery, setFeedbackQuery] = useState(initialKeyword)
 
   // 3) 검색창의 현재 입력값은 별도 상태로 관리
   const [searchKeyword, setSearchKeyword] = useState(initialKeyword)
 
+  useEffect(() => {
+    setFeedbackQuery(initialKeyword)
+  }, [initialKeyword])
 
   const [mode, setMode] = useState<'category'|'ingredient'|'menu'>('menu')
   const [catFilters, setCatFilters] = useState<CategoryFilters>({
