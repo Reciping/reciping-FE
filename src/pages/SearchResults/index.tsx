@@ -14,6 +14,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 const SearchResults = () => {
   const navigate = useNavigate()
   const [searchParams]= useSearchParams()
+  const currentPage = parseInt(searchParams.get('page') || '1', 10)
 
   // 1) URL에서 받은 최초 쿼리
   const initialKeyword = searchParams.get('keyword') || ''
@@ -99,7 +100,24 @@ const SearchResults = () => {
           </div>
 
           {/* 회원 레시피 리스트 */}
-          <UserRecipeList />
+          <UserRecipeList page={currentPage} />
+
+          {/* 페이지 네비게이션 버튼 */}
+          <div className="flex justify-center gap-4 my-4">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage <= 1}
+              className="px-4 py-2 bg-[#FDD9B5] rounded-full text-[#5C2E1E] disabled:opacity-40"
+            >
+              이전
+            </button>
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              className="px-4 py-2 bg-[#FDD9B5] rounded-full text-[#5C2E1E]"
+            >
+              다음
+            </button>
+          </div>
 
           {/* A/B 테스트용 이벤트+광고 */}
           <ABTestBlock />
