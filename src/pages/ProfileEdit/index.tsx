@@ -4,6 +4,7 @@ import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미�
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import PageLayout from '../../components/PageLayout'
+import ContentWrapper from '../../components/ContentWrapper'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()
@@ -34,7 +35,7 @@ const ProfileEdit = () => {
         <PageLayout>
             <Navbar />
 
-            <div className="max-w-[700px] mx-auto mt-8 bg-white rounded-xl p-6 shadow-lg">
+            <ContentWrapper>
                 {/* ✅ 상단 바 (뒤로가기, 타이틀, 로그아웃) */}
                 <div className="flex justify-between items-center mb-6">
                     {/* 뒤로가기 */}
@@ -125,7 +126,7 @@ const ProfileEdit = () => {
                     {/* 캐릭터 이미지 */}
                     <img src={recipingFront} alt="recipingFront" className="absolute -bottom-10 right-0 w-40" />
                 </div>
-            </div>
+            </ContentWrapper>
 
             <Footer />
         </PageLayout>

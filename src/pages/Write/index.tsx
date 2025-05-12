@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 import PageLayout from '../../components/PageLayout'
+import ContentWrapper from '../../components/ContentWrapper'
 import Footer from '../../components/Footer'
 
 const Write = () => {
@@ -64,7 +65,7 @@ const Write = () => {
       <Navbar />
 
       {/* 작성 폼 영역 */}
-      <div className="max-w-[700px] mx-auto p-6 mt-6 bg-white rounded-xl shadow-md">
+      <ContentWrapper>
         {/* 뒤로가기 아이콘 또는 버튼 */}
         <button className="mb-4 text-lg text-gray-600 hover:text-black cursor-pointer" onClick={() => navigate(-1)} aria-label="뒤로가기">{'←'}</button>
 
@@ -108,7 +109,7 @@ const Write = () => {
             발행하기
           </button>
         </div>
-      </div>
+      </ContentWrapper>
       <Footer />
     </PageLayout>
   )

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미지
 import PageLayout from '../../components/PageLayout'
+import ContentWrapper from '../../components/ContentWrapper'
 
 // 더미 이벤트 데이터
 const DUMMY_EVENTS = [
@@ -22,7 +23,7 @@ const EventPage: React.FC = () => {
       <Navbar />
 
       {/* 컨텐츠 영역 */}
-      <div className="max-w-[700px] mx-auto mt-8 mb-8 relative">
+      <ContentWrapper>
         {/* 카드 박스 */}
         <div className="bg-white rounded-2xl p-6 shadow-md">
           {/* 상단 바: 뒤로가기 + 제목 */}
@@ -69,7 +70,7 @@ const EventPage: React.FC = () => {
           alt="reciping 캐릭터"
           className="absolute -bottom-2 -right-4 w-40"
         />
-      </div>
+      </ContentWrapper>
     </PageLayout>
   )
 }
