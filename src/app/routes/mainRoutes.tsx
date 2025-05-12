@@ -4,6 +4,7 @@ import Splash from '../../pages/Splash'
 import SplashRedirect from '../../pages/SplashRedirect'
 import Write from '../../pages/Write'
 import Profile from '../../pages/Profile'
+import SearchResults from '../../pages/SearchResults'
 export const mainRoutes = [
   {
     path: '/',
@@ -16,6 +17,10 @@ export const mainRoutes = [
   {
     path: '/home',
     element: <Home />,
+  },
+  {
+    path: '/search',
+    element: <SearchResults />,
   },
   {
     path: '/write',
