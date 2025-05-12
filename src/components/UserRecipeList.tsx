@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 interface Recipe {
   id: number
   title: string
-  img: string
-  likes: number
+  image_url: string
+  like: number
+  created_at: string
 }
 
 interface UserRecipeListProps {
@@ -12,39 +13,54 @@ interface UserRecipeListProps {
   goToPage: (page: number) => void
 }
 
-const UserRecipeList: React.FC<UserRecipeListProps> = ({ page, goToPage }) => {
+const UserRecipeList = ({ page, goToPage } : UserRecipeListProps ) => {
   const [recipes, setRecipes] = useState<Recipe[]>([])
+  const [total, setTotal] = useState(2)
+  const [limit, setLimit] = useState(1) //기본값, 실제는 API에서 받아옴
 
   useEffect(() => {
     // 더미 데이터
     setRecipes([
-      { id: 1, title: '연어스테이크 소스 만들기', img: '/recipes/r1.png', likes: 6 },
-      { id: 2, title: '베트남식 밥 만들기', img: '/recipes/r2.png', likes: 2 },
-      { id: 3, title: '냉부해 떡볶이 레시피', img: '/recipes/r3.png', likes: 9 },
-      { id: 4, title: '두부 조림', img: '/recipes/r4.png', likes: 3 },
-      { id: 5, title: '버섯 크림파스타', img: '/recipes/r5.png', likes: 7 },
-      { id: 6, title: '김치찌개', img: '/recipes/r6.png', likes: 4 },
+      { id: 1, title: '연어스테이크 소스 만들기', image_url: '/recipes/r1.png', like: 6, created_at: '2025-01-01' },
+      { id: 2, title: '베트남식 밥 만들기', image_url: '/recipes/r2.png', like: 2, created_at: '2025-01-02' },
+      { id: 3, title: '냉부해 떡볶이 레시피', image_url: '/recipes/r3.png', like: 9, created_at: '2025-01-03' },
+      { id: 4, title: '두부 조림', image_url: '/recipes/r4.png', like: 3, created_at: '2025-01-04' },
+      { id: 5, title: '버섯 크림파스타', image_url: '/recipes/r5.png', like: 7, created_at: '2025-01-05' },
+      { id: 6, title: '김치찌개', image_url: '/recipes/r6.png', like: 4, created_at: '2025-01-06' },
     ])
   }, [])
 
-  const perPage = 3
-  const offset = (page - 1) * perPage
-  const currentRecipes = recipes.slice(offset, offset + perPage)
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await fetch(`https://api.example.com/recipes?page=${page}`)
+  //       const data = await res.json()
 
-  const totalPages = Math.ceil(recipes.length / perPage)
+  //       setRecipes(data.recipes)
+  //       setTotal(data.total)
+  //       setLimit(data.limit)
+  //     } catch (error) {
+  //       console.error('레시피 불러오기 실패:', error)
+  //     }
+  //   }
+
+  //   fetchData()
+  // }, [page])
+
+  const totalPages = Math.ceil(total / limit)
 
   return (
     <div className="bg-white p-6 rounded-lg mb-6 shadow">
       <h3 className="font-semibold mb-4">reciping 회원이 작성한 레시피</h3>
       
       <ul className="space-y-3">
-        {currentRecipes.map(r => (
+        {recipes.map((r) => (
           <li key={r.id} className="flex items-center justify-between">
             <div className="flex items-center">
-              <img src={r.img} alt={r.title} className="w-12 h-12 rounded mr-3" />
+              <img src={r.image_url} alt={r.title} className="w-12 h-12 rounded mr-3" />
               <span className="text-sm">{r.title}</span>
             </div>
-            <div className="text-sm text-gray-500">♥ {r.likes}</div>
+            <div className="text-sm text-gray-500">♥ {r.like}</div>
           </li>
         ))}
       </ul>
