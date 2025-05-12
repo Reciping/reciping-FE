@@ -9,9 +9,10 @@ interface Recipe {
 
 interface UserRecipeListProps {
   page: number
+  goToPage: (page: number) => void
 }
 
-const UserRecipeList: React.FC<UserRecipeListProps> = ({ page }) => {
+const UserRecipeList: React.FC<UserRecipeListProps> = ({ page, goToPage }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([])
 
   useEffect(() => {
@@ -33,8 +34,9 @@ const UserRecipeList: React.FC<UserRecipeListProps> = ({ page }) => {
   const totalPages = Math.ceil(recipes.length / perPage)
 
   return (
-    <div className="bg-white p-4 rounded-lg mb-6 shadow">
+    <div className="bg-white p-6 rounded-lg mb-6 shadow">
       <h3 className="font-semibold mb-4">reciping 회원이 작성한 레시피</h3>
+      
       <ul className="space-y-3">
         {currentRecipes.map(r => (
           <li key={r.id} className="flex items-center justify-between">
@@ -46,12 +48,24 @@ const UserRecipeList: React.FC<UserRecipeListProps> = ({ page }) => {
           </li>
         ))}
       </ul>
-
-      {/* 페이지 네비게이션 */}
-      <div className="mt-4 flex justify-center items-center gap-4 text-sm text-gray-600">
-        <span>
-          {page} / {totalPages}
-        </span>
+  
+      {/* ✅ 네비게이션 버튼을 흰 박스 안에 위치 */}
+      <div className="mt-6 flex justify-between items-center">
+        <button
+          onClick={() => goToPage(page - 1)}
+          disabled={page <= 1}
+          className="px-4 py-2 bg-[#FDD9B5] rounded-full text-[#5C2E1E] disabled:opacity-40"
+        >
+          이전
+        </button>
+        <span className="text-sm text-gray-600"> {page} / {totalPages} </span>
+        <button
+          onClick={() => goToPage(page + 1)}
+          disabled={page >= totalPages}
+          className="px-4 py-2 bg-[#FDD9B5] rounded-full text-[#5C2E1E] disabled:opacity-40"
+        >
+          다음
+        </button>
       </div>
     </div>
   )

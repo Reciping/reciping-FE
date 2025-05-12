@@ -100,24 +100,14 @@ const SearchResults = () => {
           </div>
 
           {/* 회원 레시피 리스트 */}
-          <UserRecipeList page={currentPage} />
-
-          {/* 페이지 네비게이션 버튼 */}
-          <div className="flex justify-center gap-4 my-4">
-            <button
-              onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage <= 1}
-              className="px-4 py-2 bg-[#FDD9B5] rounded-full text-[#5C2E1E] disabled:opacity-40"
-            >
-              이전
-            </button>
-            <button
-              onClick={() => goToPage(currentPage + 1)}
-              className="px-4 py-2 bg-[#FDD9B5] rounded-full text-[#5C2E1E]"
-            >
-              다음
-            </button>
-          </div>
+          <UserRecipeList 
+            page={currentPage} 
+            goToPage={(newPage) => {
+              const params = new URLSearchParams(searchParams.toString())
+              params.set('page', newPage.toString())
+              navigate(`/search?${params.toString()}`)
+            }}
+          />
 
           {/* A/B 테스트용 이벤트+광고 */}
           <ABTestBlock />
