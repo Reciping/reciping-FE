@@ -14,7 +14,7 @@ const Home = () => {
   const [selectedMode, setSelectedMode] = useState<'category'|'ingredient'|'menu'>('menu')
   const [searchKeyword, setSearchKeyword] = useState('')
   const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>({
-    type: '전체',
+    dish: '전체',
     situation: '전체',
     ingredient: '전체',
     method: '전체'
@@ -35,7 +35,7 @@ const Home = () => {
     params.set('keyword', searchKeyword)
     params.set('mode', selectedMode)
     if (selectedMode === 'category') {
-      params.set('type', categoryFilters.type)
+      params.set('type', categoryFilters.dish)
       params.set('situation', categoryFilters.situation)
       params.set('ingredient', categoryFilters.ingredient)
       params.set('method', categoryFilters.method)

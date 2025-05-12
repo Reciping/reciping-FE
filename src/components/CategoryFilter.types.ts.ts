@@ -1,5 +1,5 @@
 export interface CategoryFilters {
-    type: string
+    dish: string
     situation: string
     ingredient: string
     method: string
