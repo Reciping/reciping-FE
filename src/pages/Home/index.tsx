@@ -40,6 +40,10 @@ const Home = () => {
       params.set('ingredient', categoryFilters.ingredient)
       params.set('method', categoryFilters.method)
     }
+
+    params.set('page', '1')
+
+    // 검색 페이지로 이동
     navigate(`/search?${params.toString()}`)
   }
 

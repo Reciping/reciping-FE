@@ -28,15 +28,46 @@ const SearchResults = () => {
     setFeedbackQuery(initialKeyword)
   }, [initialKeyword])
 
-  const [mode, setMode] = useState<'category'|'ingredient'|'menu'>('menu')
-  const [catFilters, setCatFilters] = useState<CategoryFilters>({
+  const [selectedMode, setSelectedMode] = useState<'category'|'ingredient'|'menu'>('menu')
+  const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>({
     type:'전체', situation:'전체', ingredient:'전체', method:'전체'
   })
 
+
+  // 🔍 검색 버튼 클릭 시 /search로 이동
   const handleSearch = () => {
+    // 쿼리 스트링 생성
     const params = new URLSearchParams()
     params.set('keyword', searchKeyword)
-    // mode, categoryFilters 처리...
+    params.set('mode', selectedMode)
+    if (selectedMode === 'category') {
+      params.set('type', categoryFilters.type)
+      params.set('situation', categoryFilters.situation)
+      params.set('ingredient', categoryFilters.ingredient)
+      params.set('method', categoryFilters.method)
+    }
+
+    params.set('page', '1')
+
+    // 검색 페이지로 이동
+    navigate(`/search?${params.toString()}`)
+  }
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams()
+  
+    params.set('keyword', searchKeyword)
+    params.set('mode', selectedMode)
+  
+    if (selectedMode === 'category') {
+      params.set('type', categoryFilters.type)
+      params.set('situation', categoryFilters.situation)
+      params.set('ingredient', categoryFilters.ingredient)
+      params.set('method', categoryFilters.method)
+    }
+  
+    params.set('page', page.toString()) // ✅ 현재 페이지 번호 설정
+  
     navigate(`/search?${params.toString()}`)
   }
 
@@ -49,12 +80,12 @@ const SearchResults = () => {
 
           {/* 검색 + 필터 */}
           <SearchPanel
-            selectedMode={mode}
-            onModeChange={setMode}
+            selectedMode={selectedMode}
+            onModeChange={setSelectedMode}
             searchKeyword={searchKeyword}
             onSearchKeywordChange={setSearchKeyword}
-            categoryFilters={catFilters}
-            onCategoryFiltersChange={setCatFilters}
+            categoryFilters={categoryFilters}
+            onCategoryFiltersChange={setCategoryFilters}
             onSearch={handleSearch}
           />
 
