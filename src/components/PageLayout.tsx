@@ -7,7 +7,7 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
-    <div className="bg-[#FEEFEF] min-h-screen">
+    <div className="bg-[#FFF5F0] min-h-screen">
       {children}
     </div>
   )

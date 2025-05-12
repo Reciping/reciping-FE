@@ -11,7 +11,19 @@ const ContentWrapper: React.FC<ContentWrapperProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`max-w-[700px] mx-auto mt-8 bg-white rounded-xl p-6 shadow-lg relative ${className}`}>
+    <div 
+      className={`
+        max-w-[700px] 
+        mx-auto 
+        mt-8 
+        bg-[#FFFDF9] 
+        rounded-xl 
+        p-6 
+        shadow-lg 
+        relative 
+        ${className}
+      `}
+    >
       {children}
     </div>
   )
