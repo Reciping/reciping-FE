@@ -1,5 +1,5 @@
 import React from 'react'
-import avatar from '../assets/avatar.png' // 레시피피 아이콘
+import avatar from '../../assets/avatar.png' // 레시피피 아이콘
 
 interface Props {
   query: string

@@ -2,7 +2,7 @@
 import Write from '../../pages/Write'
 import Profile from '../../pages/Profile'
 import ProfileEdit from '../../pages/ProfileEdit'
-import PrivateRoute from '../../components/PrivateRoute'
+import PrivateRoute from '../../components/route/PrivateRoute'
 
 
 export const protectedRoutes = [
