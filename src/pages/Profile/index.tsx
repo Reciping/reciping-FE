@@ -1,9 +1,9 @@
 import logoutIcon from '../../assets/logout.png'
-import Footer from '../../components/Footer'
-import Navbar from '../../components/Navbar'
+import Footer from '../../components/common/Footer'
+import Navbar from '../../components/layout/Navbar'
 import { useNavigate } from 'react-router-dom'
-import PageLayout from '../../components/PageLayout'
-import ContentWrapper from '../../components/ContentWrapper'
+import PageLayout from '../../components/layout/PageLayout'
+import ContentWrapper from '../../components/common/ContentWrapper'
 
 const Profile = () => {
   const navigate = useNavigate()

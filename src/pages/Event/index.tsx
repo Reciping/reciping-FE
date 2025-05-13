@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Navbar from '../../components/Navbar'
-import PageLayout from '../../components/PageLayout'
-import ContentWrapper from '../../components/ContentWrapper'
+import Navbar from '../../components/layout/Navbar'
+import PageLayout from '../../components/layout/PageLayout'
+import ContentWrapper from '../../components/common/ContentWrapper'
 import recipingFront from '../../assets/recipingFront.png'
-import Footer from '../../components/Footer'
+import Footer from '../../components/common/Footer'
 
 // ✨ API 함수 import
 import { getEvents, EventItem } from '../../api/eventApi'

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import PageLayout from '../../components/PageLayout'
-import Navbar from '../../components/Navbar'
-import Container from '../../components/Container'
-import LogoTitle from '../../components/LogoTitle'
-import SearchPanel from '../../components/SearchPanel'
-import RecipeCard from '../../components/RecipeCard'
-import Footer from '../../components/Footer'
-import RecipeListSection from '../../components/RecipeListSection'
-import { CategoryFilters } from '../../components/CategoryFilter.types.ts'
+import PageLayout from '../../components/layout/PageLayout'
+import Navbar from '../../components/layout/Navbar'
+import Container from '../../components/common/Container'
+import LogoTitle from '../../components/common/LogoTitle'
+import SearchPanel from '../../components/search/SearchPanel'
+import RecipeCard from '../../components/recipe/RecipeCard'
+import Footer from '../../components/common/Footer'
+import RecipeListSection from '../../components/recipe/RecipeListSection'
+import { CategoryFilters } from '../../components/category/CategoryFilter.types.ts'
 
 const Home = () => {
   const navigate = useNavigate()

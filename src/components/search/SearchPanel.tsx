@@ -1,8 +1,8 @@
 import React from 'react'
-import FilterButtons from './FilterButtons'
+import FilterButtons from '../category/FilterButtons'
 import SearchInput from './SearchInput'
-import CategoryFilter from './CategoryFilter'
-import { CategoryFilters } from './CategoryFilter.types.ts'
+import CategoryFilter from '../category/CategoryFilter'
+import { CategoryFilters } from '../category/CategoryFilter.types.ts'
 
 interface Props {
   selectedMode: 'category' | 'ingredient' | 'menu'

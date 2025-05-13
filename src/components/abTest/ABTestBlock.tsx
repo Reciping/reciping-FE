@@ -1,6 +1,6 @@
 import React from 'react'
-import EventBlock from './EventBlock'
-import AdsBlock from './AdsBlock'
+import EventBlock from '../event/EventBlock'
+import AdsBlock from '../ads/AdsBlock'
 
 const ABTestBlock = () => (
   <div className="flex gap-4 mb-6">

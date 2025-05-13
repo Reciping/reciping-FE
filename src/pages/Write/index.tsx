@@ -1,10 +1,10 @@
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/layout/Navbar'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
-import PageLayout from '../../components/PageLayout'
-import ContentWrapper from '../../components/ContentWrapper'
-import Footer from '../../components/Footer'
+import PageLayout from '../../components/layout/PageLayout'
+import ContentWrapper from '../../components/common/ContentWrapper'
+import Footer from '../../components/common/Footer'
 
 const Write = () => {
   const navigate = useNavigate()
