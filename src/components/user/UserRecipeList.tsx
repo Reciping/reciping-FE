@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Recipe } from '../api/recipesApi' // ✨ 변경: Recipe 타입 import
+import { Recipe } from '../../api/recipesApi' // ✨ 변경: Recipe 타입 import
 
 interface UserRecipeListProps {
   recipes: Recipe[]          // ✨ 변경: props로 넘어오는 recipes

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미지 경로
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import PageLayout from '../../components/PageLayout'
-import ContentWrapper from '../../components/ContentWrapper'
+import Navbar from '../../components/layout/Navbar'
+import Footer from '../../components/common/Footer'
+import PageLayout from '../../components/layout/PageLayout'
+import ContentWrapper from '../../components/common/ContentWrapper'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()

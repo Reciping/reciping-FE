@@ -1,5 +1,5 @@
 // src/components/CategoryFilter.tsx
-import { CategoryFilters } from './CategoryFilter.types.ts'
+import { CategoryFilters } from './CategoryFilter.types.ts.js'
 
 const CATEGORY_OPTIONS = {
     dish: ['전체', '밑반찬', '메인반찬', '국/탕', '찌개', '디저트', '면/만두', '밥/죽/떡', '퓨전', '김치/젓갈/장류', '양념/소스/잼', '양식', '샐러드', '스프', '빵', '과자', '차/음료/술', '기타'],

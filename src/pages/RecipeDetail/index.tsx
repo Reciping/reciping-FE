@@ -1,9 +1,9 @@
 // src/pages/RecipeDetail/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import Navbar from '../../components/Navbar'
-import PageLayout from '../../components/PageLayout'
-import ContentWrapper from '../../components/ContentWrapper'
+import Navbar from '../../components/layout/Navbar'
+import PageLayout from '../../components/layout/PageLayout'
+import ContentWrapper from '../../components/common/ContentWrapper'
 
 // 댓글 타입
 interface Comment {

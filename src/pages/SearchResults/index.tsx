@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import Navbar from '../../components/Navbar'
-import LogoTitle from '../../components/LogoTitle'
-import SearchPanel from '../../components/SearchPanel'
-import SearchFeedback from '../../components/SearchFeedback'
-import EventBlock from '../../components/EventBlock'
-import AdsBlock from '../../components/AdsBlock'
-import UserRecipeList from '../../components/UserRecipeList'
-import ABTestBlock from '../../components/ABTestBlock'
+import Navbar from '../../components/layout/Navbar'
+import LogoTitle from '../../components/common/LogoTitle'
+import SearchPanel from '../../components/search/SearchPanel'
+import SearchFeedback from '../../components/search/SearchFeedback'
+import EventBlock from '../../components/event/EventBlock'
+import AdsBlock from '../../components/ads/AdsBlock'
+import UserRecipeList from '../../components/user/UserRecipeList'
+import ABTestBlock from '../../components/abTest/ABTestBlock'
 import NaverSearchIframe from '../../components/NaverSearchIframe'
-import Footer from '../../components/Footer'
+import Footer from '../../components/common/Footer'
 import { searchRecipes, SearchParams, SearchResponse } from '../../api/recipesApi'
-import PageLayout from '../../components/PageLayout'
+import PageLayout from '../../components/layout/PageLayout'
 
 const SearchResults = () => {
   const [searchParams]= useSearchParams()
