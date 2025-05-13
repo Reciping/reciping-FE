@@ -7,11 +7,20 @@ export interface RecipeCardProps {
   title: string
   /** 좋아요(추천) 수 */
   likes: number
+
+  onClick?: () => void
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ imageUrl, title, likes }) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ 
+  imageUrl, 
+  title, 
+  likes,
+  onClick
+}) => {
   return (
-    <div className="flex flex-col items-center bg-white rounded-2xl p-4 shadow">
+    <div 
+      onClick = {onClick}
+      className="cursor-pointer flex flex-col items-center bg-white rounded-2xl p-4 shadow hover:shadow-lg transition">
       {/* 타원형 이미지 */}
       <img
         src={imageUrl}
