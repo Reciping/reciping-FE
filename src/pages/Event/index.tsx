@@ -47,7 +47,7 @@ const EventPage: React.FC = () => {
         {/* 상단 뒤로가기 + 제목 */}
         <div className="flex items-center justify-between mb-4">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/")}
             className="text-lg text-gray-600 hover:text-black"
           >
             ←

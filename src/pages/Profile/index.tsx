@@ -23,7 +23,7 @@ const Profile = () => {
         <div className="flex justify-between items-center mb-6">
           {/* 뒤로가기 */}
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/")}
             className="mb-4 text-gray-600 hover:text-black text-lg p-2 rounded"
             aria-label="뒤로가기"
           >

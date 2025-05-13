@@ -68,7 +68,13 @@ const Write = () => {
       <ContentWrapper>
 
         {/* 뒤로가기 아이콘 또는 버튼 */}
-        <button className="mb-4 text-lg text-gray-600 hover:text-black cursor-pointer" onClick={() => navigate(-1)} aria-label="뒤로가기">{'←'}</button>
+        <button 
+          onClick={() => navigate("/")}
+          className="mb-4 text-lg text-gray-600 hover:text-black cursor-pointer" 
+          aria-label="뒤로가기"
+        >
+          ←
+        </button>
 
         {/* 제목 입력 */}
         <input
