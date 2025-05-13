@@ -5,6 +5,7 @@ import SplashRedirect from '../../pages/SplashRedirect'
 import Write from '../../pages/Write'
 import Profile from '../../pages/Profile'
 import SearchResults from '../../pages/SearchResults'
+import Detail from '../../pages/RecipeDetail'
 import Event from '../../pages/Event'
 
 
@@ -36,6 +37,10 @@ export const mainRoutes = [
   {
     path: '/event',
     element: <Event />,
+  },
+  {
+    path: '/recipe/:id',
+    element: <Detail />,
   },
   {
     path: '*',
