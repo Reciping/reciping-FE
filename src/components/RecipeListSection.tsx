@@ -1,16 +1,21 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import RecipeCard, { RecipeCardProps } from './RecipeCard'
 
-/** 더미 레시피 5개 */
-const DUMMY_RECIPES: RecipeCardProps[] = [
-  { imageUrl: '/recipes/1.png', title: '연어구이', likes: 12 },
-  { imageUrl: '/recipes/2.png', title: '베트남식 밥', likes: 8 },
-  { imageUrl: '/recipes/3.png', title: '꼬마 정식', likes: 5 },
-  { imageUrl: '/recipes/4.png', title: '탕수육', likes: 15 },
-  { imageUrl: '/recipes/5.png', title: '파스타', likes: 7 },
+interface DummyRecipe extends RecipeCardProps {
+  id: string
+}
+
+const DUMMY_RECIPES: DummyRecipe[] = [
+  { id: '1', imageUrl: '/recipes/1.png', title: '연어구이', likes: 12 },
+  { id: '2', imageUrl: '/recipes/2.png', title: '베트남식 밥', likes: 8 },
+  { id: '3', imageUrl: '/recipes/3.png', title: '꼬마 정식', likes: 5 },
+  { id: '4', imageUrl: '/recipes/4.png', title: '탕수육', likes: 15 },
+  { id: '5', imageUrl: '/recipes/5.png', title: '파스타', likes: 7 },
 ]
 
 const RecipeListSection: React.FC = () => {
+  const navigate = useNavigate()
   // 'likes' 또는 'newest' 중 하나
   const [sortBy, setSortBy] = useState<'likes' | 'newest'>('likes')
 
@@ -34,7 +39,7 @@ const RecipeListSection: React.FC = () => {
           }`}
         >
           추천순
-        </button>
+        </button> 
         <button
           onClick={() => setSortBy('newest')}
           className={`px-3 py-1 rounded-full ${
@@ -49,12 +54,13 @@ const RecipeListSection: React.FC = () => {
 
       {/* 카드 그리드: 5개를 5열로 */}
       <div className="grid grid-cols-5 gap-4">
-        {sorted.map((r, idx) => (
+        {sorted.map((r) => (
           <RecipeCard
-            key={idx}
+            key={r.id}
             imageUrl={r.imageUrl}
             title={r.title}
             likes={r.likes}
+            onClick={() => navigate('/recipe/${r.id}')}
           />
         ))}
       </div>
