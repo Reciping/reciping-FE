@@ -17,7 +17,7 @@ interface Comment {
 // 상세 레시피 타입
 interface RecipeDetailData {
   id: string
-  images: string[]
+  images: string
   title: string
   author: string
   difficulty: string
@@ -42,7 +42,7 @@ const RecipeDetail: React.FC = () => {
   useEffect(() => {
     const dummy: RecipeDetailData = {
       id: id || '0',
-      images: ['/recipes/1.png','/recipes/2.png','/recipes/3.png'],
+      images: 'reciping.png',
       title: '냉부해 “연어필렛 필레?” 황금 레시피 연어필렛 만들기',
       author: '시은핑',
       difficulty: '하',
@@ -127,14 +127,6 @@ const RecipeDetail: React.FC = () => {
                 d="M5 5v14l7-7 7 7V5H5z" />
             </svg>
             <span>{likes}</span>
-          </div>
-          <div className="absolute bottom-0 flex space-x-2">
-            {images.map((_, idx) => (
-              <span
-                key={idx}
-                className={`w-2 h-2 rounded-full ${idx === currentImage ? 'bg-[#F15A24]' : 'bg-gray-300'}`}
-              />
-            ))}
           </div>
         </div>
 
