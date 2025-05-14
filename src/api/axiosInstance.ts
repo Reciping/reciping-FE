@@ -9,8 +9,9 @@ export const api = axios.create({
 // 요청 시 토큰 자동 포함
 api.interceptors.request.use(
     (config) => {
-      const token = localStorage.getItem('token')
+      let token = localStorage.getItem('token')
       if (token) {
+        token = token.trim()
         config.headers.Authorization = `Bearer ${token}`
       }
       return config
