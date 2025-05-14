@@ -10,6 +10,8 @@ import RecipeCard from '../../components/recipe/RecipeCard'
 import Footer from '../../components/common/Footer'
 import RecipeListSection from '../../components/recipe/RecipeListSection'
 import { CategoryFilters } from '../../components/category/CategoryFilter.types.ts'
+import AdsBlock from '../../components/ads/AdsBlock'
+
 
 const Home = () => {
   const navigate = useNavigate()
@@ -27,7 +29,7 @@ const Home = () => {
   const [popularRecipes, setPopularRecipes] = useState<string[]>([])
 
   // 🔹 더미 데이터
-  useEffect(() => { setAds(['/ads/ad1.png','/ads/ad2.png','/ads/ad3.png']) }, [])
+  // useEffect(() => { setAds(['/ads/ad1.png','/ads/ad2.png','/ads/ad3.png']) }, [])
   useEffect(() => { setPopularRecipes(['김치라면','부대찌개','청국장','밤타리아누','양념갈비']) }, [])
 
   // 🔍 검색 버튼 클릭 시 /search로 이동
@@ -78,9 +80,7 @@ const Home = () => {
               <button className="text-xs underline">확인하기 &gt;</button>
             </div>
             <div className="bg-white p-4 rounded-lg flex-1 flex items-center overflow-x-auto gap-4 shadow">
-              {ads.map((src, idx) => (
-                <img key={idx} src={src} alt={`ad-${idx}`} className="h-24 rounded" />
-              ))}
+              <AdsBlock />
             </div>
           </div>
 
