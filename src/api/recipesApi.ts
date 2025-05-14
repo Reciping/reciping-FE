@@ -130,3 +130,14 @@ export const getRecipeDetail = (
       }
     })
     .then(res => res.data)
+
+/**
+ * 북마크 토글
+ * @param userId  – 현재 로그인한 유저 ID
+ * @param recipeId – 토글할 레시피 ID
+ */
+export const toggleBookmark = (userId: number, recipeId: number): Promise<boolean> => {
+  return recipeApi
+    .post<boolean>('/api/v1/bookmarks/toggle', { userId, recipeId })
+    .then(res => res.data)
+}
