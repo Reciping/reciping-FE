@@ -115,9 +115,16 @@ const RecipeDetail: React.FC = () => {
           <button
             onClick={handleBookmark}
             aria-label={bookmarked ? '북마크 해제' : '북마크'}
-            className="flex items-center px-6 py-2 bg-[#F15A24] text-white rounded-full hover:opacity-90 transition"
+            className={`
+              p-3 rounded-full transition
+              ${bookmarked
+                ? 'bg-[#F15A24] text-white'
+                : 'bg-white text-[#F15A24] ring-2 ring-inset ring-[#F15A24]'
+              }
+              hover:opacity-80
+            `}
           >
-            {bookmarked ? '🔖 북마크' : '📑 북마크'}  
+            {bookmarked ? '북마크 해제' : '북마크 하기'}
           </button>
         </div>
 
