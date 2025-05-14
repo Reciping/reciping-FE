@@ -1,5 +1,7 @@
 // src/pages/LoginSelect/index.tsx
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../../components/layout/PageLayout'
 
 const LoginSelect = () => {
   const navigate = useNavigate()
@@ -15,6 +17,14 @@ const LoginSelect = () => {
       {/* 로그인 버튼 */}
       <button onClick={() => navigate('/signin')} className="bg-white text-[#F15A24] font-semibold w-72 py-3 rounded-full mb-6">
         로그인하기
+      </button>
+
+      {/* 관리자 로그인 링크 */}
+      <button
+        onClick={() => navigate('/admin-login')}
+        className="mb-6 text-sm text-white underline"
+      >
+        관리자 로그인 하러가기
       </button>
 
       {/* 텍스트 안내 */}

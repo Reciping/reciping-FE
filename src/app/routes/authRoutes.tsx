@@ -2,6 +2,7 @@ import LoginSelect from '../../pages/LoginSelect'
 import SignIn from '../../pages/SignIn'
 import SignUp from '../../pages/SignUp'
 import PublicRoute from '../../components/route/PublicRoute'
+import AdminLogin from '../../pages/AdminLogin'
 
 export const authRoutes = [
   {
@@ -15,5 +16,9 @@ export const authRoutes = [
   {
     path: '/signup',
     element: <PublicRoute><SignUp /></PublicRoute>,
+  },
+  {
+    path: '/admin-login',
+    element: <PublicRoute><AdminLogin /></PublicRoute>
   },
 ]
