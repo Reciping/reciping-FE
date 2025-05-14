@@ -1,19 +1,35 @@
+
+//AdsBlock.ts
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+
+interface Ad {
+  id: number
+  title: string
+  imageUrl: string
+  targetUrl: string
+}
 
 const AdsBlock = () => {
-  const [ads, setAds] = useState<string[]>([])
+  const [ad, setAd] = useState<Ad | null>(null)
 
   useEffect(() => {
-    // 더미 광고
-    setAds(['/ads/ad1.png', '/ads/ad2.png', '/ads/ad3.png'])
+    axios
+      .get('http://localhost:8081/api/v1/ads/public/serve?position=MAIN_TOP')
+      .then(res => {
+        if (res.data.length > 0) {
+          setAd(res.data[0]) // 첫 번째 광고만 선택
+        }
+      })
+      .catch(err => console.error(err))
   }, [])
 
+  if (!ad) return null // 광고 없으면 아무것도 렌더링 안함
+
   return (
-    <div className="bg-white p-4 rounded-lg flex-1 flex items-center overflow-x-auto gap-4 shadow">
-      {ads.map((src, i) => (
-        <img key={i} src={src} alt={`ad-${i}`} className="h-24 rounded" />
-      ))}
-    </div>
+    <a href={ad.targetUrl} target="_blank" rel="noopener noreferrer">
+      <img src={ad.imageUrl} alt={ad.title} className="h-24 rounded shadow" />
+    </a>
   )
 }
 
