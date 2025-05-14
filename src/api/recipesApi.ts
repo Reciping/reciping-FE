@@ -141,3 +141,32 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
     .post<boolean>('/api/v1/bookmarks/toggle', { userId, recipeId })
     .then(res => res.data)
 }
+
+// …기존 인터페이스, getDefaultRecipes, getRecipeDetail 등…
+
+/**
+ * 새로운 레시피 등록
+ * POST /api/v1/recipes
+ * - multipart/form-data
+ * - 반드시 X-USER-ID 헤더를 함께 전송해야 함
+ * @param formData FormData (title, content, tags, file 등)
+ * @param userId   요청 헤더에 넣을 유저 ID
+ * @returns 새로 생성된 레시피 ID
+ */
+export const createRecipe = (
+  formData: FormData,
+  userId: number
+): Promise<{ id: number }> => {
+  return recipeApi
+    .post<{ id: number }>(
+      '/api/v1/recipes',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'X-USER-ID': String(userId),   // ← 여기에 X-USER-ID 를 추가
+        }
+      }
+    )
+    .then(res => res.data)
+}
