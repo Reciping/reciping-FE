@@ -6,7 +6,7 @@ export interface RecipeCardProps {
   /** 레시피 제목 */
   title: string
   /** 좋아요(추천) 수 */
-  likes: number
+  likeCount: number
 
   onClick?: () => void
 }
@@ -14,7 +14,7 @@ export interface RecipeCardProps {
 const RecipeCard: React.FC<RecipeCardProps> = ({ 
   imageUrl, 
   title, 
-  likes,
+  likeCount,
   onClick
 }) => {
   return (
@@ -45,7 +45,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
             d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z"
           />
         </svg>
-        <span className="text-xs">{likes}</span>
+        <span className="text-xs">{likeCount}</span>
       </div>
     </div>
   )

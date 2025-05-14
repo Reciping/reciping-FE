@@ -1,12 +1,23 @@
-import { api } from './axiosInstance'
+import { recipeApi } from "./recipeApi"
+import axios from "axios"
 
 // --- 응답 타입 정의 (API 명세에 맞춰서) -------------
 export interface Recipe {
   id: number
   title: string
-  image_url: string
-  like: number
-  created_at: string
+  imageUrl: string
+  likeCount: number
+  createdAt: string
+  modifiedAt: string
+  liked: boolean
+}
+
+/** 🔸 홈 기본 레시피 목록 가져오기  
+ *  GET /api/v1/recipes/default  
+ *  ※ gateway prefix (`/recipe-api`) 없이 호출해야 CORS 403이 안 납니다 */
+ export const getDefaultRecipes = async (): Promise<Recipe[]> => {
+  const res = await recipeApi.get<Recipe[]>('/api/v1/recipes/default')
+  return res.data
 }
 
 export interface SearchResponse {
@@ -27,12 +38,16 @@ export interface SearchParams {
   method?: string
   page?: number
 }
+/**
+ * 레시피 검색
+ */
+export const searchRecipes = (params: SearchParams) => {
+  return recipeApi.get<SearchResponse>('/api/v1/recipes/search', { params })
+}
 
-// --- 실제 호출 함수 --------------------------------
-// 엔드포인트는 백엔드 사양에 맞춰 조정. 
-export const searchRecipes = async (params: SearchParams): Promise<SearchResponse> => {
-  const res = await api.get<SearchResponse>('/api/v1/recipes/search', {
-    params,
-  })
-  return res.data
+/**
+ * 레시피 상세 조회
+ */
+export const getRecipeById = (id: string | number) => {
+  return recipeApi.get<Recipe>(`/api/v1/recipes/${id}`)
 }
