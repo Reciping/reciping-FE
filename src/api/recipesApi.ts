@@ -12,7 +12,7 @@ export interface Recipe {
 
   cookingTime: string | null
   difficulty:  string | null
-  category:    string | null
+  dish:    string | null
   situation:   string | null
   method:      string | null
   ingredient:  string | null
@@ -171,4 +171,25 @@ export const createRecipe = async (
   )
   // 실제 ID는 res.data.data.id 에 들어 있습니다
   return res.data.data.id
+}
+
+/** 카테고리 옵션 하나 */
+export interface CategoryOption {
+  label: string
+  value: string
+}
+
+/** 전체 카테고리 옵션 */
+export interface CategoryOptions {
+  dish:       CategoryOption[]
+  situation:  CategoryOption[]
+  ingredient: CategoryOption[]
+  method:     CategoryOption[]
+}
+
+export const getCategoryOptions = async (): Promise<CategoryOptions> => {
+  const res = await recipeApi.get<CategoryOptions>(
+    '/api/v1/recipes/category-options'
+  )
+  return res.data
 }

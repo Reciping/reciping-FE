@@ -1,23 +1,64 @@
 // src/pages/Write/index.tsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createRecipe } from '../../api/recipesApi'  // FormData + X-USER-ID 헤더 처리
+import { createRecipe, getCategoryOptions, CategoryOption, CategoryOptions } from '../../api/recipesApi'
 import PageLayout from '../../components/layout/PageLayout'
-import Navbar from '../../components/layout/Navbar'
+import Navbar         from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
-import Footer from '../../components/common/Footer'
+import Footer         from '../../components/common/Footer'
 
 const MAX_CONTENT_LENGTH = 10000
+
+// 카테고리 키 타입
+type CategoryKey = keyof CategoryOptions
 
 const Write: React.FC = () => {
   const navigate = useNavigate()
 
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [file, setFile] = useState<File | null>(null)
-  const [tagInput, setTagInput] = useState('')     // 해시태그 입력
+  // 입력 상태
+  const [title, setTitle]       = useState('')
+  const [content, setContent]   = useState('')
+  const [file, setFile]         = useState<File | null>(null)
+  const [tagInput, setTagInput] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
+  // --- 카테고리 옵션 & 선택 ---
+  const [categoryOptions, setCategoryOptions] = useState<CategoryOptions>({
+    dish:       [],
+    situation:  [],
+    ingredient: [],
+    method:     []
+  })
+  const [category, setCategory] = useState<Record<CategoryKey, string>>({
+    dish:       'ALL',
+    situation:  'ALL',
+    ingredient: 'ALL',
+    method:     'ALL'
+  })
+
+  // 1) 마운트 시 카테고리 옵션 fetch
+  useEffect(() => {
+    getCategoryOptions()
+      .then(opts => {
+        setCategoryOptions(opts)
+        // 기본값으로 ALL(전체)이 있으면 그대로, 없으면 첫 번째 value 사용
+        setCategory(prev => {
+          const next: typeof prev = {} as any
+          (Object.keys(opts) as CategoryKey[]).forEach(key => {
+            next[key] =
+              prev[key] === 'ALL' && opts[key].some(o => o.value === 'ALL')
+                ? 'ALL'
+                : opts[key][0]?.value ?? ''
+          })
+          return next
+        })
+      })
+      .catch(err => {
+        console.error('카테고리 옵션 불러오기 실패', err)
+      })
+  }, [])
+
+  // 입력 핸들러
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
   }
@@ -30,46 +71,50 @@ const Write: React.FC = () => {
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value)
   }
+  const handleCategoryChange = (key: CategoryKey) => (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setCategory(prev => ({ ...prev, [key]: e.target.value }))
+  }
 
+  // 발행하기
   const handlePublish = async () => {
-    // 1) 기본 검증
     if (!title.trim() || !content.trim()) {
       alert('제목과 본문을 입력해주세요.')
       return
     }
     if (content.length > MAX_CONTENT_LENGTH) {
-      alert(`본문은 최대 ${MAX_CONTENT_LENGTH.toLocaleString()}자까지 입력 가능합니다.`)
+      alert(`본문은 최대 ${MAX_CONTENT_LENGTH.toLocaleString()}자까지 가능합니다.`)
       return
     }
     if (submitting) return
 
     setSubmitting(true)
     try {
-      // 2) 해시태그 배열로 변환
       const tags = tagInput
         .split(',')
         .map(t => t.trim())
-        .filter(t => t.length > 0)
+        .filter(t => t)
 
-      // 3) FormData 구성
+      const dto = {
+        title:   title.trim(),
+        content: content.trim(),
+        tags,
+        // 선택된 카테고리 value
+        dishType:       category.dish,
+        situationType:  category.situation,
+        ingredientType: category.ingredient,
+        methodType:     category.method
+      }
+
       const formData = new FormData()
-
-      // 🔹 JSON 필드를 Blob 으로 감싸서 requestDto에 추가
-      const dto = { title: title.trim(), content: content.trim(), tags }
       formData.append(
         'requestDto',
         new Blob([JSON.stringify(dto)], { type: 'application/json' })
       )
+      if (file) formData.append('file', file)
 
-      // 🔹 파일이 있으면 'file' 필드로 추가
-      if (file) {
-        formData.append('file', file)
-      }
-
-      // 4) API 호출
-      //    createRecipe(formData, userId) 내부에서 X-USER-ID 헤더를 붙입니다.
       const newId = await createRecipe(formData, 1123)
-
       alert('레시피가 성공적으로 등록되었습니다.')
       navigate(`/recipe/${newId}`)
     } catch (err) {
@@ -83,7 +128,6 @@ const Write: React.FC = () => {
   return (
     <PageLayout>
       <Navbar />
-
       <ContentWrapper>
         {/* 뒤로가기 */}
         <button
@@ -103,12 +147,24 @@ const Write: React.FC = () => {
           onChange={handleTitleChange}
         />
 
-        {/* 파일 업로드 */}
-        <input
-          type="file"
-          className="w-full mb-4 text-sm"
-          onChange={handleFileChange}
-        />
+        {/* 카테고리 드롭다운 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {(Object.keys(categoryOptions) as CategoryKey[]).map(key => (
+            <select
+              key={key}
+              name={key}
+              value={category[key]}
+              onChange={handleCategoryChange(key)}
+              className="w-full p-3 rounded-full bg-[#F9F9F9] focus:outline-none"
+            >
+              {categoryOptions[key].map(opt => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          ))}
+        </div>
 
         {/* 본문 */}
         <textarea
@@ -123,13 +179,20 @@ const Write: React.FC = () => {
           {content.length.toLocaleString()} / {MAX_CONTENT_LENGTH.toLocaleString()}
         </div>
 
-        {/* 해시태그 입력(콤마 허용) */}
+        {/* 해시태그 */}
         <input
           type="text"
           placeholder="# 해시태그를 쉼표로 구분하여 입력하세요"
           className="w-full p-3 rounded-full bg-[#F9F9F9] focus:outline-none mb-6"
           value={tagInput}
           onChange={handleTagInputChange}
+        />
+
+        {/* 파일 업로드 */}
+        <input
+          type="file"
+          className="w-full mb-4 text-sm"
+          onChange={handleFileChange}
         />
 
         {/* 발행하기 버튼 */}
@@ -149,7 +212,6 @@ const Write: React.FC = () => {
           </button>
         </div>
       </ContentWrapper>
-
       <Footer />
     </PageLayout>
   )
