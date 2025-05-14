@@ -68,10 +68,10 @@ const Write: React.FC = () => {
 
       // 4) API 호출
       //    createRecipe(formData, userId) 내부에서 X-USER-ID 헤더를 붙입니다.
-      const { id: newRecipeId } = await createRecipe(formData, 1123)
+      const newId = await createRecipe(formData, 1123)
 
       alert('레시피가 성공적으로 등록되었습니다.')
-      navigate(`/recipe/${newRecipeId}`)
+      navigate(`/recipe/${newId}`)
     } catch (err) {
       console.error(err)
       alert('레시피 등록에 실패했습니다.')

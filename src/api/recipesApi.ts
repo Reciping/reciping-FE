@@ -153,20 +153,22 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
  * @param userId   요청 헤더에 넣을 유저 ID
  * @returns 새로 생성된 레시피 ID
  */
-export const createRecipe = (
+export const createRecipe = async (
   formData: FormData,
   userId: number
-): Promise<{ id: number }> => {
-  return recipeApi
-    .post<{ id: number }>(
-      '/api/v1/recipes',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'X-USER-ID': String(userId),   // ← 여기에 X-USER-ID 를 추가
-        }
-      }
-    )
-    .then(res => res.data)
+): Promise<number> => {
+  const res = await recipeApi.post<{
+    data: { id: number }
+  }>(
+    '/api/v1/recipes',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-USER-ID': String(userId),
+      },
+    }
+  )
+  // 실제 ID는 res.data.data.id 에 들어 있습니다
+  return res.data.data.id
 }
