@@ -52,6 +52,14 @@ const AdminLogin: React.FC = () => {
         Admin Login
       </button>
 
+            {/* 유저 로그인으로 이동 */}
+            <button
+        onClick={() => navigate('/login')}
+        className="mt-4 text-sm text-[#F15A24] underline"
+      >
+        유저 로그인으로
+      </button>
+
       {/* 하단 로고 */}
       <div className="absolute bottom-5 right-5 text-[#F15A24] text-sm text-right font-bold">
         <span className="text-2xl">●</span> reciping.<br />
