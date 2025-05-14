@@ -19,6 +19,11 @@ const Splash = () => {
     navigate('/home')
   }
 
+  const handleSkip = () => {
+    localStorage.setItem('hasSeenSplash', 'true')
+    navigate('/login')
+  }
+
   return (
     <div className="w-full h-screen bg-[#F15A24] flex flex-col justify-between items-center px-4 py-6 relative text-white">
       {/* 로고 + skip */}
@@ -27,7 +32,7 @@ const Splash = () => {
           <span className="bg-white text-[#F15A24] rounded-full w-4 h-4 inline-block mr-2" />
           reciping.
         </div>
-        <button onClick={() => navigate('/login')} className="text-sm underline">skip</button>
+        <button onClick={handleSkip} className="text-sm underline">skip</button>
       </div>
 
       {/* 슬라이드 */}
