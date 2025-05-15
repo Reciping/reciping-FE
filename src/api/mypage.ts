@@ -14,3 +14,15 @@ export const getMyPage = (page: number, size: number): Promise<MyPageData> => {
     .get<{ data: MyPageData }>(`/api/v1/mypage?page=${page}&size=${size}`)
     .then(res => res.data.data);
 };
+
+
+
+export const updateProfile = async (data: {
+  nickname?: string
+  password?: string
+  interestKeyword?: string
+  sex?: string
+  age?: string
+}) => {
+  return api.put('/api/v1/users/me', data)
+}
