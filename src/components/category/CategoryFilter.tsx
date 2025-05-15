@@ -48,9 +48,9 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
     <div className="bg-[#FCF7F4] p-5 rounded-2xl mb-6 shadow-sm">
       {(Object.entries(options) as [keyof CategoryFilters, { label: string; value: string }[]][])
         .map(([key, opts]) => (
-        <div key={key} className="flex flex-wrap items-center mb-4">
+        <div key={key} className="mb-6">
           {/* 레이블 */}
-          <span className="w-20 text-[#5C2E1E] font-semibold">
+          <span className="block w-full text-[#5C2E1E] font-semibold mb-2">
             {key === 'dish'       && '종류별'}
             {key === 'situation'  && '상황별'}
             {key === 'ingredient' && '재료별'}
@@ -68,7 +68,7 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
                   key={opt.value}
                   onClick={() => handleSelect(key, opt.label)}
                   className={`
-                    px-3 py-1 rounded-full text-sm font-medium transition-colors
+                    px-3 py-1 rounded-full text-xs font-medium transition-colors
                     ${isActive
                       ? 'bg-[#F15A24] text-white shadow-md'
                       : 'bg-[#FFF2E5] text-[#5C2E1E] hover:bg-[#FFE2CA] hover:shadow-sm'
