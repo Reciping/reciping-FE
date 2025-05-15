@@ -104,29 +104,29 @@ const RecipeDetail: React.FC = () => {
           {new Date(createdAt).toLocaleDateString()}
         </p>
 
-        {/* 난이도 · 소요시간 · 분류 버튼들 */}
-        <div className="flex flex-wrap justify-center text-sm text-gray-600 mb-6 space-x-4">
-          <span>난이도 ({difficulty || '정보 없음'})</span>
-          <span>소요 시간 ({cookingTime || '정보 없음'})</span>
-          <span>
-            종류 ( 
-            {findLabel(categoryOpts.dish, dishType)} 
-            )
+        {/* 난이도·소요시간 */}
+        <div className="flex flex-wrap justify-center gap-2 mb-4">
+          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">
+            난이도: {difficulty || '정보 없음'}
           </span>
-          <span>
-            상황 ( 
-            {findLabel(categoryOpts.situation, situationType)} 
-            )
+          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">
+            소요 시간: {cookingTime || '정보 없음'}
           </span>
-          <span>
-            재료 ( 
-            {findLabel(categoryOpts.ingredient, ingredientType)} 
-            )
+        </div>
+
+        {/* 카테고리 레이블 뱃지 */}
+        <div className="flex flex-wrap justify-center gap-2 mb-6">
+          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+            {findLabel(categoryOpts.dish, dishType)}
           </span>
-          <span>
-            방법 ( 
-            {findLabel(categoryOpts.method, methodType)} 
-            )
+          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+            {findLabel(categoryOpts.situation, situationType)}
+          </span>
+          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+            {findLabel(categoryOpts.ingredient, ingredientType)}
+          </span>
+          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+            {findLabel(categoryOpts.method, methodType)}
           </span>
         </div>
 
