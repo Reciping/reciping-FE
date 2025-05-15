@@ -7,16 +7,16 @@ import Container from '../../components/common/Container'
 import EventBlock from '../../components/event/EventBlock'
 import LogoTitle from '../../components/common/LogoTitle'
 import SearchPanel from '../../components/search/SearchPanel'
-import Footer from '../../components/common/Footer'
-import RecipeListSection from '../../components/recipe/HomeRecipeList'
 import AdsBlock from '../../components/ads/AdsBlock'
+import Footer from '../../components/common/Footer'
+
+import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
 /* === 추가: 카테고리 검색 API === */
 import {
   CategorySearchRequest,
   searchRecipesByCategory,
 } from '../../api/recipesApi'
-import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 /* ================================= */
 
 const Home = () => {
@@ -56,19 +56,13 @@ const Home = () => {
 
     // 카테고리 모드 → POST /search/category
     try {
-      const payload: CategorySearchRequest = {
-        dishType:       categoryFilters.dishType,
-        situationType:  categoryFilters.situationType,
-        ingredientType: categoryFilters.ingredientType,
-        methodType:     categoryFilters.methodType,
-        cookingTime:    categoryFilters.cookingTime,
-        difficulty:     categoryFilters.difficulty,
-      }
-
+      const payload: CategorySearchRequest = { ...categoryFilters }
       const { content } = await searchRecipesByCategory(payload, 0, 20)
 
       // /search 로 결과 배열을 state 로 넘김
-      navigate('/search', { state: { recipes: content, mode: 'category' } })
+      navigate('/search', 
+        { state: { recipes: content, mode: 'category' }
+      })
     } catch (e) {
       console.error(e)
       alert('카테고리 검색 중 오류가 발생했습니다.')
@@ -96,13 +90,74 @@ const Home = () => {
 
           {/* 광고 & 기본 레시피 리스트 */}
           <div className="flex gap-4 mb-6">
-            <EventBlock />
-            <AdsBlock />
-          </div>  
+            <div className="bg-white p-4 rounded-lg flex-1 text-sm font-semibold text-[#5C2E1E] shadow">
+              <p className="mb-2">
+                매일 자정!<br />
+                선착순 10명!<br />
+                마켓컬리 상품권 증정
+              </p>
+              <button className="text-xs underline">확인하기 &gt;</button>
+            </div>
+            <div className="bg-white p-4 rounded-lg flex-1 flex items-center overflow-x-auto gap-4 shadow">
+              <AdsBlock />
+            </div>
+          </div>
 
           <HomeRecipeList />
+          {/* ───── 인기 급상승 & AI 추천 블록 ───── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* 인기 급상승 */}
+            <div className="bg-white p-4 rounded-lg shadow">
+              <h3 className="font-bold mb-2">인기 급상승 레시피 🔥</h3>
+              <ol className="list-decimal pl-4">
+                {popularRecipes.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ol>
+            </div>
 
-          {/* (AI 추천·인기 리스트 영역 생략) */}
+            {/* AI 추천 (재료 기반) */}
+            <div className="bg-white p-4 rounded-lg shadow">
+              <h3 className="font-bold mb-2">
+                AI 추천 <span className="text-sm font-normal">| 최근 검색한 재료 기반</span>
+              </h3>
+              <p className="text-sm">
+                최근 <span className="text-[#F15A24] font-semibold">당근</span>을 재료로
+                검색하셨어요!<br />
+                유사 재료를 활용한 레시피를 추천해드릴게요.
+              </p>
+            </div>
+          </div>
+
+          {/* ───── 최근 검색 · AI(카테고리 기반) ───── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* 최근 검색 피드백 */}
+            <div className="bg-white p-4 rounded-lg shadow">
+              <h3 className="font-bold mb-2">
+                근래 <span className="text-[#F15A24] font-semibold">당근</span>을 가장 많이
+                검색하셨네요!
+              </h3>
+              <p className="text-sm mb-2">
+                '당근'을 재료로 하는 인기 레시피를 추천해드릴게요.
+              </p>
+              <button className="mt-2 text-xs px-3 py-1 bg-[#5C2E1E] text-white rounded">
+                [ 당근 라떼 샌드위치 ] 확인하기 &gt;
+              </button>
+            </div>
+
+            {/* AI 추천 (카테고리 기반) */}
+            <div className="bg-white p-4 rounded-lg shadow">
+              <h3 className="font-bold mb-2">
+                AI 추천 <span className="text-sm font-normal">| 자주 열람한 카테고리 기반</span>
+              </h3>
+              <p className="text-sm">
+                최근 <span className="text-[#F15A24] font-semibold">일식</span>을 자주
+                열람하셨네요!<br />
+                다른 유저들도 선호한 <span className="font-semibold">일식 레시피</span>를
+                추천해드릴게요 :-)
+              </p>
+            </div>
+          </div>
         </Container>
       </div>
 
