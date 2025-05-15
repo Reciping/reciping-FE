@@ -1,7 +1,7 @@
 // src/pages/RecipeDetail/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getRecipeDetail, RecipeDetailResponse, toggleBookmark, getCategoryOptions, CategoryOptions } from '../../api/recipesApi'
+import { getRecipeDetail, RecipeDetailResponse, toggleBookmark, getCategoryOptions, CategoryOptionsResponse } from '../../api/recipesApi'
 
 import PageLayout from '../../components/layout/PageLayout'
 import Navbar    from '../../components/layout/Navbar'
@@ -15,7 +15,7 @@ const RecipeDetail: React.FC = () => {
   const navigate = useNavigate()
 
   const [data, setData] = useState<RecipeDetailResponse | null>(null)
-  const [categoryOpts, setCategoryOpts] = useState<CategoryOptions | null>(null)
+  const [categoryOpts, setCategoryOpts] = useState<CategoryOptionsResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [bookmarked, setBookmarked] = useState(false)
@@ -110,33 +110,22 @@ const RecipeDetail: React.FC = () => {
         <p className="text-center text-gray-600 mb-6">
           {new Date(createdAt).toLocaleDateString()}
         </p>
-
-        {/* 난이도·소요시간 */}
-        <div className="flex flex-wrap justify-center gap-2 mb-4">
-          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">
-            난이도: {difficulty || '정보 없음'}
-          </span>
-          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">
-            소요 시간: {cookingTime || '정보 없음'}
-          </span>
-        </div>
-
         {/* 카테고리 레이블 뱃지 */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
           {/* dish */}
-          {dishType !== null && (
+          {dishType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
               {findLabel(categoryOpts.dish, dishType)}
             </span>
           )}
           {/* situation */}
-          {situationType !== null && (
+          {situationType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
               {findLabel(categoryOpts.situation, situationType)}
             </span>
           )}
           {/* ingredient */}
-          {ingredientType !== null && (
+          {ingredientType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
               {findLabel(categoryOpts.ingredient, ingredientType)}
             </span>
@@ -145,6 +134,18 @@ const RecipeDetail: React.FC = () => {
           {methodType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
               {findLabel(categoryOpts.method, methodType)}
+            </span>
+          )}
+
+          {/* 추가 : cookingTime */}
+          {cookingTime && cookingTime !== 'ALL' && (
+                <span className="bg-[#4A90E2] text-white px-3 py-1 rounded-full text-xs">
+                  {findLabel(categoryOpts.cookingTime, cookingTime)}
+                </span>
+          )}
+          {difficulty && difficulty !== 'ALL' && (
+            <span className="bg-[#7B61FF] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.difficulty, difficulty)}
             </span>
           )}
         </div>

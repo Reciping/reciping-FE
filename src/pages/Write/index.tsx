@@ -1,7 +1,7 @@
 // src/pages/Write/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createRecipe, getCategoryOptions, CategoryOption, CategoryOptions } from '../../api/recipesApi'
+import { createRecipe, getCategoryOptions, CategoryOption, CategoryOptionsResponse } from '../../api/recipesApi'
 import PageLayout from '../../components/layout/PageLayout'
 import Navbar         from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
@@ -10,7 +10,7 @@ import Footer         from '../../components/common/Footer'
 const MAX_CONTENT_LENGTH = 10000
 
 // 카테고리 키 타입
-type CategoryKey = keyof CategoryOptions
+type CategoryKey = keyof CategoryOptionsResponse
 
 const Write: React.FC = () => {
   const navigate = useNavigate()
@@ -23,17 +23,21 @@ const Write: React.FC = () => {
   const [submitting, setSubmitting] = useState(false)
 
   // --- 카테고리 옵션 & 선택 ---
-  const [categoryOptions, setCategoryOptions] = useState<CategoryOptions>({
+  const [categoryOptions, setCategoryOptions] = useState<CategoryOptionsResponse>({
     dish:       [],
     situation:  [],
     ingredient: [],
-    method:     []
+    method:     [],
+    cookingTime: [],
+    difficulty: []
   })
   const [category, setCategory] = useState<Record<CategoryKey, string>>({
     dish:       'ALL',
     situation:  'ALL',
     ingredient: 'ALL',
-    method:     'ALL'
+    method:     'ALL',
+    cookingTime: 'All',
+    difficulty: 'All'
   })
 
   // 1) 마운트 시 카테고리 옵션 fetch
@@ -104,7 +108,9 @@ const Write: React.FC = () => {
         dishType:       category.dish,
         situationType:  category.situation,
         ingredientType: category.ingredient,
-        methodType:     category.method
+        methodType:     category.method,
+        cookingTime:    category.cookingTime,
+        difficulty:     category.difficulty
       }
 
       const formData = new FormData()
