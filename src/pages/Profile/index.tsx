@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import ContentWrapper from '../../components/common/ContentWrapper';
 
-import { getMyPage } from '../../api/mypage';
+import { getMyPage } from '../../api/profile';
 import type { MyPageData } from '../../types/mypage';
 
 type Tab = 'myRecipes' | 'myBookmarks';
