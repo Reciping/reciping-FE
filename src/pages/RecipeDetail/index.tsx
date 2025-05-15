@@ -1,22 +1,27 @@
 // src/pages/RecipeDetail/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getRecipeDetail, RecipeDetailResponse, toggleBookmark, getCategoryOptions, CategoryOptions } from '../../api/recipesApi'
+import { getRecipeDetail, RecipeDetailResponse, toggleBookmark, getCategoryOptions, CategoryOptionsResponse } from '../../api/recipesApi'
 
 import PageLayout from '../../components/layout/PageLayout'
 import Navbar    from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
 import Footer    from '../../components/common/Footer'
 
+import nonImage from '../../assets/nonImage.jpeg'
+
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
 
   const [data, setData] = useState<RecipeDetailResponse | null>(null)
-  const [categoryOpts, setCategoryOpts] = useState<CategoryOptions | null>(null)
+  const [categoryOpts, setCategoryOpts] = useState<CategoryOptionsResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [bookmarked, setBookmarked] = useState(false)
+
+
+
 
   useEffect(() => {
     if (!id) return
@@ -72,9 +77,11 @@ const RecipeDetail: React.FC = () => {
       console.error(e)
       alert('북마크 토글 중 오류가 발생했습니다.')
     }
-  }
+  }  
+  const displayImage = imageUrl && imageUrl.trim() !== ''
+  ? imageUrl
+  : nonImage
 
-  
 
   return (
     <PageLayout>
@@ -90,9 +97,9 @@ const RecipeDetail: React.FC = () => {
         </button>
 
         {/* 이미지 */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center items-center mb-4">
           <img
-            src={imageUrl}
+            src={displayImage}
             alt={title}
             className="w-64 h-64 object-cover rounded-full shadow-lg"
           />
@@ -103,31 +110,44 @@ const RecipeDetail: React.FC = () => {
         <p className="text-center text-gray-600 mb-6">
           {new Date(createdAt).toLocaleDateString()}
         </p>
-
-        {/* 난이도·소요시간 */}
-        <div className="flex flex-wrap justify-center gap-2 mb-4">
-          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">
-            난이도: {difficulty || '정보 없음'}
-          </span>
-          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">
-            소요 시간: {cookingTime || '정보 없음'}
-          </span>
-        </div>
-
         {/* 카테고리 레이블 뱃지 */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.dish, dishType)}
-          </span>
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.situation, situationType)}
-          </span>
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.ingredient, ingredientType)}
-          </span>
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.method, methodType)}
-          </span>
+          {/* dish */}
+          {dishType !== 'ALL' && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.dish, dishType)}
+            </span>
+          )}
+          {/* situation */}
+          {situationType !== 'ALL' && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.situation, situationType)}
+            </span>
+          )}
+          {/* ingredient */}
+          {ingredientType !== 'ALL' && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.ingredient, ingredientType)}
+            </span>
+          )}
+          {/* method */}
+          {methodType !== 'ALL' && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.method, methodType)}
+            </span>
+          )}
+
+          {/* 추가 : cookingTime */}
+          {cookingTime && cookingTime !== 'ALL' && (
+                <span className="bg-[#4A90E2] text-white px-3 py-1 rounded-full text-xs">
+                  {findLabel(categoryOpts.cookingTime, cookingTime)}
+                </span>
+          )}
+          {difficulty && difficulty !== 'ALL' && (
+            <span className="bg-[#7B61FF] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.difficulty, difficulty)}
+            </span>
+          )}
         </div>
 
         {/* 레시피 설명 */}

@@ -180,15 +180,17 @@ export interface CategoryOption {
 }
 
 /** 전체 카테고리 옵션 */
-export interface CategoryOptions {
+export interface CategoryOptionsResponse {
   dish:       CategoryOption[]
   situation:  CategoryOption[]
   ingredient: CategoryOption[]
   method:     CategoryOption[]
+  cookingTime: CategoryOption[]
+  difficulty: CategoryOption[]
 }
 
-export const getCategoryOptions = async (): Promise<CategoryOptions> => {
-  const res = await recipeApi.get<CategoryOptions>(
+export const getCategoryOptions = async (): Promise<CategoryOptionsResponse> => {
+  const res = await recipeApi.get<CategoryOptionsResponse>(
     '/api/v1/recipes/category-options'
   )
   return res.data
