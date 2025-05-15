@@ -11,23 +11,32 @@ interface Props {
   onChange: (newFilters: CategoryFilters) => void
 }
 
+const normalizeOptions = (raw: CategoryOptionsResponse) => ({
+  dishType:       raw.dish,
+  situationType:  raw.situation,
+  ingredientType: raw.ingredient,
+  methodType:     raw.method,
+  cookingTime:    raw.cookingTime,
+  difficulty:     raw.difficulty,
+})
+
 const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
   // 1) 백엔드에서 카테고리 옵션을 받아올 상태
-  const [options, setOptions] = useState<CategoryOptionsResponse | null>(null)
+  const [options, setOptions] = useState<Partial<
+    Record<keyof CategoryFilters, { label: string; value: string }[]>
+  > | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
   
   // 2) 마운트 시 API 호출
   useEffect(() => {
     setLoading(true)
     getCategoryOptions()
-      .then(opts => {
-        setOptions(opts)
-      })
-      .catch(err => {
-        console.error(err)
-        setError('카테고리 옵션을 불러오는 중 오류가 발생했습니다.')
-      })
+      .then(res => setOptions(normalizeOptions(res))) // ★ 키 변환
+      .catch(() =>
+        setError('카테고리 옵션을 불러오는 중 오류가 발생했습니다.'),
+      )
       .finally(() => setLoading(false))
   }, [])
 
@@ -46,11 +55,11 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
 
   return (
     <div className="bg-[#FCF7F4] p-5 rounded-2xl mb-6 shadow-sm">
-      {(Object.entries(options) as [keyof CategoryFilters, { label: string; value: string }[]][])
+      {(Object.entries(options) as [keyof CategoryFilters, any][])
         .map(([key, opts]) => (
         <div key={key} className="mb-6">
           {/* 레이블 */}
-          <span className="block w-full text-[#5C2E1E] font-semibold mb-2">
+          <span className="block w-full text-[#5C2E1E] font-semibold mb-s2">
             {key === 'dishType'       && '종류별'}
             {key === 'situationType'  && '상황별'}
             {key === 'ingredientType' && '재료별'}
@@ -61,7 +70,7 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
 
           {/* 옵션 버튼들 */}
           <div className="flex flex-wrap gap-2">
-            {opts.map(opt => {
+            {opts.map((opt: any) => {
               const isActive = value[key] === opt.label
               return (
                 <button
