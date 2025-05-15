@@ -20,7 +20,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   return (
     <div 
       onClick = {onClick}
-      className="cursor-pointer flex flex-col items-center bg-white rounded-2xl p-4 shadow hover:shadow-lg transition">
+      className="
+        cursor-pointer flex flex-col items-center 
+        bg-white rounded-2xl p-4 shadow hover:shadow-lg transition
+        w-full
+      ">
       {/* 타원형 이미지 */}
       <img
         src={imageUrl}
@@ -28,7 +32,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         className="w-24 h-24 object-cover rounded-full mb-2"
       />
       {/* 제목 */}
-      <span className="text-sm font-medium mb-1">{title}</span>
+      <span className="text-sm font-medium mb-1 truncate w-full text-center">{title}</span>
       {/* 좋아요 아이콘 + 수 */}
       <div className="flex items-center text-gray-500">
         <svg
