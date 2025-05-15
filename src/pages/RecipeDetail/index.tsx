@@ -116,18 +116,30 @@ const RecipeDetail: React.FC = () => {
 
         {/* 카테고리 레이블 뱃지 */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.dish, dishType)}
-          </span>
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.situation, situationType)}
-          </span>
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.ingredient, ingredientType)}
-          </span>
-          <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-            {findLabel(categoryOpts.method, methodType)}
-          </span>
+          {/* dish */}
+          {dishType !== null && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.dish, dishType)}
+            </span>
+          )}
+          {/* situation */}
+          {situationType !== null && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.situation, situationType)}
+            </span>
+          )}
+          {/* ingredient */}
+          {ingredientType !== null && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.ingredient, ingredientType)}
+            </span>
+          )}
+          {/* method */}
+          {methodType !== 'ALL' && (
+            <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
+              {findLabel(categoryOpts.method, methodType)}
+            </span>
+          )}
         </div>
 
         {/* 레시피 설명 */}
