@@ -7,6 +7,8 @@ import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
+import nonImage from '../../assets/nonImage.jpeg'
+
 const ITEMS_PER_PAGE = 5
 
 const RecipeListSection: React.FC = () => {
@@ -43,6 +45,7 @@ const RecipeListSection: React.FC = () => {
   )
 
   const totalPages = chunked.length
+
 
   return (
     <div className="bg-white p-4 rounded-lg mb-6 shadow">
@@ -92,15 +95,21 @@ const RecipeListSection: React.FC = () => {
           {chunked.map((group, index) => (
             <SwiperSlide key={index}>
               <div className="grid grid-cols-5 gap-4">
-                {group.map(r => (
-                  <RecipeCard
-                    key={r.id}
-                    imageUrl={r.imageUrl}
-                    title={r.title}
-                    likeCount={r.likeCount}
-                    onClick={() => navigate(`/recipe/${r.id}`)}
-                  />
-                ))}
+                {group.map(r => {
+                  // 2) 이미지가 없으면 nonImage 사용
+                  const displayUrl = r.imageUrl && r.imageUrl.trim()
+                    ? r.imageUrl
+                    : nonImage
+                  return (
+                    <RecipeCard
+                      key={r.id}
+                      imageUrl={displayUrl}
+                      title={r.title}
+                      likeCount={r.likeCount}
+                      onClick={() => navigate(`/recipe/${r.id}`)}
+                    />
+                  )
+                })}
               </div>
             </SwiperSlide>
           ))}
