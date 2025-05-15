@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RecipeCard from './RecipeCard'
-import { getDefaultRecipes, Recipe } from '../../api/recipesApi'
+import { getDefaultRecipes, DefaultRecipesResponse, Recipe } from '../../api/recipesApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
@@ -15,24 +15,30 @@ const RecipeListSection: React.FC = () => {
   const navigate = useNavigate()
   const [sortBy, setSortBy] = useState<'likes' | 'newest'>('likes')
   const [recipes, setRecipes] = useState<Recipe[]>([])
+  const [totalPages, setTotalPages] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    (async () => {
+    const fetchPage = async () => {
       setLoading(true)
       try {
-        const list = await getDefaultRecipes()
-        setRecipes(list)
+        // 서버로부터 { content, totalPages, number, ... } 반환
+        const pageData: DefaultRecipesResponse =
+          await getDefaultRecipes(currentPage, ITEMS_PER_PAGE)
+
+        setRecipes(pageData.content)               // 레시피 목록
+        setTotalPages(pageData.totalPages)         // 전체 페이지 수
       } catch (e) {
         console.error(e)
         setError('레시피를 불러오는 중 오류가 발생했습니다.')
       } finally {
         setLoading(false)
       }
-    })()
-  }, [])
+    }
+      fetchPage()
+  }, [currentPage])
 
   const sorted = [...recipes].sort((a, b) =>
     sortBy === 'likes'
@@ -43,8 +49,6 @@ const RecipeListSection: React.FC = () => {
   const chunked = Array.from({ length: Math.ceil(sorted.length / ITEMS_PER_PAGE) }, (_, i) =>
     sorted.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE)
   )
-
-  const totalPages = chunked.length
 
 
   return (
@@ -76,9 +80,21 @@ const RecipeListSection: React.FC = () => {
           </button>
         </div>
 
-        <span className="text-sm text-gray-600">
-          {currentPage} / {totalPages}
-        </span>
+        <div className="flex justify-end items-center mb-4">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(p-1, 0))}
+            disabled={currentPage === 0}
+          >◀</button>
+          <span className="mx-2 text-sm text-gray-600">
+            {currentPage + 1} / {totalPages}
+          </span>
+          <button
+            onClick={() =>
+              setCurrentPage(p => Math.min(p+1, totalPages-1))
+            }
+            disabled={currentPage === totalPages-1}
+          >▶</button>
+        </div>
       </div>
 
       {/* 로딩/에러 */}
@@ -92,27 +108,23 @@ const RecipeListSection: React.FC = () => {
           modules={[Navigation]}
           onSlideChange={(swiper) => setCurrentPage(swiper.activeIndex + 1)}
         >
-          {chunked.map((group, index) => (
-            <SwiperSlide key={index}>
-              <div className="grid grid-cols-5 gap-4">
-                {group.map(r => {
-                  // 2) 이미지가 없으면 nonImage 사용
-                  const displayUrl = r.imageUrl && r.imageUrl.trim()
-                    ? r.imageUrl
-                    : nonImage
-                  return (
-                    <RecipeCard
-                      key={r.id}
-                      imageUrl={displayUrl}
-                      title={r.title}
-                      likeCount={r.likeCount}
-                      onClick={() => navigate(`/recipe/${r.id}`)}
-                    />
-                  )
-                })}
-              </div>
-            </SwiperSlide>
-          ))}
+          {/* 이제 recipes 배열(한 페이지 분량)만 출력 */}
+          <SwiperSlide key={currentPage}>
+            <div className="grid grid-cols-5 gap-4">
+              {recipes.map(r => {
+                const img = r.imageUrl?.trim() ? r.imageUrl : nonImage
+                return (
+                  <RecipeCard
+                    key={r.id}
+                    imageUrl={img}
+                    title={r.title}
+                    likeCount={r.likeCount}
+                    onClick={() => navigate(`/recipe/${r.id}`)}
+                  />
+                )
+              })}
+            </div>
+          </SwiperSlide>
         </Swiper>
       )}
     </div>

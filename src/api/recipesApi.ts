@@ -30,6 +30,29 @@ export interface Recipe {
   bookmarked: boolean
   liked:      boolean
 }
+// --- 추가: 페이지네이션 응답 타입 ---
+export interface Pageable {
+  pageNumber:      number
+  pageSize:        number
+  sort:            unknown[]
+  offset:          number
+  paged:           boolean
+  unpaged:         boolean
+}
+
+export interface DefaultRecipesResponse {
+  content:         Recipe[]        // 실제 레시피 배열
+  pageable:        Pageable
+  last:            boolean
+  totalElements:   number
+  totalPages:      number
+  first:           boolean
+  size:            number
+  number:          number          // 현재 페이지 (0-based)
+  sort:            unknown[]
+  numberOfElements:number
+  empty:           boolean
+}
 
 /**
  * 검색 API 응답 타입
@@ -73,8 +96,15 @@ export const getRecipeById = (id: string | number) =>
  * 홈 기본 레시피 목록 조회
  * GET /api/v1/recipes/default
  */
-export const getDefaultRecipes = async (): Promise<Recipe[]> => {
-  const res = await recipeApi.get<Recipe[]>('/api/v1/recipes/default')
+// 기존 getDefaultRecipes 를 아래처럼 수정
+export const getDefaultRecipes = async (
+  page = 0,          // 0-based page 인 경우
+  size = 5           // 한 페이지당 아이템 개수
+): Promise<DefaultRecipesResponse> => {
+  const res = await recipeApi.get<DefaultRecipesResponse>(
+    '/api/v1/recipes/default',
+    { params: { page, size } }
+  )
   return res.data
 }
 
@@ -119,8 +149,8 @@ export interface RecipeDetailResponse {
  */
 export const getRecipeDetail = (
   id: string | number,
-  page = 1,
-  size = 6
+  page = 0,
+  size = 5
 ): Promise<RecipeDetailResponse> =>
   recipeApi
     .get<RecipeDetailResponse>(`/api/v1/recipes/${id}`, {
@@ -160,7 +190,7 @@ export const createRecipe = async (
   const res = await recipeApi.post<{
     data: { id: number }
   }>(
-    '/api/v1/recipes',
+    '/api/v1/recipes', 
     formData,
     {
       headers: {
