@@ -12,10 +12,10 @@ export interface Recipe {
 
   cookingTime: string | null
   difficulty:  string | null
-  category:    string | null
-  situation:   string | null
-  method:      string | null
-  ingredient:  string | null
+  dishType:    string | null
+  situationType:   string | null
+  methodType:      string | null
+  ingredientType:  string | null
 
   objectName: string | null
   keyName:    string | null
@@ -140,4 +140,56 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
   return recipeApi
     .post<boolean>('/api/v1/bookmarks/toggle', { userId, recipeId })
     .then(res => res.data)
+}
+
+// …기존 인터페이스, getDefaultRecipes, getRecipeDetail 등…
+
+/**
+ * 새로운 레시피 등록
+ * POST /api/v1/recipes
+ * - multipart/form-data
+ * - 반드시 X-USER-ID 헤더를 함께 전송해야 함
+ * @param formData FormData (title, content, tags, file 등)
+ * @param userId   요청 헤더에 넣을 유저 ID
+ * @returns 새로 생성된 레시피 ID
+ */
+export const createRecipe = async (
+  formData: FormData,
+  userId: number
+): Promise<number> => {
+  const res = await recipeApi.post<{
+    data: { id: number }
+  }>(
+    '/api/v1/recipes',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-USER-ID': String(userId),
+      },
+    }
+  )
+  // 실제 ID는 res.data.data.id 에 들어 있습니다
+  return res.data.data.id
+}
+
+/** 카테고리 옵션 하나 */
+export interface CategoryOption {
+  label: string
+  value: string
+}
+
+/** 전체 카테고리 옵션 */
+export interface CategoryOptions {
+  dish:       CategoryOption[]
+  situation:  CategoryOption[]
+  ingredient: CategoryOption[]
+  method:     CategoryOption[]
+}
+
+export const getCategoryOptions = async (): Promise<CategoryOptions> => {
+  const res = await recipeApi.get<CategoryOptions>(
+    '/api/v1/recipes/category-options'
+  )
+  return res.data
 }
