@@ -9,7 +9,7 @@ import SearchPanel from '../../components/search/SearchPanel'
 import RecipeCard from '../../components/recipe/RecipeCard'
 import Footer from '../../components/common/Footer'
 import RecipeListSection from '../../components/recipe/RecipeListSection'
-import { CategoryFilters } from '../../components/category/CategoryFilter.types.ts'
+import { CategoryFilters } from '../../components/category/CategoryFilter.types'
 import AdsBlock from '../../components/ads/AdsBlock'
 
 
@@ -22,7 +22,9 @@ const Home = () => {
     dish: '전체',
     situation: '전체',
     ingredient: '전체',
-    method: '전체'
+    method: '전체',
+    cookingTime: '전체',
+    difficulty: '전체'
   })
 
   const [ads, setAds] = useState<string[]>([])

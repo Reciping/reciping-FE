@@ -3,5 +3,7 @@ export interface CategoryFilters {
     situation: string
     ingredient: string
     method: string
+    cookingTime: string
+    difficulty: string
   }
   

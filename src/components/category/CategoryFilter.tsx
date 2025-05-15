@@ -1,42 +1,72 @@
-// src/components/CategoryFilter.tsx
-import { CategoryFilters } from './CategoryFilter.types.ts.js'
-
-const CATEGORY_OPTIONS = {
-    dish: ['전체', '밑반찬', '메인반찬', '국/탕', '찌개', '디저트', '면/만두', '밥/죽/떡', '퓨전', '김치/젓갈/장류', '양념/소스/잼', '양식', '샐러드', '스프', '빵', '과자', '차/음료/술', '기타'],
-    situation: ['전체', '일상', '초스피드', '손님접대', '술안주', '다이어트', '도시락', '영양식', '간식', '야식', '푸드스타일링', '해장', '명절', '이유식', '기타'],
-    ingredient: ['전체', '소고기', '돼지고기', '닭고기', '육류', '채소류', '해물류', '달걀/유제품', '가공식품류', '쌀', '밀가루', '건어물류', '버섯류', '과일류', '콩/견과류', '곡류', '기타'],
-    method: ['전체', '볶음', '끓이기', '부침', '조림', '무침', '비빔', '찜', '절임', '튀김', '삶기', '굽기', '데치기', '회', '기타']
-  }
+// src/components/category/CategoryFilter.tsx
+import React, { useState, useEffect } from 'react'
+import { CategoryFilters } from './CategoryFilter.types'
+import {
+  getCategoryOptions,
+  CategoryOptionsResponse
+} from '../../api/recipesApi'
 
 interface Props {
   value: CategoryFilters
   onChange: (newFilters: CategoryFilters) => void
 }
 
-const CategoryFilter = ({ value, onChange }: Props) => {
-  const handleSelect = (key: keyof CategoryFilters, option: string) => {
-    onChange({ ...value, [key]: value[key] === option ? '' : option })
+const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
+  // 1) 백엔드에서 카테고리 옵션을 받아올 상태
+  const [options, setOptions] = useState<CategoryOptionsResponse | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  
+  // 2) 마운트 시 API 호출
+  useEffect(() => {
+    setLoading(true)
+    getCategoryOptions()
+      .then(opts => {
+        setOptions(opts)
+      })
+      .catch(err => {
+        console.error(err)
+        setError('카테고리 옵션을 불러오는 중 오류가 발생했습니다.')
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  // 3) 선택 핸들러 (토글 방식)
+  const handleSelect = (key: keyof CategoryFilters, label: string) => {
+    onChange({
+      ...value,
+      [key]: value[key] === label ? '' : label
+    })
   }
+
+  // 4) 로딩 / 에러 표시
+  if (loading) return <p className="p-4 text-center">옵션을 불러오는 중…</p>
+  if (error)   return <p className="p-4 text-center text-red-500">{error}</p>
+  if (!options) return null
 
   return (
     <div className="bg-[#FCF7F4] p-5 rounded-2xl mb-6 shadow-sm">
-      {Object.entries(CATEGORY_OPTIONS).map(([key, options]) => (
+      {(Object.entries(options) as [keyof CategoryFilters, { label: string; value: string }[]][])
+        .map(([key, opts]) => (
         <div key={key} className="flex flex-wrap items-center mb-4">
           {/* 레이블 */}
           <span className="w-20 text-[#5C2E1E] font-semibold">
-            {key === 'type' && '종류별'}
-            {key === 'situation' && '상황별'}
+            {key === 'dish'       && '종류별'}
+            {key === 'situation'  && '상황별'}
             {key === 'ingredient' && '재료별'}
-            {key === 'method' && '방법별'}
+            {key === 'method'     && '방법별'}
+            {key === 'cookingTime' && '조리시간'}
+            {key === 'difficulty'  && '난이도'}
           </span>
+
           {/* 옵션 버튼들 */}
           <div className="flex flex-wrap gap-2">
-            {options.map(option => {
-              const isActive = value[key as keyof CategoryFilters] === option
+            {opts.map(opt => {
+              const isActive = value[key] === opt.label
               return (
                 <button
-                  key={option}
-                  onClick={() => handleSelect(key as keyof CategoryFilters, option)}
+                  key={opt.value}
+                  onClick={() => handleSelect(key, opt.label)}
                   className={`
                     px-3 py-1 rounded-full text-sm font-medium transition-colors
                     ${isActive
@@ -45,7 +75,7 @@ const CategoryFilter = ({ value, onChange }: Props) => {
                     }
                   `}
                 >
-                  {option}
+                  {opt.label}
                 </button>
               )
             })}
