@@ -12,10 +12,10 @@ export interface Recipe {
 
   cookingTime: string | null
   difficulty:  string | null
-  dish:    string | null
-  situation:   string | null
-  method:      string | null
-  ingredient:  string | null
+  dishType:    string | null
+  situationType:   string | null
+  methodType:      string | null
+  ingredientType:  string | null
 
   objectName: string | null
   keyName:    string | null

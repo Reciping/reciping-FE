@@ -44,7 +44,8 @@ const RecipeDetail: React.FC = () => {
   const {
     recipe: {
       imageUrl, title, content, likeCount,
-      difficulty, cookingTime, tags, createdAt
+      difficulty, cookingTime, tags, createdAt,
+      dishType, situationType, ingredientType, methodType,
     },
     comments
   } = data
@@ -89,10 +90,14 @@ const RecipeDetail: React.FC = () => {
           {new Date(createdAt).toLocaleDateString()}
         </p>
 
-        {/* 난이도·소요시간 */}
-        <div className="flex justify-center gap-8 text-sm text-gray-600 mb-8">
-          <span>난이도 {difficulty || '정보 없음'}</span>
-          <span>소요 시간 {cookingTime || '정보 없음'}</span>
+        {/* 난이도 · 소요시간 · 분류 버튼들 */}
+        <div className="flex justify-center text-sm text-gray-600 mb-6 space-x-6">
+          <span>난이도 ({difficulty || '정보 없음'})</span>
+          <span>소요 시간 ({cookingTime || '정보 없음'})</span>
+          <span>종류 ({dishType || '정보 없음'})</span>
+          <span>상황 ({situationType || '정보 없음'})</span>
+          <span>재료 ({ingredientType || '정보 없음'})</span>
+          <span>방법 ({methodType || '정보 없음'})</span>
         </div>
 
         {/* 레시피 설명 */}
