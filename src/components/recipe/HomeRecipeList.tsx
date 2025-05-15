@@ -1,11 +1,13 @@
 // src/components/recipe/HomeRecipeList.tsx
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getDefaultRecipes, Recipe } from '../../api/recipesApi'
 import RecipeSwiper from './RecipeSwiper'   // 👉 공통 슬라이더 로직 분리
 
 const FETCH_SIZE = 20
 
 const HomeRecipeList: React.FC = () => {
+  const navigate = useNavigate()
   const [recipes, setRecipes] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +30,12 @@ const HomeRecipeList: React.FC = () => {
   if (loading) return <p className="text-center py-12">Loading…</p>
   if (error)   return <p className="text-center text-red-500 py-12">{error}</p>
 
-  return <RecipeSwiper recipes={recipes} />
+  return (
+    <RecipeSwiper
+      recipes={recipes}
+      onCardClick={id => navigate(`/recipe/${id}`)}   // ← 추가
+    />
+  )
 }
 
 export default HomeRecipeList
