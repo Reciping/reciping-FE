@@ -139,13 +139,13 @@ const RecipeDetail: React.FC = () => {
 
           {/* 추가 : cookingTime */}
           {cookingTime && cookingTime !== 'ALL' && (
-                <span className="bg-[#4A90E2] text-white px-3 py-1 rounded-full text-xs">
-                  {findLabel(categoryOpts.cookingTime, cookingTime)}
-                </span>
+            <span className="bg-[#4A90E2] text-white px-3 py-1 rounded-full text-xs">
+              {cookingTime}
+            </span>
           )}
           {difficulty && difficulty !== 'ALL' && (
             <span className="bg-[#7B61FF] text-white px-3 py-1 rounded-full text-xs">
-              {findLabel(categoryOpts.difficulty, difficulty)}
+              {difficulty}
             </span>
           )}
         </div>

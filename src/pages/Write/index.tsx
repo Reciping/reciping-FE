@@ -108,10 +108,12 @@ const Write: React.FC = () => {
         dishType:       category.dish,
         situationType:  category.situation,
         ingredientType: category.ingredient,
-        methodType:     category.method,
-        cookingTime:    category.cookingTime,
-        difficulty:     category.difficulty
+        methodType:     category.method, 
+        // label을 전송해야 하는 카테고리
+        cookingTime: categoryOptions.cookingTime.find(opt => opt.value === category.cookingTime)?.label || '',
+        difficulty: categoryOptions.difficulty.find(opt => opt.value === category.difficulty)?.label || '',
       }
+      
 
       const formData = new FormData()
       formData.append(
