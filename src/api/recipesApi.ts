@@ -31,6 +31,36 @@ export interface Recipe {
   liked:      boolean
 }
 
+export interface SearchResponse {
+  total: number
+  page: number
+  limit: number
+  recipes: Recipe[]
+}
+
+/**
+ * 검색 파라미터 타입
+ */
+export interface SearchParams {
+  keyword: string
+  mode?: 'category' | 'ingredient' | 'menu'
+  // category 모드일 때만 사용
+  type?: string
+  situation?: string
+  ingredient?: string
+  method?: string
+  page?: number
+}
+
+/**
+ * 레시피 검색
+ * GET /api/v1/recipes/search?keyword=...&mode=...&...
+ */
+export const searchRecipes = (params: SearchParams) =>
+  recipeApi
+    .get<SearchResponse>('/api/v1/recipes/search', { params })
+    .then(res => res.data)
+
 // --- 추가: 페이지네이션 응답 타입 ---
 export interface Pageable {
   pageNumber:      number

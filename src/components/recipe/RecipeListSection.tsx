@@ -1,41 +1,44 @@
-// src/components/recipe/RecipeListSection.tsx
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import RecipeCard from './RecipeCard'
-import { DefaultRecipesResponse, getDefaultRecipes, Recipe } from '../../api/recipesApi'
+import { getDefaultRecipes, Recipe } from '../../api/recipesApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import RecipeCard from './RecipeCard'
 import nonImage from '../../assets/nonImage.jpeg'
 
 const ITEMS_PER_PAGE = 5
-const FETCH_SIZE = 20  // 최대 20개만 가져옴
+const FETCH_SIZE = 20
 
-const RecipeListSection: React.FC = () => {
+/* === 변경: 외부 결과·클릭 핸들러 주입 ================= */
+interface Props {
+  initialRecipes?: Recipe[]
+  onCardClick?: (id: number) => void
+}
+/* ==================================================== */
+
+const RecipeListSection: React.FC<Props> = ({
+  initialRecipes = [],
+  onCardClick,
+}) => {
   const navigate = useNavigate()
-  const swiperRef = useRef<any>(null)                // Swiper 인스턴스 저장용
+  const swiperRef = useRef<any>(null)
 
-  // * 전체 레시피(최대 20개)
-  const [allRecipes, setAllRecipes] = useState<Recipe[]>([])
-  const [loading, setLoading] = useState(false)
+  const [allRecipes, setAllRecipes] = useState<Recipe[]>(initialRecipes)
+  const [loading, setLoading] = useState(initialRecipes.length === 0)
   const [error, setError] = useState<string | null>(null)
-
-  // * 정렬 기준
   const [sortBy, setSortBy] = useState<'likes' | 'newest'>('likes')
-
-  // Swiper 현재 페이지(0-based)
   const [currentPage, setCurrentPage] = useState(0)
 
-  // 1) 마운트 시 최초 20개 불러오기
   useEffect(() => {
-    (async () => {
+    if (initialRecipes.length) return           // Search 페이지에서는 fetch 생략
+    ;(async () => {
       setLoading(true)
       setError(null)
       try {
-        const pageData: DefaultRecipesResponse = 
-          await getDefaultRecipes(0, FETCH_SIZE)
-        setAllRecipes(pageData.content)
+        const res = await getDefaultRecipes(0, FETCH_SIZE)
+        setAllRecipes(res.content)
       } catch (e) {
         console.error(e)
         setError('레시피를 불러오는 중 오류가 발생했습니다.')
@@ -43,22 +46,22 @@ const RecipeListSection: React.FC = () => {
         setLoading(false)
       }
     })()
-  }, [])
+  }, [initialRecipes])
 
-  // 2) 정렬된 레시피 목록
-  const sorted = useMemo(() => {
-    return [...allRecipes].sort((a, b) =>
-      sortBy === 'likes'
-        ? b.likeCount - a.likeCount
-        : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-  }, [allRecipes, sortBy])
+  const sorted = useMemo(
+    () =>
+      [...allRecipes].sort((a, b) =>
+        sortBy === 'likes'
+          ? b.likeCount - a.likeCount
+          : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
+    [allRecipes, sortBy],
+  )
 
-  // 3) 5개씩 묶은 페이지 배열
   const pages = useMemo(() => {
     const pageCount = Math.ceil(sorted.length / ITEMS_PER_PAGE)
     return Array.from({ length: pageCount }, (_, i) =>
-      sorted.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE)
+      sorted.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE),
     )
   }, [sorted])
 
@@ -66,7 +69,7 @@ const RecipeListSection: React.FC = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg mb-6 shadow">
-      {/* ───────── 정렬 + 페이지 인디케이터 ───────── */}
+      {/* 상단: 정렬 버튼 & 페이지 인디케이터 */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex gap-2">
           <button
@@ -97,41 +100,45 @@ const RecipeListSection: React.FC = () => {
           </button>
         </div>
         <span className="text-sm text-gray-600">
-          {currentPage + 1} / {totalPages}
+          {currentPage + 1} / {totalPages || 1}
         </span>
       </div>
 
-      {/* ───────── Swiper ───────── */}
       {!loading && !error && pages.length > 0 && (
-          <Swiper
-            modules={[Navigation]}
-            navigation={false}               // 기본 화살표 끄기
-            loop                              // 무한 루프
-            onSwiper={swiper => { swiperRef.current = swiper }}
-            onSlideChange={swiper => {
-              setCurrentPage(swiper.realIndex)
-            }}
-          >
-            {pages.map((group, idx) => (
-              <SwiperSlide key={idx}>
-                <div className="grid grid-cols-5 gap-4">
-                  {group.map(r => {
-                    const img = r.imageUrl?.trim() ? r.imageUrl : nonImage
-                    return (
-                      <RecipeCard
-                        key={r.id}
-                        imageUrl={img}
-                        title={r.title}
-                        likeCount={r.likeCount}
-                        onClick={() => navigate(`/recipe/${r.id}`)}
-                      />
-                    )
-                  })}
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        <Swiper
+          modules={[Navigation]}
+          loop
+          onSwiper={swiper => {
+            swiperRef.current = swiper
+          }}
+          onSlideChange={swiper => {
+            setCurrentPage(swiper.realIndex)
+          }}
+        >
+          {pages.map((group, idx) => (
+            <SwiperSlide key={idx}>
+              <div className="grid grid-cols-5 gap-4">
+                {group.map(r => (
+                  <RecipeCard
+                    key={r.id}
+                    imageUrl={r.imageUrl?.trim() ? r.imageUrl : nonImage}
+                    title={r.title}
+                    likeCount={r.likeCount}
+                    onClick={() =>
+                      onCardClick
+                        ? onCardClick(r.id)
+                        : navigate(`/recipe/${r.id}`)
+                    }
+                  />
+                ))}
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       )}
+
+      {loading && <p className="text-center py-8">Loading…</p>}
+      {error && <p className="text-center text-red-500 py-8">{error}</p>}
     </div>
   )
 }

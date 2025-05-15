@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from 'react-router-dom'
 
+import PageLayout from '../../components/layout/PageLayout'
 import Navbar from '../../components/layout/Navbar'
 import LogoTitle from '../../components/common/LogoTitle'
 import SearchPanel from '../../components/search/SearchPanel'
@@ -10,112 +15,129 @@ import AdsBlock from '../../components/ads/AdsBlock'
 import UserRecipeList from '../../components/user/UserRecipeList'
 import ABTestBlock from '../../components/abTest/ABTestBlock'
 import NaverSearchIframe from '../../components/NaverSearchIframe'
-import Footer from '../../components/common/Footer'
-import { searchRecipes, SearchParams, SearchResponse } from '../../api/recipesApi'
-import PageLayout from '../../components/layout/PageLayout'
+
+import {
+  searchRecipes,
+  SearchParams,
+  SearchResponse,
+  Recipe,
+} from '../../api/recipesApi'
+
+import RecipeListSection from '../../components/recipe/RecipeListSection'
 
 const SearchResults = () => {
-  const [searchParams]= useSearchParams()
+  const [searchParams] = useSearchParams()
+  const { state } = useLocation()
   const navigate = useNavigate()
 
-  const initialKeyword = searchParams.get('keyword') || ''
-  const [submittedKeyword, setSubmittedKeyword] = useState(initialKeyword)
-  const [searchKeyword, setSearchKeyword] = useState(initialKeyword)
+  // Home → state 로 온 카테고리 결과
+  const categoryRecipes: Recipe[] | undefined = (state as any)?.recipes
+  const categoryMode = (state as any)?.mode === 'category'
 
+  // 쿼리스트링 기반 검색 파라미터
   const keyword = searchParams.get('keyword') || ''
-  const mode = searchParams.get('mode') as SearchParams['mode'] || 'menu'
+  const mode = (searchParams.get('mode') as SearchParams['mode']) || 'menu'
   const page = parseInt(searchParams.get('page') || '1', 10)
 
-  const dish = searchParams.get('dish') || '전체'
-  const situation = searchParams.get('situation') || '전체'
-  const ingredient = searchParams.get('ingredient') || '전체'
-  const method = searchParams.get('method') || '전체'
+  const dishType = searchParams.get('dishType') || '전체'
+  const situationType = searchParams.get('situationType') || '전체'
+  const ingredientType = searchParams.get('ingredientType') || '전체'
+  const methodType = searchParams.get('methodType') || '전체'
 
+  const [searchKeyword, setSearchKeyword] = useState(keyword)
+  const [submittedKeyword, setSubmittedKeyword] = useState(keyword)
   const [data, setData] = useState<SearchResponse | null>(null)
 
-
+  // 키워드/메뉴/재료 검색 (카테고리 결과가 없을 때만)
   useEffect(() => {
+    if (categoryRecipes) return
+
     const params: SearchParams = { keyword, mode, page }
     if (mode === 'category') {
-      Object.assign(params, { dish, situation, ingredient, method })
+      Object.assign(params, {
+        dishType,
+        situationType,
+        ingredientType,
+        methodType,
+      })
     }
+
     searchRecipes(params)
       .then(res => setData(res))
       .catch(err => console.error('검색 API 오류:', err))
-  }, [submittedKeyword, mode, page, dish, situation, ingredient, method])
+  }, [categoryRecipes, keyword, mode, page, dishType, situationType, ingredientType, methodType])
 
+  /* 검색창 엔터 → quersyString 방식 유지 */
+  const handleSearch = () => {
+    setSubmittedKeyword(searchKeyword)
+    const qs = new URLSearchParams()
+    qs.set('keyword', searchKeyword)
+    qs.set('mode', mode)
+    qs.set('page', '1')
+    navigate(`/search?${qs.toString()}`)
+  }
+
+  /* 페이지 변경 */
   const goToPage = (newPage: number) => {
     const qs = new URLSearchParams(searchParams.toString())
     qs.set('page', newPage.toString())
     navigate(`/search?${qs.toString()}`)
   }
 
-  const handleSearch = () => {
-    setSubmittedKeyword(searchKeyword)
-
-    const params = new URLSearchParams()
-    params.set('keyword', searchKeyword)
-    params.set('mode', mode)
-    if (mode === 'category') {
-      params.set('dish', dish)
-      params.set('situation', situation)
-      params.set('ingredient', ingredient)
-      params.set('method', method)
-    }
-
-    params.set('page', '1')
-
-    // 검색 페이지로 이동
-    navigate(`/search?${params.toString()}`)
-  }
-
   return (
     <PageLayout>
       <Navbar />
-
       <div className="py-8">
         <div className="max-w-[1080px] mx-auto px-4">
           <LogoTitle />
 
-          {/* 검색 + 필터 */}
           <SearchPanel
             selectedMode={mode}
             onModeChange={() => {}}
             searchKeyword={searchKeyword}
             onSearchKeywordChange={setSearchKeyword}
-            categoryFilters={{ dish, situation, ingredient, method }}
+            categoryFilters={{
+              dishType,
+              situationType,
+              ingredientType,
+              methodType,
+              cookingTime: '전체',
+              difficulty: '전체',
+            }}
             onCategoryFiltersChange={() => {}}
             onSearch={handleSearch}
           />
 
-          {/* 검색한 쿼리 피드백 */}
           {submittedKeyword && <SearchFeedback query={submittedKeyword} />}
 
-          {/* 광고 & 이벤트 */}
           <div className="flex gap-4 mb-6">
             <EventBlock />
             <AdsBlock />
           </div>
 
-          
-          {data && (
-            <UserRecipeList
-              recipes = {data.recipes}
-              page = {data.page}
-              total = {data.total}
-              limit = {data.limit}
-              goToPage = {goToPage}
+          {/* ① 카테고리 검색 결과 */}
+          {categoryRecipes && (
+            <RecipeListSection
+              initialRecipes={categoryRecipes}
+              onCardClick={id => navigate(`/recipe/${id}`)}
             />
           )}
 
-          {/* A/B 테스트용 이벤트+광고 */}
-          <ABTestBlock />
+          {/* ② 기존 키워드 검색 결과 */}
+          {data && !categoryRecipes && (
+            <UserRecipeList
+              recipes={data.recipes}
+              page={data.page}
+              total={data.total}
+              limit={data.limit}
+              goToPage={goToPage}
+            />
+          )}
 
-          {/* 네이버 검색 결과 iframe */}
+          <ABTestBlock />
           <NaverSearchIframe query={keyword} />
         </div>
       </div>
-      <Footer />
     </PageLayout>
   )
 }

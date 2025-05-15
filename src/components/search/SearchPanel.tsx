@@ -2,7 +2,7 @@ import React from 'react'
 import FilterButtons from '../category/FilterButtons'
 import SearchInput from './SearchInput'
 import CategoryFilter from '../category/CategoryFilter'
-import { CategoryFilters } from '../category/CategoryFilter.types.ts'
+import { CategoryFilters } from '../category/CategoryFilter.types'
 
 interface Props {
   selectedMode: 'category' | 'ingredient' | 'menu'

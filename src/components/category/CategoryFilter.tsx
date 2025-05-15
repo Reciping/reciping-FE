@@ -51,10 +51,10 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
         <div key={key} className="mb-6">
           {/* 레이블 */}
           <span className="block w-full text-[#5C2E1E] font-semibold mb-2">
-            {key === 'dish'       && '종류별'}
-            {key === 'situation'  && '상황별'}
-            {key === 'ingredient' && '재료별'}
-            {key === 'method'     && '방법별'}
+            {key === 'dishType'       && '종류별'}
+            {key === 'situationType'  && '상황별'}
+            {key === 'ingredientType' && '재료별'}
+            {key === 'methodType'     && '방법별'}
             {key === 'cookingTime' && '조리시간'}
             {key === 'difficulty'  && '난이도'}
           </span>

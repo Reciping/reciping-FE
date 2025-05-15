@@ -1,4 +1,4 @@
-import { api } from './axiosInstance'
+import { authApi } from './axiosInstance'
 
 export const signUp = async (data: {
   nickname: string
@@ -8,12 +8,12 @@ export const signUp = async (data: {
   sex: string             
   age: string             
 }) => {
-  return api.post('/api/v1/users/signup', data)
+  return authApi.post('/api/v1/users/signup', data)
 }
 
 export const signIn = async (data: {
   email: string
   password: string
 }) => {
-  return api.post('/login', data)
+  return authApi.post('/login', data)
 }
