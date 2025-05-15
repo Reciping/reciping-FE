@@ -1,28 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RecipeCard from './RecipeCard'
-import { getDefaultRecipes, DefaultRecipesResponse, Recipe } from '../../api/recipesApi'
+import { 
+  getDefaultRecipes, 
+  DefaultRecipesResponse, 
+  Recipe 
+} from '../../api/recipesApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
-
 import nonImage from '../../assets/nonImage.jpeg'
 
 const ITEMS_PER_PAGE = 5
 
 const RecipeListSection: React.FC = () => {
   const navigate = useNavigate()
-  const [sortBy, setSortBy] = useState<'likes' | 'newest'>('likes')
+
+  // 현재 표시할 레시피들
   const [recipes, setRecipes] = useState<Recipe[]>([])
+  // 서버가 알려주는 전체 페이지 수
   const [totalPages, setTotalPages] = useState(1)
+  // 0-based 페이지 인덱스
   const [currentPage, setCurrentPage] = useState(0)
+
+  const [sortBy, setSortBy] = useState<'likes' | 'newest'>('likes')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchPage = async () => {
       setLoading(true)
+      setError(null)
       try {
         // 서버로부터 { content, totalPages, number, ... } 반환
         const pageData: DefaultRecipesResponse =
@@ -37,6 +46,7 @@ const RecipeListSection: React.FC = () => {
         setLoading(false)
       }
     }
+    
       fetchPage()
   }, [currentPage])
 
@@ -106,25 +116,30 @@ const RecipeListSection: React.FC = () => {
         <Swiper
           navigation
           modules={[Navigation]}
-          onSlideChange={(swiper) => setCurrentPage(swiper.activeIndex + 1)}
+          onSlideChange={(swiper) => setCurrentPage(swiper.activeIndex)}
+          initialSlide={currentPage}
         >
           {/* 이제 recipes 배열(한 페이지 분량)만 출력 */}
-          <SwiperSlide key={currentPage}>
-            <div className="grid grid-cols-5 gap-4">
-              {recipes.map(r => {
-                const img = r.imageUrl?.trim() ? r.imageUrl : nonImage
-                return (
-                  <RecipeCard
-                    key={r.id}
-                    imageUrl={img}
-                    title={r.title}
-                    likeCount={r.likeCount}
-                    onClick={() => navigate(`/recipe/${r.id}`)}
-                  />
-                )
-              })}
-            </div>
-          </SwiperSlide>
+          {Array.from({ length: totalPages }).map((_, pageIndex) => (
+            <SwiperSlide key={pageIndex}>
+              <div className="grid grid-cols-5 gap-4">
+                {pageIndex === currentPage
+                  ? recipes.map(r => {
+                      const img = r.imageUrl?.trim() ? r.imageUrl : nonImage
+                      return (
+                        <RecipeCard
+                          key={r.id}
+                          imageUrl={img}
+                          title={r.title}
+                          likeCount={r.likeCount}
+                          onClick={() => navigate(`/recipe/${r.id}`)}
+                        />
+                      )
+                    })
+                  : null}
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       )}
     </div>
