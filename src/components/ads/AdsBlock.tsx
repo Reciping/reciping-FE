@@ -15,7 +15,7 @@ const AdsBlock = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8081/api/v1/ads/public/serve?position=MAIN_TOP')
+      .get('http://localhost:8080/api/v1/ads/public/serve?position=MAIN_TOP')
       .then(res => {
         if (res.data.length > 0) {
           setAd(res.data[0]) // 첫 번째 광고만 선택
