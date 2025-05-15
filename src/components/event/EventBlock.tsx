@@ -1,10 +1,23 @@
 import React from 'react'
+import { EventBanner } from '../../api/mainApi'
 
-const EventBlock = () => (
-  <div className="bg-white p-4 rounded-lg flex-1 text-sm font-semibold text-[#5C2E1E] shadow">
-    <p className="mb-2">매일 자정!<br/>선착순 10명!<br/>마켓컬리 상품권 증정</p>
-    <button className="text-xs underline">확인하기 &gt;</button>
-  </div>
+interface Props {
+  event: EventBanner
+}
+
+const EventBlock: React.FC<Props> = ({ event }) => (
+  <a
+    href={event.previewImage.filePath}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="block bg-white rounded-2xl overflow-hidden shadow h-40"
+  >
+    <img
+      src={event.previewImage.filePath}
+      alt={event.title}
+      className="w-full h-full object-cover"
+    />
+  </a>
 )
 
 export default EventBlock
