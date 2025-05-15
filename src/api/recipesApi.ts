@@ -30,6 +30,7 @@ export interface Recipe {
   bookmarked: boolean
   liked:      boolean
 }
+
 // --- 추가: 페이지네이션 응답 타입 ---
 export interface Pageable {
   pageNumber:      number
@@ -53,37 +54,6 @@ export interface DefaultRecipesResponse {
   numberOfElements:number
   empty:           boolean
 }
-
-/**
- * 검색 API 응답 타입
- */
-export interface SearchResponse {
-  total: number
-  page: number
-  limit: number
-  recipes: Recipe[]
-}
-
-/**
- * 검색 파라미터 타입
- */
-export interface SearchParams {
-  keyword: string
-  mode?: 'category' | 'ingredient' | 'menu'
-  // category 모드일 때만 사용
-  type?: string
-  situation?: string
-  ingredient?: string
-  method?: string
-  page?: number
-}
-
-/**
- * 레시피 검색
- * GET /api/v1/recipes/search?keyword=...&mode=...&...
- */
-export const searchRecipes = (params: SearchParams) =>
-  recipeApi.get<SearchResponse>('/api/v1/recipes/search', { params })
 
 /**
  * 레시피 상세 조회 (이미지 없이 본문만)
@@ -221,4 +191,41 @@ export const getCategoryOptions = async (): Promise<CategoryOptionsResponse> => 
     '/api/v1/recipes/category-options'
   )
   return res.data
+}
+
+export interface CategorySearchRequest {
+  dishType?:       string | null
+  situationType?:  string | null
+  methodType?:     string | null
+  ingredientType?: string | null
+  cookingTime?:    string | null
+  difficulty?:     string | null
+}
+
+export interface CategorySearchResponse {
+  content: Recipe[]
+  pageable: Pageable
+  last: boolean
+  totalElements: number
+  totalPages: number
+  first: boolean
+  size: number
+  number: number
+  sort: unknown[]
+  numberOfElements: number
+  empty: boolean
+}
+
+/** 🆕 POST /api/v1/recipes/search/category */
+export const searchRecipesByCategory = async (
+  body: CategorySearchRequest,
+  page = 0,             // 필요 없으면 삭제해도 무방
+  size = 20,
+) => {
+  const { data } = await recipeApi.post<CategorySearchResponse>(
+    '/api/v1/recipes/search/category',
+    body,
+    { params: { page, size } }      // 백엔드에 page/size 쿼리 사용 시
+  )
+  return data                       // data.content 가 실제 Recipe[]
 }
