@@ -1,7 +1,7 @@
 // src/pages/RecipeDetail/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getRecipeDetail, RecipeDetailResponse, toggleBookmark } from '../../api/recipesApi'
+import { getRecipeDetail, RecipeDetailResponse, toggleBookmark, getCategoryOptions, CategoryOptions } from '../../api/recipesApi'
 
 import PageLayout from '../../components/layout/PageLayout'
 import Navbar    from '../../components/layout/Navbar'
@@ -13,33 +13,37 @@ const RecipeDetail: React.FC = () => {
   const navigate = useNavigate()
 
   const [data, setData] = useState<RecipeDetailResponse | null>(null)
+  const [categoryOpts, setCategoryOpts] = useState<CategoryOptions | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [bookmarked, setBookmarked] = useState(false)
 
   useEffect(() => {
-    const fetchDetail = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        // 예시로 page=1, size=10, userId 헤더는 X_user_id
-        const detail = await getRecipeDetail(id!, 1, 10)
-        setData(detail)
-        setBookmarked(detail.recipe.bookmarked)
-      } catch (e: any) {
-        console.error(e)
+    if (!id) return
+    setLoading(true)
+    setError(null)
+
+    Promise.all([
+      getRecipeDetail(id, 1, 6),   // → Promise<RecipeDetailResponse>
+      getCategoryOptions()         // → Promise<CategoryOptionsResponse>
+    ])
+      .then(([detail, opts]) => {
+        setData(detail)            // ★ detailRes.data 가 아니라 detail 그대로
+        setCategoryOpts(opts)      // ★ optsRes.data 가 아니라 opts 그대로
+      })
+      .catch(() => {
         setError('레시피 상세를 불러오는 중 오류가 발생했습니다.')
-      } finally {
+      })
+      .finally(() => {
         setLoading(false)
-      }
-    }
-    fetchDetail()
+      })
   }, [id])
 
   // 로딩 / error / 데이터 가드
   if (loading) return <p className="p-4 text-center">불러오는 중…</p>
   if (error)   return <p className="p-4 text-center text-red-500">{error}</p>
-  if (!data || !data.recipe) return null
+  if (!data || !categoryOpts) return null
+  
 
   const {
     recipe: {
@@ -49,6 +53,14 @@ const RecipeDetail: React.FC = () => {
     },
     comments
   } = data
+
+  const findLabel = (
+    list: { label: string; value: string }[],
+    code?: string | null
+  ) => {
+    if (!code) return '전체'
+    return list.find(opt => opt.value === code)?.label || '전체'
+  }
 
   // 북마크 버튼 클릭 핸들러
   const handleBookmark = async () => {
@@ -61,6 +73,8 @@ const RecipeDetail: React.FC = () => {
       alert('북마크 토글 중 오류가 발생했습니다.')
     }
   }
+
+  
 
   return (
     <PageLayout>
@@ -91,13 +105,29 @@ const RecipeDetail: React.FC = () => {
         </p>
 
         {/* 난이도 · 소요시간 · 분류 버튼들 */}
-        <div className="flex justify-center text-sm text-gray-600 mb-6 space-x-6">
+        <div className="flex flex-wrap justify-center text-sm text-gray-600 mb-6 space-x-4">
           <span>난이도 ({difficulty || '정보 없음'})</span>
           <span>소요 시간 ({cookingTime || '정보 없음'})</span>
-          <span>종류 ({dishType || '정보 없음'})</span>
-          <span>상황 ({situationType || '정보 없음'})</span>
-          <span>재료 ({ingredientType || '정보 없음'})</span>
-          <span>방법 ({methodType || '정보 없음'})</span>
+          <span>
+            종류 ( 
+            {findLabel(categoryOpts.dish, dishType)} 
+            )
+          </span>
+          <span>
+            상황 ( 
+            {findLabel(categoryOpts.situation, situationType)} 
+            )
+          </span>
+          <span>
+            재료 ( 
+            {findLabel(categoryOpts.ingredient, ingredientType)} 
+            )
+          </span>
+          <span>
+            방법 ( 
+            {findLabel(categoryOpts.method, methodType)} 
+            )
+          </span>
         </div>
 
         {/* 레시피 설명 */}

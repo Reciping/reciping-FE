@@ -21,10 +21,6 @@ const Write: React.FC = () => {
   const [file, setFile]         = useState<File | null>(null)
   const [tagInput, setTagInput] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [dishType, setDishType] = useState('')
-  const [situationType, setSituationType] = useState('')
-  const [methodType, setMethodType] = useState('')
-  const [ingredientType, setIngredientType] = useState('')
 
   // --- 카테고리 옵션 & 선택 ---
   const [categoryOptions, setCategoryOptions] = useState<CategoryOptions>({
