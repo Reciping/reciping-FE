@@ -23,7 +23,7 @@ export const mainRoutes = [
     element: <Home />,
   },
   {
-    path: '/search',
+    path: '/search/:mode',
     element: <SearchResults />,
   },
   {

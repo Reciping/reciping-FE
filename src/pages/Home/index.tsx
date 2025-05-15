@@ -44,28 +44,25 @@ const Home = () => {
 
   /* === 변경: 검색 버튼 === */
   const handleSearch = async () => {
-    // 메뉴/재료 모드 → 기존 쿼리스트링 검색
-    if (selectedMode !== 'category') {
+    if (selectedMode === 'category') {
+      try {
+        const payload: CategorySearchRequest = { ...categoryFilters }
+        const { content } = await searchRecipesByCategory(payload, 0, 20)
+  
+        // 🔁 /search/category 로 이동하면서 state에 데이터 전달
+        navigate('/search/category', {
+          state: { recipes: content, mode: 'category' },
+        })
+      } catch (e) {
+        console.error(e)
+        alert('카테고리 검색 중 오류가 발생했습니다.')
+      }
+    } else {
       const qs = new URLSearchParams()
       qs.set('keyword', searchKeyword)
-      qs.set('mode', selectedMode)
       qs.set('page', '1')
-      navigate(`/search?${qs.toString()}`)
-      return
-    }
-
-    // 카테고리 모드 → POST /search/category
-    try {
-      const payload: CategorySearchRequest = { ...categoryFilters }
-      const { content } = await searchRecipesByCategory(payload, 0, 20)
-
-      // /search 로 결과 배열을 state 로 넘김
-      navigate('/search', 
-        { state: { recipes: content, mode: 'category' }
-      })
-    } catch (e) {
-      console.error(e)
-      alert('카테고리 검색 중 오류가 발생했습니다.')
+      // 🔁 mode에 따라 search/menu 또는 search/ingredient 로 이동
+      navigate(`/search/${selectedMode}?${qs.toString()}`)
     }
   }
   /* ================================= */
