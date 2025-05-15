@@ -99,12 +99,11 @@ export const getRecipeById = (id: string | number) =>
 // 기존 getDefaultRecipes 를 아래처럼 수정
 export const getDefaultRecipes = async (
   page = 0,          // 0-based page 인 경우
-  size = 5           // 한 페이지당 아이템 개수
+  size = 20           // 한 페이지당 아이템 개수
 ): Promise<DefaultRecipesResponse> => {
-  const res = await recipeApi.get<DefaultRecipesResponse>(
-    '/api/v1/recipes/default',
-    { params: { page, size } }
-  )
+  const res = await recipeApi.get<DefaultRecipesResponse>('/api/v1/recipes/default', {
+    params: { page, size },
+  })
   return res.data
 }
 
@@ -171,8 +170,6 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
     .post<boolean>('/api/v1/bookmarks/toggle', { userId, recipeId })
     .then(res => res.data)
 }
-
-// …기존 인터페이스, getDefaultRecipes, getRecipeDetail 등…
 
 /**
  * 새로운 레시피 등록
