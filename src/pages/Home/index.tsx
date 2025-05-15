@@ -8,7 +8,7 @@ import EventBlock from '../../components/event/EventBlock'
 import LogoTitle from '../../components/common/LogoTitle'
 import SearchPanel from '../../components/search/SearchPanel'
 import Footer from '../../components/common/Footer'
-import RecipeListSection from '../../components/recipe/RecipeListSection'
+import RecipeListSection from '../../components/recipe/HomeRecipeList'
 import AdsBlock from '../../components/ads/AdsBlock'
 
 /* === 추가: 카테고리 검색 API === */
@@ -16,6 +16,7 @@ import {
   CategorySearchRequest,
   searchRecipesByCategory,
 } from '../../api/recipesApi'
+import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 /* ================================= */
 
 const Home = () => {
@@ -99,7 +100,7 @@ const Home = () => {
             <AdsBlock />
           </div>  
 
-          <RecipeListSection />
+          <HomeRecipeList />
 
           {/* (AI 추천·인기 리스트 영역 생략) */}
         </Container>

@@ -23,7 +23,7 @@ import {
   Recipe,
 } from '../../api/recipesApi'
 
-import RecipeListSection from '../../components/recipe/RecipeListSection'
+import SearchRecipeList from '../../components/recipe/SearchRecipeList'
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams()
@@ -116,9 +116,10 @@ const SearchResults = () => {
           </div>
 
           {/* ① 카테고리 검색 결과 */}
+
           {categoryRecipes && (
-            <RecipeListSection
-              initialRecipes={categoryRecipes}
+            <SearchRecipeList
+              recipes={categoryRecipes}
               onCardClick={id => navigate(`/recipe/${id}`)}
             />
           )}

@@ -155,7 +155,7 @@ export const getRecipeDetail = (
     .get<RecipeDetailResponse>(`/api/v1/recipes/${id}`, {
       params: { page, size },
       headers: {
-        'X-USER-ID' : '1234'
+        'X-USER-ID' : '1123'
       }
     })
     .then(res => res.data)
