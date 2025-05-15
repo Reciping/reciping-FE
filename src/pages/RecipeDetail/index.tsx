@@ -8,6 +8,8 @@ import Navbar    from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
 import Footer    from '../../components/common/Footer'
 
+import nonImage from '../../assets/nonImage.jpeg'
+
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -17,6 +19,9 @@ const RecipeDetail: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [bookmarked, setBookmarked] = useState(false)
+
+
+
 
   useEffect(() => {
     if (!id) return
@@ -72,9 +77,11 @@ const RecipeDetail: React.FC = () => {
       console.error(e)
       alert('북마크 토글 중 오류가 발생했습니다.')
     }
-  }
+  }  
+  const displayImage = imageUrl && imageUrl.trim() !== ''
+  ? imageUrl
+  : nonImage
 
-  
 
   return (
     <PageLayout>
@@ -90,9 +97,9 @@ const RecipeDetail: React.FC = () => {
         </button>
 
         {/* 이미지 */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center items-center mb-4">
           <img
-            src={imageUrl}
+            src={displayImage}
             alt={title}
             className="w-64 h-64 object-cover rounded-full shadow-lg"
           />
