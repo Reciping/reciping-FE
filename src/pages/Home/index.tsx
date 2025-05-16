@@ -11,7 +11,6 @@ import AdsBlock from '../../components/ads/AdsBlock'
 import Footer from '../../components/common/Footer'
 import RecommendedRecipeList from '../../components/recipe/RecommendedRecipeList'
 
-
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
 /* === 추가: 카테고리 검색 API === */
@@ -83,7 +82,7 @@ const Home = () => {
       qs.set('keyword', searchKeyword)
       qs.set('page', '1')
       // 🔁 mode에 따라 search/menu 또는 search/ingredient 로 이동
-      navigate(`/search/${selectedMode}?${qs.toString()}`)
+      navigate(`/search/${selectedMode}?${qs.toString()}`, { state: { main }})
     }
   }
   /* ================================= */

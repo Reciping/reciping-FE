@@ -24,6 +24,11 @@ import {
   Recipe,
 } from '../../api/recipesApi'
 
+import {
+  getMainData,
+  MainResponse,
+} from '../../api/mainApi'
+
 import SearchRecipeList from '../../components/recipe/SearchRecipeList'
 import { CategoryFilters } from '../../components/category/CategoryFilter.types'
 import {
@@ -35,7 +40,8 @@ import {
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams()
-  const { state } = useLocation()
+  const { state } = useLocation() as { state?: { main?: MainResponse } }
+  const [main, setMain] = useState<MainResponse | null>(state?.main ?? null)
   const navigate = useNavigate()
   
   // Home → state 로 온 카테고리 결과
@@ -69,6 +75,11 @@ const SearchResults = () => {
     difficulty,
   })
 
+  useEffect(() => {
+    if (main) return         // 이미 있으면 요청 생략
+    getMainData('MAIN_TOP', 20).then(setMain).catch(console.error)
+  }, [])
+  
   // 키워드/메뉴/재료 검색 (카테고리 결과가 없을 때만)
   useEffect(() => {
     if (categoryRecipes) return
@@ -136,9 +147,20 @@ const SearchResults = () => {
 
           {submittedKeyword && <SearchFeedback query={submittedKeyword} />}
 
-          <div className="flex gap-4 mb-6">
-            <EventBlock />
-            <AdsBlock />
+          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+            {/* 이벤트 (첫 배너) */}
+            {main?.events[0] ? (
+              <EventBlock event={main.events[0]} />
+            ) : (
+              <div className="h-40 w-full lg:w-1/2 rounded-2xl bg-white shadow flex items-center justify-center">
+                이벤트 없음
+              </div>
+            )}
+
+            {/* 광고 (첫 배너) */}
+            <div className="h-40 w-full lg:w-1/2 rounded-2xl overflow-hidden shadow">
+              <AdsBlock ad={main?.ads?.[0] ?? null} />
+            </div>
           </div>
 
           {/* ① 카테고리 검색 결과 */}
@@ -161,7 +183,7 @@ const SearchResults = () => {
             />
           )}
 
-          <ABTestBlock />
+          {/* <ABTestBlock /> */}
           <NaverSearchIframe query={keyword} />
         </div>
       </div>
