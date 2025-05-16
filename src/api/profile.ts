@@ -1,4 +1,4 @@
-import { api } from './axiosInstance';
+import { authApi } from './axiosInstance';
 import type { MyPageData } from '../types/mypage';
 
 /**
@@ -10,7 +10,7 @@ import type { MyPageData } from '../types/mypage';
 
 
 export const getMyPage = (page: number, size: number): Promise<MyPageData> => {
-  return api
+  return authApi
     .get<{ data: MyPageData }>(`/api/v1/mypage?page=${page}&size=${size}`)
     .then(res => res.data.data);
 };

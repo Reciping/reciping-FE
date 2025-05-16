@@ -27,13 +27,13 @@ const UserRecipeList: React.FC<UserRecipeListProps> = ({
           <li key={r.id} className="flex items-center justify-between">
             <div className="flex items-center">
               <img
-                src={r.image_url}
+                src={r.imageUrl}
                 alt={r.title}
                 className="w-12 h-12 rounded mr-3"
               />
               <span className="text-sm">{r.title}</span>
             </div>
-            <div className="text-sm text-gray-500">♥ {r.like}</div>
+            <div className="text-sm text-gray-500">♥ {r.liked}</div>
           </li>
         ))}
       </ul>

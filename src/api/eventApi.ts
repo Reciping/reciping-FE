@@ -1,4 +1,4 @@
-import { api } from './axiosInstance'
+import { authApi } from './axiosInstance'
 
 // 📑 응답 데이터 타입
 export interface PreviewImage {
@@ -35,7 +35,7 @@ export const getEvents = async (
   params: GetEventsParams
 ): Promise<EventItem[]> => {
   try {
-    const res = await api.get<GetEventsResponse>('/api/v1/events', {
+    const res = await authApi.get<GetEventsResponse>('/api/v1/events', {
       params,
     })
     return res.data.data

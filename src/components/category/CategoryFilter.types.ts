@@ -1,9 +1,9 @@
 export interface CategoryFilters {
-    dish: string
-    situation: string
-    ingredient: string
-    method: string
-    cookingTime: string
-    difficulty: string
-  }
+  dishType: string
+  situationType: string
+  ingredientType: string
+  methodType: string
+  cookingTime: string
+  difficulty: string
+}
   

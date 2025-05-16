@@ -1,5 +1,11 @@
 // src/api/recipesApi.ts
 import { recipeApi } from '../services/recipeApi'
+import {
+  DishTypeLabelToValue,
+  SituationTypeLabelToValue,
+  IngredientTypeLabelToValue,
+  MethodTypeLabelToValue,
+} from '../constants/CategoryValueMap'
 
 /**
  * 레시피 기본 정보 타입
@@ -30,6 +36,73 @@ export interface Recipe {
   bookmarked: boolean
   liked:      boolean
 }
+
+export interface SearchResponse {
+  total: number
+  page: number
+  limit: number
+  recipes: Recipe[]
+}
+
+/**
+ * 검색 파라미터 타입
+ */
+export interface SearchParams {
+  keyword: string
+  mode?: 'category' | 'ingredient' | 'menu'
+  // category 모드일 때만 사용
+  type?: string
+  dishType?: string
+  situationType?: string
+  ingredientType?: string
+  methodType?: string
+  cookingTime?: string
+  difficulty?: string
+  page?: number
+}
+
+/**
+ * 레시피 검색 (mode에 따라 분기)
+ * - menu        → GET /api/v1/recipes/search/menu
+ * - ingredient  → GET /api/v1/recipes/search/ingredients
+ * - category    → POST /api/v1/recipes/search/category
+ */
+export const searchRecipes = async (
+  mode: 'category' | 'ingredient' | 'menu',
+  params: SearchParams
+): Promise<SearchResponse> => {
+  const { page = 1, keyword } = params
+  if (mode === 'category') {
+    const body = {
+      dishType: DishTypeLabelToValue[params.dishType ?? '전체'] ?? 'ALL',
+      situationType: SituationTypeLabelToValue[params.situationType ?? '전체'] ?? 'ALL',
+      ingredientType: IngredientTypeLabelToValue[params.ingredientType ?? '전체'] ?? 'ALL',
+      methodType: MethodTypeLabelToValue[params.methodType ?? '전체'] ?? 'ALL',
+      cookingTime:    params.cookingTime ?? '전체',  // 이미 Enum value인 경우
+      difficulty:     params.difficulty ?? '전체',   // 이미 Enum value인 경우
+    }
+    const data = await searchRecipesByCategory(body, page - 1, 20)
+
+    return {
+      recipes: data.content,
+      total: data.totalElements,
+      page: data.number + 1,
+      limit: data.size,
+    }
+  }
+
+  const endpoint =
+    mode === 'ingredient'
+      ? '/api/v1/recipes/search/ingredients'
+      : '/api/v1/recipes/search/menu'
+
+  const { data } = await recipeApi.get<SearchResponse>(endpoint, {
+    params: { keyword, page },
+  })
+
+  return data
+}
+
 // --- 추가: 페이지네이션 응답 타입 ---
 export interface Pageable {
   pageNumber:      number
@@ -53,37 +126,6 @@ export interface DefaultRecipesResponse {
   numberOfElements:number
   empty:           boolean
 }
-
-/**
- * 검색 API 응답 타입
- */
-export interface SearchResponse {
-  total: number
-  page: number
-  limit: number
-  recipes: Recipe[]
-}
-
-/**
- * 검색 파라미터 타입
- */
-export interface SearchParams {
-  keyword: string
-  mode?: 'category' | 'ingredient' | 'menu'
-  // category 모드일 때만 사용
-  type?: string
-  situation?: string
-  ingredient?: string
-  method?: string
-  page?: number
-}
-
-/**
- * 레시피 검색
- * GET /api/v1/recipes/search?keyword=...&mode=...&...
- */
-export const searchRecipes = (params: SearchParams) =>
-  recipeApi.get<SearchResponse>('/api/v1/recipes/search', { params })
 
 /**
  * 레시피 상세 조회 (이미지 없이 본문만)
@@ -155,7 +197,7 @@ export const getRecipeDetail = (
     .get<RecipeDetailResponse>(`/api/v1/recipes/${id}`, {
       params: { page, size },
       headers: {
-        'X-USER-ID' : '1234'
+        'X-USER-ID' : '1123'
       }
     })
     .then(res => res.data)
@@ -221,4 +263,42 @@ export const getCategoryOptions = async (): Promise<CategoryOptionsResponse> => 
     '/api/v1/recipes/category-options'
   )
   return res.data
+}
+
+export interface CategorySearchRequest {
+  dishType?:       string | null
+  situationType?:  string | null
+  methodType?:     string | null
+  ingredientType?: string | null
+  cookingTime?:    string | null
+  difficulty?:     string | null
+}
+
+export interface CategorySearchResponse {
+  content: Recipe[]
+  pageable: Pageable
+  last: boolean
+  totalElements: number
+  totalPages: number
+  first: boolean
+  size: number
+  number: number
+  sort: unknown[]
+  numberOfElements: number
+  empty: boolean
+}
+
+/** 🆕 POST /api/v1/recipes/search/category */
+export const searchRecipesByCategory = async (
+  body: CategorySearchRequest,
+  page = 0,             // 필요 없으면 삭제해도 무방
+  size = 20,
+) => {
+  const { data } = await recipeApi.post<CategorySearchResponse>(
+    '/api/v1/recipes/search/category',
+    body,
+    { params: { page, size } }      // 백엔드에 page/size 쿼리 사용 시
+  )
+  console.log(data, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+  return data                       // data.content 가 실제 Recipe[]
 }
