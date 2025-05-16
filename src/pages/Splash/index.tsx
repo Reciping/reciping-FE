@@ -16,7 +16,7 @@ const Splash = () => {
 
   const handleStart = () => {
     localStorage.setItem('hasSeenSplash', 'true')
-    navigate('/home')
+    navigate('/login')
   }
 
   const handleSkip = () => {

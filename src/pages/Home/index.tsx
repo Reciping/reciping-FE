@@ -9,6 +9,7 @@ import LogoTitle from '../../components/common/LogoTitle'
 import SearchPanel from '../../components/search/SearchPanel'
 import AdsBlock from '../../components/ads/AdsBlock'
 import Footer from '../../components/common/Footer'
+import eventPlaceholder from '../../assets/event.jpg'   // 실제 경로에 맞게 수정
 import RecommendedRecipeList from '../../components/recipe/RecommendedRecipeList'
 
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
@@ -112,7 +113,11 @@ const Home = () => {
               <EventBlock event={main.events[0]} />
             ) : (
               <div className="h-40 rounded-2xl bg-white shadow flex items-center justify-center">
-                이벤트 준비 중…
+                    <img
+                      src={eventPlaceholder}
+                      alt="이벤트 준비 중"
+                      className="w-full h-full object-cover"
+                    />
               </div>
             )}
 

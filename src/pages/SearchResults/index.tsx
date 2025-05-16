@@ -16,6 +16,7 @@ import AdsBlock from '../../components/ads/AdsBlock'
 import UserRecipeList from '../../components/user/UserRecipeList'
 import ABTestBlock from '../../components/abTest/ABTestBlock'
 import NaverSearchIframe from '../../components/NaverSearchIframe'
+import eventPlaceholder from '../../assets/event.jpg'   // 실제 경로에 맞게 수정
 
 import {
   searchRecipes,
@@ -153,7 +154,11 @@ const SearchResults = () => {
               <EventBlock event={main.events[0]} />
             ) : (
               <div className="h-40 w-full lg:w-1/2 rounded-2xl bg-white shadow flex items-center justify-center">
-                이벤트 없음
+                    <img
+                      src={eventPlaceholder}
+                      alt="이벤트 준비 중"
+                      className="w-full h-full object-cover"
+                    />
               </div>
             )}
 
