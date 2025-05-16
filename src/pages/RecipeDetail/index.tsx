@@ -19,6 +19,7 @@ const RecipeDetail: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [bookmarked, setBookmarked] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
 
 
@@ -153,7 +154,24 @@ const RecipeDetail: React.FC = () => {
         {/* 레시피 설명 */}
         <section className="mb-8">
           <h2 className="font-semibold mb-2">레시피 설명 :</h2>
-          <p className="text-gray-700 mb-2">{content}</p>
+          <p
+            className={`
+              text-gray-700 mb-2 whitespace-pre-wrap
+              ${expanded ? '' : 'line-clamp-5'}
+            `}
+          >
+            {content}
+          </p>
+          {content.length > 120 && (    // 글이 충분히 길 때만 표시
+            <div className="flex justify-center">
+              <button
+                onClick={() => setExpanded(prev => !prev)}
+                className="text-[#F15A24] font-medium text-sm"
+              >
+                {expanded ? '접기 ▲' : '더보기 ▼'}
+              </button>
+            </div>
+          )}
           <div className="text-sm text-gray-500">
             {tags.map(tag => `#${tag} `)}
           </div>
