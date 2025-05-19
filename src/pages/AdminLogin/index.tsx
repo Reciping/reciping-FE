@@ -14,7 +14,7 @@ const AdminLogin: React.FC = () => {
     // 임시: ID/PW 둘 다 "qwer" 일 때만 성공
     if (form.id === 'qwer' && form.password === 'qwer') {
       alert('관리자 로그인 성공!')
-      navigate('/')  // 로그인 후 홈으로
+      navigate('/admin')  // 로그인 후 홈으로
     } else {
       alert('관리자 아이디 또는 비밀번호가 올바르지 않습니다.')
     }
