@@ -7,37 +7,9 @@ import ContentWrapper from '../../components/common/ContentWrapper'
 import recipingFront from '../../assets/recipingFront.png'
 import Footer from '../../components/common/Footer'
 
-// ✨ API 함수 import
-import { getEvents, EventItem } from '../../api/eventApi'
 
 const EventPage: React.FC = () => {
   const navigate = useNavigate()
-
-  // ✨ API로 불러온 이벤트 상태
-  const [events, setEvents] = useState<EventItem[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await getEvents({
-          page: 0,
-          size: 10,
-          event_type: 'FLASH_SALE',
-          is_deleted: false,
-        })
-        setEvents(data)
-      } catch (e: any) {
-        setError(e.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchEvents()
-  }, [])
 
   return (
     <PageLayout>
@@ -59,25 +31,15 @@ const EventPage: React.FC = () => {
         <h3 className="text-base font-semibold mb-4">진행중인 이벤트 🎉</h3>
 
         {/* 로딩 상태 */}
-        {loading && <p className="text-center text-gray-500">이벤트 불러오는 중...</p>}
+        {<p className="text-center text-gray-500">이벤트 불러오는 중...</p>}
 
         {/* 에러 상태 */}
-        {error && <p className="text-center text-red-500">{error}</p>}
+        {<p className="text-center text-red-500">{}</p>}
 
         {/* 이벤트 리스트 */}
-        {!loading && !error && (
+        { (
           <ul className="divide-y">
-            {events.map((evt) => (
-              <li key={evt.id} className="flex items-center py-3">
-                {/* 미리보기 이미지 */}
-                <img
-                  src={`${import.meta.env.VITE_API_BASE}/${evt.previewImage.filePath}/${evt.previewImage.keyName}`}
-                  alt={evt.title}
-                  className="w-12 h-6 object-cover rounded-full mr-4"
-                />
-                <span className="text-sm flex-1">{evt.title}</span>
-              </li>
-            ))}
+            
           </ul>
         )}
 

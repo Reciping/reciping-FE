@@ -1,6 +1,6 @@
 // src/components/recipe/SearchRecipeList.tsx
 import React from 'react'
-import { Recipe } from '../../api/recipesApi'
+import { Recipe } from '../../services/recipeService'
 import RecipeSwiper from './RecipeSwiper'
 
 interface Props {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { EventBanner } from '../../api/mainApi'
+import { EventBanner } from '../../services/mainService'
 
 interface Props {
   event: EventBanner

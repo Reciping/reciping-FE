@@ -14,17 +14,10 @@ import RecommendedRecipeList from '../../components/recipe/RecommendedRecipeList
 
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
-/* === 추가: 카테고리 검색 API === */
-import {
-  CategorySearchRequest,
-  searchRecipesByCategory,
-} from '../../api/recipesApi'
+import { getMainData, MainResponse, EventBanner } from '../../services/mainService'
+import { Ad } from '../../types/ads'
+import { Recipe } from '../../services/recipeService'
 
-import {
-  getMainData,
-  MainResponse,
-} from '../../api/mainApi'
-/* ================================= */
 
 const Home = () => {
   const navigate = useNavigate()
@@ -65,26 +58,26 @@ const Home = () => {
 
   /* === 변경: 검색 버튼 === */
   const handleSearch = async () => {
+    // 모든 검색 모드에서 쿼리 스트링 사용
+    const qs = new URLSearchParams()
+    qs.set('page', '1')
+
     if (selectedMode === 'category') {
-      try {
-        const payload: CategorySearchRequest = { ...categoryFilters }
-        const { content } = await searchRecipesByCategory(payload, 0, 20)
-  
-        // 🔁 /search/category 로 이동하면서 state에 데이터 전달
-        navigate('/search/category', {
-          state: { recipes: content, mode: 'category' },
-        })
-      } catch (e) {
-        console.error(e)
-        alert('카테고리 검색 중 오류가 발생했습니다.')
-      }
-    } else {
-      const qs = new URLSearchParams()
+      // 카테고리 필터 값을 쿼리 스트링으로 추가
+      // SearchResults 페이지에서 필요한 필터 값을 읽어서 API 호출
+      qs.set('dishType', categoryFilters.dishType)
+      qs.set('situationType', categoryFilters.situationType)
+      qs.set('ingredientType', categoryFilters.ingredientType)
+      qs.set('methodType', categoryFilters.methodType)
+      qs.set('cookingTime', categoryFilters.cookingTime)
+      qs.set('difficulty', categoryFilters.difficulty)
+
+    } else { // menu 또는 ingredient
       qs.set('keyword', searchKeyword)
-      qs.set('page', '1')
-      // 🔁 mode에 따라 search/menu 또는 search/ingredient 로 이동
-      navigate(`/search/${selectedMode}?${qs.toString()}`, { state: { main }})
     }
+
+    // 모든 모드에서 /search/:mode 경로로 이동
+    navigate(`/search/${selectedMode}?${qs.toString()}`, { state: { main }}) // main 데이터는 SearchResults에서 사용할 수 있으니 그대로 넘깁니다.
   }
   /* ================================= */
 

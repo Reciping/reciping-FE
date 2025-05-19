@@ -5,6 +5,7 @@ import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/common/Footer'
 import PageLayout from '../../components/layout/PageLayout'
 import ContentWrapper from '../../components/common/ContentWrapper'
+import {updateProfile} from '../../services/userService'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()
@@ -22,10 +23,10 @@ const ProfileEdit = () => {
         setForm(prev => ({ ...prev, [name]: value }))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!form.nickname || !form.password || !form.interestKeyword || !form.sex || !form.age) {
-        alert('모든 항목을 입력해주세요.')
-        return
+            alert('모든 항목을 입력해주세요.')
+            return
         }
         alert('수정이 완료되었습니다.')
         navigate('/profile')

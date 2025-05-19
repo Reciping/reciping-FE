@@ -4,7 +4,7 @@ import { CategoryFilters } from './CategoryFilter.types'
 import {
   getCategoryOptions,
   CategoryOptionsResponse
-} from '../../api/recipesApi'
+} from '../../services/recipeService'
 
 interface Props {
   value: CategoryFilters

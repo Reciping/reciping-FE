@@ -1,6 +1,6 @@
 // src/pages/SignUp/index.tsx
 import { useState } from "react"
-import { signUp } from "../../api/authApi"
+import { signUp } from "../../services/authService"
 import { useNavigate } from "react-router-dom"
 
 const SignUp = () => {

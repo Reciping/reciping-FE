@@ -1,7 +1,7 @@
 // src/components/recipe/HomeRecipeList.tsx
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getDefaultRecipes, Recipe } from '../../api/recipesApi'
+import { getDefaultRecipes, Recipe } from '../../services/recipeService'
 import RecipeSwiper from './RecipeSwiper'   // 👉 공통 슬라이더 로직 분리
 
 const FETCH_SIZE = 20
