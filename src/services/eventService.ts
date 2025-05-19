@@ -1,4 +1,4 @@
-import { authApi } from './axiosInstance'
+import { authApiClient } from '../api/authApiClient'
 
 // 📑 응답 데이터 타입
 export interface PreviewImage {
@@ -35,7 +35,7 @@ export const getEvents = async (
   params: GetEventsParams
 ): Promise<EventItem[]> => {
   try {
-    const res = await authApi.get<GetEventsResponse>('/api/v1/events', {
+    const res = await authApiClient.get<GetEventsResponse>('/api/v1/events', {
       params,
     })
     return res.data.data
@@ -51,4 +51,4 @@ export const getEvents = async (
     }
     throw new Error('알 수 없는 오류가 발생했습니다.')
   }
-}
+} 

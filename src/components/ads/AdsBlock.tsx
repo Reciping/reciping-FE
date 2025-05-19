@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Ad } from '../../api/adsApi'   // ★ 변경
+import { Ad } from '../../types/ads'   // ★ 변경
 
 interface Props {
   ad: Ad | null

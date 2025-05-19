@@ -1,25 +1,8 @@
-import axios from 'axios'
-import { Recipe } from './recipesApi'
-import { Ad } from './adsApi'
+import { mainApiClient } from '../api/mainApiClient'
+import { Recipe } from './recipeService'
+import { Ad } from '../types/ads' // Assuming Ad type is in src/types
 
-export const mainApi = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_MAIN_BASE ||
-    'http://localhost:8080',
-  timeout: 10_000,
-})
-
-mainApi.interceptors.request.use(
-  config => {
-    const userId =
-      localStorage.getItem('userId')  // 로그인 시 저장해둔 값
-      ?? '1123'                       // 또는 하드코드 테스트 ID
-    config.headers['X-USER-ID'] = userId
-    return config
-  },
-  error => Promise.reject(error),
-)
-
+// Keeping the type definitions relevant to the service
 export interface EventBanner {
   id: string
   title: string
@@ -42,7 +25,7 @@ export const getMainData = async (
   position = 'MAIN_TOP',
   size = 20,                // ★ 여기서 개수 조정
 ): Promise<MainResponse> => {
-  const { data } = await mainApi.get<RawMainResponse>(
+  const { data } = await mainApiClient.get<RawMainResponse>(
     '/api/v1/main',
     { params: { position, size } },
   )
@@ -52,4 +35,4 @@ export const getMainData = async (
     events: data.events?.data ?? [],
     recommendedRecipes: data.recommendedRecipeList ?? [],
   }
-}
+} 

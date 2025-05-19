@@ -1,7 +1,7 @@
 // src/pages/SignIn/index.tsx
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { signIn } from "../../api/authApi"
+import { signIn } from "../../services/authService"
 
 const SignIn = () => {
   const [form, setForm] = useState({ email: '', password: '' })

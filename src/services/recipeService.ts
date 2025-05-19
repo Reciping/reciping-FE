@@ -1,5 +1,4 @@
-// src/api/recipesApi.ts
-import { recipeApi } from '../services/recipeApi'
+import { recipeApiClient } from '../api/recipeApiClient'
 import {
   DishTypeLabelToValue,
   SituationTypeLabelToValue,
@@ -81,6 +80,7 @@ export const searchRecipes = async (
       cookingTime:    params.cookingTime ?? '전체',  // 이미 Enum value인 경우
       difficulty:     params.difficulty ?? '전체',   // 이미 Enum value인 경우
     }
+    // Assuming searchRecipesByCategory is also moved to this service file
     const data = await searchRecipesByCategory(body, page - 1, 20)
 
     return {
@@ -96,7 +96,7 @@ export const searchRecipes = async (
       ? '/api/v1/recipes/search/ingredients'
       : '/api/v1/recipes/search/menu'
 
-  const { data } = await recipeApi.get<SearchResponse>(endpoint, {
+  const { data } = await recipeApiClient.get<SearchResponse>(endpoint, {
     params: { keyword, page },
   })
 
@@ -132,7 +132,7 @@ export interface DefaultRecipesResponse {
  * GET /api/v1/recipes/:id
  */
 export const getRecipeById = (id: string | number) =>
-  recipeApi.get<Recipe>(`/api/v1/recipes/${id}`)
+  recipeApiClient.get<Recipe>(`/api/v1/recipes/${id}`)
 
 /**
  * 홈 기본 레시피 목록 조회
@@ -143,7 +143,7 @@ export const getDefaultRecipes = async (
   page = 0,          // 0-based page 인 경우
   size = 20           // 한 페이지당 아이템 개수
 ): Promise<DefaultRecipesResponse> => {
-  const res = await recipeApi.get<DefaultRecipesResponse>('/api/v1/recipes/default', {
+  const res = await recipeApiClient.get<DefaultRecipesResponse>('/api/v1/recipes/default', {
     params: { page, size },
   })
   return res.data
@@ -193,7 +193,7 @@ export const getRecipeDetail = (
   page = 0,
   size = 5
 ): Promise<RecipeDetailResponse> =>
-  recipeApi
+  recipeApiClient
     .get<RecipeDetailResponse>(`/api/v1/recipes/${id}`, {
       params: { page, size },
       headers: {
@@ -208,7 +208,7 @@ export const getRecipeDetail = (
  * @param recipeId – 토글할 레시피 ID
  */
 export const toggleBookmark = (userId: number, recipeId: number): Promise<boolean> => {
-  return recipeApi
+  return recipeApiClient
     .post<boolean>('/api/v1/bookmarks/toggle', { userId, recipeId })
     .then(res => res.data)
 }
@@ -226,7 +226,7 @@ export const createRecipe = async (
   formData: FormData,
   userId: number
 ): Promise<number> => {
-  const res = await recipeApi.post<{
+  const res = await recipeApiClient.post<{
     data: { id: number }
   }>(
     '/api/v1/recipes', 
@@ -248,7 +248,8 @@ export interface CategoryOption {
   value: string
 }
 
-/** 전체 카테고리 옵션 */
+// --- Remaining content from src/api/recipesApi.ts ---
+
 export interface CategoryOptionsResponse {
   dish:       CategoryOption[]
   situation:  CategoryOption[]
@@ -259,9 +260,7 @@ export interface CategoryOptionsResponse {
 }
 
 export const getCategoryOptions = async (): Promise<CategoryOptionsResponse> => {
-  const res = await recipeApi.get<CategoryOptionsResponse>(
-    '/api/v1/recipes/category-options'
-  )
+  const res = await recipeApiClient.get<CategoryOptionsResponse>('/api/v1/recipes/categories')
   return res.data
 }
 
@@ -288,17 +287,16 @@ export interface CategorySearchResponse {
   empty: boolean
 }
 
-/** 🆕 POST /api/v1/recipes/search/category */
 export const searchRecipesByCategory = async (
   body: CategorySearchRequest,
   page = 0,             // 필요 없으면 삭제해도 무방
   size = 20,
 ) => {
-  const { data } = await recipeApi.post<CategorySearchResponse>(
+  const res = await recipeApiClient.post<CategorySearchResponse>(
     '/api/v1/recipes/search/category',
     body,
-    { params: { page, size } }      // 백엔드에 page/size 쿼리 사용 시
+    { params: { page, size } }
   )
-  console.log(data, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-  return data                       // data.content 가 실제 Recipe[]
-}
+  return res.data
+  // return data
+} 
