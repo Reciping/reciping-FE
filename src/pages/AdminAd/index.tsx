@@ -6,7 +6,7 @@ import AdminSidebar from '../../components/admin/AdminSidebar'
 import PageLayout from '../../components/layout/PageLayout'
 
 
-const Admin = () => {
+const AdminAd = () => {
     const navigate = useNavigate()
 
     return (
@@ -19,4 +19,4 @@ const Admin = () => {
     )
 }
 
-export default Admin
+export default AdminAd
