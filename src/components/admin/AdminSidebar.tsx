@@ -9,6 +9,26 @@ const AdminSidebar = () => {
     navigate('/adminlogin')
   }
 
+  const handleAdminEventList = () => {
+    navigate('/admin/event')
+    
+  }
+
+  const handleAdminAdList = () => {
+    navigate('/admin/ad')
+
+  }
+
+  const handleAdminEventWrite = () => {
+    navigate('/admin/event/write')
+    
+  }
+
+  const handleAdminAdWrite = () => {
+    navigate('/admin/ad/write')
+
+  }
+
   return (
     <aside className="w-64 h-screen bg-[#FAFAFA] border-r shadow flex flex-col justify-between">
       <div>
@@ -19,13 +39,13 @@ const AdminSidebar = () => {
         <nav className="flex flex-col px-4 gap-2">
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-left hover:bg-orange-100 bg-white shadow text-gray-700 font-semibold"
-            onClick={() => navigate('/admin/event')}
+            onClick={handleAdminEventList}
           >
             📅 이벤트 목록 보기
           </button>
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-left hover:bg-orange-100 bg-white shadow text-gray-700 font-semibold"
-            onClick={() => navigate('/admin/ad')}
+            onClick={handleAdminAdList}
           >
             📢 광고 목록 보기
           </button>
@@ -35,13 +55,13 @@ const AdminSidebar = () => {
 
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-left hover:bg-orange-100 bg-white shadow text-gray-700 font-semibold"
-            onClick={() => navigate('/admin/event/write')}
+            onClick={handleAdminEventWrite}
           >
             ✍️ 이벤트 글 작성
           </button>
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-left hover:bg-orange-100 bg-white shadow text-gray-700 font-semibold"
-            onClick={() => navigate('/admin/ad/write')}
+            onClick={handleAdminAdWrite}
           >
             ✍️ 광고 글 작성
           </button>
