@@ -13,7 +13,7 @@ const AdminSidebar = () => {
     <aside className="w-64 h-screen bg-[#FAFAFA] border-r shadow flex flex-col justify-between">
       <div>
         {/* 로고 */}
-        <div className="text-2xl font-bold text-orange-500 px-6 py-4">🍳 reciping</div>
+        <h1 className="text-2xl font-bold text-orange-500 px-6 py-4">🍳 reciping</h1>
 
         {/* 메뉴 목록 */}
         <nav className="flex flex-col px-4 gap-2">
@@ -29,6 +29,10 @@ const AdminSidebar = () => {
           >
             📢 광고 목록 보기
           </button>
+
+          {/* 구분선 */}
+          <div className="border-t border-gray-300 my-2"></div>
+
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-left hover:bg-orange-100 bg-white shadow text-gray-700 font-semibold"
             onClick={() => navigate('/admin/event/write')}
