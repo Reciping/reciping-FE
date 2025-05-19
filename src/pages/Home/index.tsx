@@ -23,7 +23,7 @@ const Home = () => {
   const navigate = useNavigate()
 
   const [selectedMode, setSelectedMode] =
-    useState<'category' | 'ingredient' | 'menu'>('menu')
+    useState<'category' | 'ingredient' | 'menu' | null>(null)
   const [searchKeyword, setSearchKeyword] = useState('')
   
   // 카테고리 필터 (초기값 '전체')
@@ -37,6 +37,13 @@ const Home = () => {
   })
   
   const [main, setMain] = useState<MainResponse | null>(null)
+
+  // 카테고리 필터 변경 시 자동으로 검색 실행
+  useEffect(() => {
+    if (selectedMode === 'category') {
+      handleSearch()
+    }
+  }, [categoryFilters])
 
   useEffect(() => {
     getMainData('MAIN_TOP', 20)
@@ -73,7 +80,14 @@ const Home = () => {
       qs.set('difficulty', categoryFilters.difficulty)
 
     } else { // menu 또는 ingredient
+      const qs = new URLSearchParams()
       qs.set('keyword', searchKeyword)
+      qs.set('page', '1')
+      
+      // 모드가 없으면 자연어 검색
+      const searchMode = selectedMode || 'natural'
+      navigate(`/search/${searchMode}?${qs.toString()}`, { state: { main }})
+
     }
 
     // 모든 모드에서 /search/:mode 경로로 이동

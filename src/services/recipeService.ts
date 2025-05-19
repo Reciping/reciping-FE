@@ -298,4 +298,5 @@ export const searchRecipesByCategory = async (
     { params: { page, size } }
   )
   return res.data
+  // return data
 } 

@@ -40,15 +40,23 @@ import {
   MethodTypeLabelToValue,
 } from '../../constants/CategoryValueMap'
 
+export type SearchPageState = {
+  recipes?: Recipe[]
+  mode?: 'menu' | 'ingredient' | 'category'
+  main?: MainResponse
+}
+
 const SearchResults = () => {
   const [searchParams] = useSearchParams()
   // state로 categoryRecipes를 받아오는 로직 제거
   const { state } = useLocation() as { state?: { main?: MainResponse } }
+  // const { state } = useLocation() as { state?: SearchPageState }
   const [main, setMain] = useState<MainResponse | null>(state?.main ?? null)
   const navigate = useNavigate()
   
   // Home → state 로 온 카테고리 결과 로직 제거
   // const categoryRecipes: Recipe[] | undefined = (state as any)?.recipes
+  // const categoryRecipes = state?.recipes ?? null
   const { mode: rawMode } = useParams<{ mode?: string }>()
   const mode: 'menu' | 'ingredient' | 'category' =
   rawMode === 'menu' || rawMode === 'ingredient' || rawMode === 'category'
@@ -188,7 +196,7 @@ const SearchResults = () => {
               currentQs.delete('difficulty');
               // 페이지 번호도 1로 초기화
               currentQs.set('page', '1');
-
+              
               navigate(`/search/${nextMode}?${currentQs.toString()}`);
             }}
             searchKeyword={searchKeyword}
