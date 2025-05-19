@@ -68,7 +68,7 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
 
           {/* 옵션 버튼 */}
           <div className="flex flex-wrap gap-2">
-            {opts.map((opt: any) => {
+            {Array.isArray(opts) && opts.map((opt: any) => {
               const isActive = value[key] === opt.label
               return (
                 <button

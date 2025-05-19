@@ -16,8 +16,14 @@ const HomeRecipeList: React.FC = () => {
     let cancelled = false;
     (async () => {
       try {
-        const { content } = await getDefaultRecipes(0, FETCH_SIZE)
-        if (!cancelled) setRecipes(content)
+        const result = await getDefaultRecipes(0, FETCH_SIZE)
+        if (Array.isArray(result?.content)) {
+          setRecipes(result.content)
+        } else {
+          console.error("API response content is not an array:", result)
+          setRecipes([])
+          setError("레시피 데이터를 불러오는데 실패했습니다.")
+        }
       } catch (e) {
         if (!cancelled) setError('레시피를 불러오는 중 오류가 발생했습니다.')
       } finally {

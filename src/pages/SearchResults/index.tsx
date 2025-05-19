@@ -232,7 +232,7 @@ const SearchResults = () => {
           {/* ① 카테고리 검색 결과 - 이 섹션을 제거하고 아래 UserRecipeList로 통합 */}
 
           {/* ② 기존 키워드 검색 결과 - 모든 검색 결과를 UserRecipeList로 표시 */}
-          {data && (
+          {data && Array.isArray(data.recipes) && (
             <UserRecipeList
               recipes={data.recipes}
               page={data.page}
