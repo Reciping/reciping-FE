@@ -13,8 +13,8 @@ const HomeRecipeList: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    let cancelled = false
-    ;(async () => {
+    let cancelled = false;
+    (async () => {
       try {
         const { content } = await getDefaultRecipes(0, FETCH_SIZE)
         if (!cancelled) setRecipes(content)

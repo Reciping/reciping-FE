@@ -5,8 +5,8 @@ import CategoryFilter from '../category/CategoryFilter'
 import { CategoryFilters } from '../category/CategoryFilter.types'
 
 interface Props {
-  selectedMode: 'category' | 'ingredient' | 'menu'
-  onModeChange: (mode: 'category' | 'ingredient' | 'menu') => void
+  selectedMode: 'category' | 'ingredient' | 'menu' | null
+  onModeChange: (mode: 'category' | 'ingredient' | 'menu' | null) => void
   searchKeyword: string
   onSearchKeywordChange: (kw: string) => void
   categoryFilters: CategoryFilters
