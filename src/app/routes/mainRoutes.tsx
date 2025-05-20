@@ -7,7 +7,10 @@ import Profile from '../../pages/Profile'
 import SearchResults from '../../pages/SearchResults'
 import Detail from '../../pages/RecipeDetail'
 import Event from '../../pages/Event'
-
+import AdminAd from '../../pages/AdminAd'
+import AdminEventWrite from '../../pages/AdminEventWrite'
+import AdminAdWrite from '../../pages/AdminAdWrite'
+import AdminEvent from '../../pages/AdminEvent'
 
 export const mainRoutes = [
   {
@@ -41,6 +44,22 @@ export const mainRoutes = [
   {
     path: '/recipe/:id',
     element: <Detail />,
+  },
+  {
+    path: '/admin/event',
+    element: <AdminEvent/>,
+  },
+  {
+    path: '/admin/ad',
+    element: <AdminAd />,
+  },
+  {
+    path: '/admin/event/write',
+    element: <AdminEventWrite/>,
+  },
+  {
+    path: '/admin/ad/write',
+    element: <AdminAdWrite />,
   },
   {
     path: '*',
