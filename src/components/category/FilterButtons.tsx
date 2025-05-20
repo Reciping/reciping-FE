@@ -1,33 +1,46 @@
 import React from 'react'
+import { SearchMode } from '../../types/SearchPanel.types'
 
 interface Props {
-  selected: 'category' | 'ingredient' | 'menu' | null
-  onChange: (mode: 'category' | 'ingredient' | 'menu' | null) => void
+  selectedMode: SearchMode
+  onModeChange: (mode: SearchMode) => void
 }
 
-const OPTIONS = [
-  { key: null, label: '# 자연어 검색' },
-  { key: 'category', label: '# 카테고리 필터' },
-  { key: 'ingredient', label: '# 재료기반 검색' },
-  { key: 'menu', label: '# 메뉴기반 검색' }
-]
-
-const FilterButtons: React.FC<Props> = ({ selected, onChange }) => (
-  <div className="flex gap-2 text-sm mb-6">
-    {OPTIONS.map(opt => (
+const FilterButtons: React.FC<Props> = ({ selectedMode, onModeChange }) => {
+  return (
+    <div className="flex gap-2">
       <button
-        key={opt.key ?? 'natural'}
-        onClick={() => onChange(opt.key as 'category' | 'ingredient' | 'menu' | null)}
-        className={`rounded-full px-4 py-1 ${
-          selected === opt.key
+        onClick={() => onModeChange('category')}
+        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+          selectedMode === 'category'
             ? 'bg-[#F15A24] text-white'
-            : 'bg-[#FDD9B5] text-[#F15A24]'
+            : 'bg-[#FDD9B5] text-[#5C2E1E] hover:bg-[#FFE2CA]'
         }`}
       >
-        {opt.label}
+        카테고리
       </button>
-    ))}
-  </div>
-)
+      <button
+        onClick={() => onModeChange('ingredient')}
+        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+          selectedMode === 'ingredient'
+            ? 'bg-[#F15A24] text-white'
+            : 'bg-[#FDD9B5] text-[#5C2E1E] hover:bg-[#FFE2CA]'
+        }`}
+      >
+        재료
+      </button>
+      <button
+        onClick={() => onModeChange('menu')}
+        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+          selectedMode === 'menu'
+            ? 'bg-[#F15A24] text-white'
+            : 'bg-[#FDD9B5] text-[#5C2E1E] hover:bg-[#FFE2CA]'
+        }`}
+      >
+        메뉴
+      </button>
+    </div>
+  )
+}
 
 export default FilterButtons

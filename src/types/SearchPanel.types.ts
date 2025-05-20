@@ -1,0 +1,1 @@
+export type SearchMode = 'category' | 'ingredient' | 'menu' | null 

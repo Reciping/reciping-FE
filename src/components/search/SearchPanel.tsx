@@ -1,16 +1,23 @@
 import React from 'react'
-import FilterButtons from '../category/FilterButtons'
+import { SearchMode } from '../../types/SearchPanel.types'
 import SearchInput from './SearchInput'
+import FilterButtons from '../category/FilterButtons'
 import CategoryFilter from '../category/CategoryFilter'
-import { CategoryFilters } from '../category/CategoryFilter.types'
 
 interface Props {
-  selectedMode: 'category' | 'ingredient' | 'menu' | null
-  onModeChange: (mode: 'category' | 'ingredient' | 'menu' | null) => void
+  selectedMode: SearchMode
+  onModeChange: (mode: SearchMode) => void
   searchKeyword: string
-  onSearchKeywordChange: (kw: string) => void
-  categoryFilters: CategoryFilters
-  onCategoryFiltersChange: (f: CategoryFilters) => void
+  onSearchKeywordChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  categoryFilters: {
+    dishType: string
+    situationType: string
+    ingredientType: string
+    methodType: string
+    cookingTime: string
+    difficulty: string
+  }
+  onCategoryFiltersChange: (filters: Props['categoryFilters']) => void
   onSearch: () => void
 }
 
@@ -22,26 +29,44 @@ const SearchPanel: React.FC<Props> = ({
   categoryFilters,
   onCategoryFiltersChange,
   onSearch
-}) => (
-  <div>
-    {/* 1) 모드 버튼 */}
-    <FilterButtons selected={selectedMode} onChange={onModeChange} />
-
-    {/* 2) 검색 인풋 */}
-    <SearchInput
-      value={searchKeyword}
-      onChange={e => onSearchKeywordChange(e.target.value)}
-      onSearch={onSearch}
-    />
-
-    {/* 3) 카테고리 모드일 때만 필터 노출 */}
-    {selectedMode === 'category' && (
-      <CategoryFilter
-        value={categoryFilters}
-        onChange={onCategoryFiltersChange}
+}) => {
+  return (
+    <div className="bg-white p-6 rounded-2xl shadow mb-6">
+      {/* 검색 모드 버튼 */}
+      <FilterButtons
+        selectedMode={selectedMode}
+        onModeChange={onModeChange}
       />
-    )}
-  </div>
-)
+
+      {/* 검색창 */}
+      <div className="mt-4">
+        <SearchInput
+          value={searchKeyword}
+          onChange={onSearchKeywordChange}
+          onSearch={onSearch}
+          placeholder={
+            selectedMode === 'category'
+              ? '검색어를 입력하고 검색 버튼을 눌러주세요'
+              : selectedMode === 'ingredient'
+              ? '재료를 입력해주세요'
+              : selectedMode === 'menu'
+              ? '메뉴를 입력해주세요'
+              : '검색어를 입력해주세요'
+          }
+        />
+      </div>
+
+      {/* 카테고리 필터 */}
+      {selectedMode === 'category' && (
+        <div className="mt-4">
+          <CategoryFilter
+            value={categoryFilters}
+            onChange={onCategoryFiltersChange}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default SearchPanel

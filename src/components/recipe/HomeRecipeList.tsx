@@ -1,7 +1,8 @@
 // src/components/recipe/HomeRecipeList.tsx
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getDefaultRecipes, Recipe } from '../../services/recipeService'
+import { getDefaultRecipes } from '../../services/recipeService'
+import { Recipe } from '../../types/recipe'
 import RecipeSwiper from './RecipeSwiper'   // 👉 공통 슬라이더 로직 분리
 
 const FETCH_SIZE = 20
@@ -17,6 +18,7 @@ const HomeRecipeList: React.FC = () => {
     (async () => {
       try {
         const result = await getDefaultRecipes(0, FETCH_SIZE)
+
         if (Array.isArray(result?.content)) {
           setRecipes(result.content)
         } else {

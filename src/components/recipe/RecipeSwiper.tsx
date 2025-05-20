@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
-import { Recipe } from '../../services/recipeService'
+import { Recipe } from '../../types/recipe'
 import RecipeCard from './RecipeCard'
 import nonImage from '../../assets/nonImage.jpeg'
 import 'swiper/css'

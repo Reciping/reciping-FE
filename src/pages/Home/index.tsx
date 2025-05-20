@@ -15,15 +15,15 @@ import RecommendedRecipeList from '../../components/recipe/RecommendedRecipeList
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
 import { getMainData, MainResponse, EventBanner } from '../../services/mainService'
-import { Ad } from '../../types/ads'
-import { Recipe } from '../../services/recipeService'
-
+import { Recipe, CategorySearchRequest } from '../../types/recipe'
+import { searchRecipesByCategory } from '../../services/recipeService'
+import RecipeSwiper from '../../components/recipe/RecipeSwiper'
+import { SearchMode } from '../../types/SearchPanel.types'
 
 const Home = () => {
   const navigate = useNavigate()
 
-  const [selectedMode, setSelectedMode] =
-    useState<'category' | 'ingredient' | 'menu' | null>(null)
+  const [selectedMode, setSelectedMode] = useState<SearchMode>(null)
   const [searchKeyword, setSearchKeyword] = useState('')
   
   // 카테고리 필터 (초기값 '전체')
@@ -37,25 +37,22 @@ const Home = () => {
   })
   
   const [main, setMain] = useState<MainResponse | null>(null)
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([])
 
   // 카테고리 필터 변경 시 자동으로 검색 실행
   useEffect(() => {
     if (selectedMode === 'category') {
-      handleSearch()
+      handleCategorySearch()
     }
   }, [categoryFilters])
 
   useEffect(() => {
     getMainData('MAIN_TOP', 20)
       .then(res => {
-        console.log('▶ getMainData 응답', res)   // ① 파사드 응답 확인
         setMain(res)
       })
       .catch(err => console.error('메인 데이터 오류:', err))
   }, [])
-  useEffect(() => {
-    console.log('▶ main 상태 변화', main)        // ② state가 바뀌는지
-  }, [main])
 
   /* 데모 인기 급상승 텍스트 ------------------------------ */
   const [popularRecipes, setPopularRecipes] = useState<string[]>([])
@@ -63,37 +60,59 @@ const Home = () => {
     setPopularRecipes(['김치라면', '부대찌개', '청국장', '밤타리아누', '양념갈비'])
   }, [])
 
-  /* === 변경: 검색 버튼 === */
-  const handleSearch = async () => {
-    // 모든 검색 모드에서 쿼리 스트링 사용
-    const qs = new URLSearchParams()
-    qs.set('page', '1')
+  /* === 변경: 카테고리 검색 === */
+  const handleCategorySearch = async () => {
+    try {
+      const qs = new URLSearchParams()
+      Object.entries(categoryFilters).forEach(([key, value]) => {
+        if (value !== '전체') {
+          qs.set(key, value)
+        }
+      })
+      navigate(`/search/category?${qs.toString()}`, { state: { main }})
+    } catch (e) {
+      console.error(e)
+      alert('카테고리 검색 중 오류가 발생했습니다.')
+    }
+  }
 
-    if (selectedMode === 'category') {
-      // 카테고리 필터 값을 쿼리 스트링으로 추가
-      // SearchResults 페이지에서 필요한 필터 값을 읽어서 API 호출
-      qs.set('dishType', categoryFilters.dishType)
-      qs.set('situationType', categoryFilters.situationType)
-      qs.set('ingredientType', categoryFilters.ingredientType)
-      qs.set('methodType', categoryFilters.methodType)
-      qs.set('cookingTime', categoryFilters.cookingTime)
-      qs.set('difficulty', categoryFilters.difficulty)
-
-    } else { // menu 또는 ingredient
+  /* === 변경: 자연어 검색 === */
+  const handleNaturalSearch = async () => {
+    try {
       const qs = new URLSearchParams()
       qs.set('keyword', searchKeyword)
       qs.set('page', '1')
-      
-      // 모드가 없으면 자연어 검색
-      const searchMode = selectedMode || 'natural'
-      navigate(`/search/${searchMode}?${qs.toString()}`, { state: { main }})
-
+      navigate(`/search/natural?${qs.toString()}`, { state: { main }})
+    } catch (e) {
+      console.error(e)
+      alert('자연어 검색 중 오류가 발생했습니다.')
     }
-
-    // 모든 모드에서 /search/:mode 경로로 이동
-    navigate(`/search/${selectedMode}?${qs.toString()}`, { state: { main }}) // main 데이터는 SearchResults에서 사용할 수 있으니 그대로 넘깁니다.
   }
-  /* ================================= */
+
+  /* === 변경: 검색 버튼 클릭 === */
+  const handleSearch = () => {
+    if (selectedMode === null || (selectedMode === 'category' && searchKeyword)) {
+      // 아무 모드도 선택되지 않았거나, 카테고리 모드에서 검색어가 있을 때는 자연어 검색
+      handleNaturalSearch()
+    } else if (selectedMode === 'menu') {
+      // 메뉴 기반 검색
+      const qs = new URLSearchParams()
+      qs.set('keyword', searchKeyword)
+      qs.set('page', '1')
+      navigate(`/search/menu?${qs.toString()}`, { state: { main }})
+    } else if (selectedMode === 'ingredient') {
+      // 재료 기반 검색
+      const qs = new URLSearchParams()
+      qs.set('keyword', searchKeyword)
+      qs.set('page', '1')
+      navigate(`/search/ingredient?${qs.toString()}`, { state: { main }})
+    }
+  }
+
+  // 검색어 변경 핸들러
+  const handleSearchKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value)
+  }
 
   return (
     <PageLayout>
@@ -107,7 +126,7 @@ const Home = () => {
             selectedMode={selectedMode}
             onModeChange={setSelectedMode}
             searchKeyword={searchKeyword}
-            onSearchKeywordChange={setSearchKeyword}
+            onSearchKeywordChange={handleSearchKeywordChange}
             categoryFilters={categoryFilters}
             onCategoryFiltersChange={setCategoryFilters}
             onSearch={handleSearch}
@@ -128,7 +147,6 @@ const Home = () => {
               </div>
             )}
 
-
              {/* 광고 이미지 */}
             <div className="bg-white rounded-lg flex-1 flex items-center overflow-x-auto gap-4 shadow">
               <AdsBlock ad={main?.ads?.[0] ?? null} />
@@ -143,7 +161,6 @@ const Home = () => {
               recipes={main.recommendedRecipes ?? []}
               onCardClick={id => navigate(`/recipe/${id}`)}
             />
-
           )}
 
           {/* ▼ ② 2×2 그리드 : 왼쪽=인기 급상승, 오른쪽=근래 당근 피드백 */}

@@ -1,10 +1,8 @@
 // src/components/category/CategoryFilter.tsx
 import React, { useState, useEffect } from 'react'
 import { CategoryFilters } from './CategoryFilter.types'
-import {
-  getCategoryOptions,
-  CategoryOptionsResponse
-} from '../../services/recipeService'
+import { getCategoryOptions } from '../../services/recipeService'
+import { CategoryOptionsResponse, CategoryOption } from '../../types/recipe'
 
 interface Props {
   value: CategoryFilters
@@ -13,10 +11,10 @@ interface Props {
 
 // API 응답 키를 CategoryFilters 키에 맞게 변환
 const normalizeOptions = (raw: CategoryOptionsResponse) => ({
-  dishType:       raw.dish,
-  situationType:  raw.situation,
-  ingredientType: raw.ingredient,
-  methodType:     raw.method,
+  dishType:       raw.dishType,
+  situationType:  raw.situationType,
+  ingredientType: raw.ingredientType,
+  methodType:     raw.methodType,
   cookingTime:    raw.cookingTime,
   difficulty:     raw.difficulty,
 })
@@ -32,10 +30,12 @@ const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
   useEffect(() => {
     setLoading(true)
     getCategoryOptions()
-      .then(res => setOptions(normalizeOptions(res)))
-      .catch(() =>
-        setError('카테고리 옵션을 불러오는 중 오류가 발생했습니다.'),
-      )
+      .then(res => {
+        setOptions(normalizeOptions(res))
+      })
+      .catch(err => {
+        setError('카테고리 옵션을 불러오는 중 오류가 발생했습니다.')
+      })
       .finally(() => setLoading(false))
   }, [])
 
