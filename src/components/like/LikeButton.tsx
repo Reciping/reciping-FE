@@ -61,17 +61,40 @@ const LikeButton: React.FC<LikeButtonProps> = ({
 
   return (
     <button
-      onClick={handleClick}
-      disabled={loading}
-      aria-label={liked ? '좋아요 취소' : '좋아요'}
-      className={`
-        flex items-center gap-1 text-2xl
-        hover:opacity-80 transition disabled:opacity-50
-        ${className}
-      `}
+        onClick={handleClick}
+        disabled={loading}
+        aria-label={liked ? '좋아요 취소' : '좋아요'}
+        className={`
+            flex items-center gap-1 text-2xl
+            hover:opacity-80 transition disabled:opacity-50
+            ${className}
+        `}
     >
-      <span>{liked ? '❤️' : '🤍'}</span>
-      <span className="text-lg">{count}</span>
+        <span className="relative inline-block">
+            {/* Solid Heart */}
+            <span
+                className={`absolute transition-all duration-300 ${
+                    liked 
+                    ? 'opacity-100 scale-100' 
+                    : 'opacity-0 scale-50'
+                }`}
+            >
+            ❤️
+            </span>
+            
+            {/* Outline Heart */}
+            <span
+                className={`transition-all duration-300 ${
+                    liked 
+                    ? 'opacity-0 scale-50' 
+                    : 'opacity-100 scale-100'
+                }`}
+            >
+            🤍
+            </span>
+        </span>
+        
+        <span className="text-lg">{count}</span>
     </button>
   )
 }
