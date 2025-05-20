@@ -260,7 +260,7 @@ export interface CategoryOptionsResponse {
 }
 
 export const getCategoryOptions = async (): Promise<CategoryOptionsResponse> => {
-  const res = await recipeApiClient.get<CategoryOptionsResponse>('/api/v1/recipes/categories')
+  const res = await recipeApiClient.get<CategoryOptionsResponse>('/api/v1/recipes/category-options')
   return res.data
 }
 

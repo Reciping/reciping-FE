@@ -68,7 +68,7 @@ const AdminAdWrite: React.FC = () => {
         <main className="flex-1">
           <ContentWrapper>
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/admin/ad')}
               className="mb-4 text-lg text-gray-600 hover:text-black"
               aria-label="뒤로가기"
             >
