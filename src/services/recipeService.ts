@@ -155,8 +155,74 @@ export const createRecipe = async (
     } else {
       return false;
     }
+<<<<<<< HEAD
   } catch (error) {
     console.error('Error creating recipe:', error);
     return false;
   }
 } 
+=======
+  )
+  // 실제 ID는 res.data.data.id 에 들어 있습니다
+  return res.data.data.id
+}
+
+/** 카테고리 옵션 하나 */
+export interface CategoryOption {
+  label: string
+  value: string
+}
+
+// --- Remaining content from src/api/recipesApi.ts ---
+
+export interface CategoryOptionsResponse {
+  dish:       CategoryOption[]
+  situation:  CategoryOption[]
+  ingredient: CategoryOption[]
+  method:     CategoryOption[]
+  cookingTime: CategoryOption[]
+  difficulty: CategoryOption[]
+}
+
+export const getCategoryOptions = async (): Promise<CategoryOptionsResponse> => {
+  const res = await recipeApiClient.get<CategoryOptionsResponse>('/api/v1/recipes/category-options')
+  return res.data
+}
+
+export interface CategorySearchRequest {
+  dishType?:       string | null
+  situationType?:  string | null
+  methodType?:     string | null
+  ingredientType?: string | null
+  cookingTime?:    string | null
+  difficulty?:     string | null
+}
+
+export interface CategorySearchResponse {
+  content: Recipe[]
+  pageable: Pageable
+  last: boolean
+  totalElements: number
+  totalPages: number
+  first: boolean
+  size: number
+  number: number
+  sort: unknown[]
+  numberOfElements: number
+  empty: boolean
+}
+
+export const searchRecipesByCategory = async (
+  body: CategorySearchRequest,
+  page = 0,             // 필요 없으면 삭제해도 무방
+  size = 20,
+) => {
+  const res = await recipeApiClient.post<CategorySearchResponse>(
+    '/api/v1/recipes/search/category',
+    body,
+    { params: { page, size } }
+  )
+  return res.data
+  // return data
+} 
+>>>>>>> a1e40a1 (⚡️fix : api 수정, 뒤로가기 버튼 주소 수정)
