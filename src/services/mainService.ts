@@ -1,5 +1,5 @@
 import { mainApiClient } from '../api/mainApiClient'
-import { Recipe } from './recipeService'
+import { Recipe } from '../types/recipe'
 import { Ad } from '../types/ads' // Assuming Ad type is in src/types
 
 // Keeping the type definitions relevant to the service
@@ -29,10 +29,9 @@ export const getMainData = async (
     '/api/v1/main',
     { params: { position, size } },
   )
-  console.log('[main] data', data)
   return {
     ads: data.ads ?? [],
     events: data.events?.data ?? [],
     recommendedRecipes: data.recommendedRecipeList ?? [],
   }
-} 
+}

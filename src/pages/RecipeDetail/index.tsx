@@ -1,7 +1,8 @@
 // src/pages/RecipeDetail/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getRecipeDetail, RecipeDetailResponse, toggleBookmark, getCategoryOptions, CategoryOptionsResponse } from '../../services/recipeService'
+import { getRecipeDetail, toggleBookmark, getCategoryOptions } from '../../services/recipeService'
+import { RecipeDetailResponse, CategoryOptionsResponse } from '../../types/recipe'
 
 import PageLayout from '../../components/layout/PageLayout'
 import Navbar    from '../../components/layout/Navbar'

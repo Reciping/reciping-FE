@@ -1,44 +1,53 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 interface Props {
   value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onSearch: () => void
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onSearch?: () => void
+  placeholder?: string
+  disabled?: boolean
 }
 
-const SearchInput: React.FC<Props> = ({ value, onChange, onSearch }) => (
-  <form
-    onSubmit={e => {
-      e.preventDefault()
+const SearchInput: React.FC<Props> = ({
+  value,
+  onChange,
+  onSearch,
+  placeholder = '검색어를 입력하세요',
+  disabled = false
+}) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && onSearch) {
       onSearch()
-    }}
-    className="relative w-full mb-6"
-  >
-    <input
-      type="text"
-      value={value}
-      onChange={onChange}
-      placeholder="Search"
-      className="w-full bg-[#F8CBA6] text-white px-4 py-3 pr-12 rounded-full placeholder-white"
-    />
-    <button
-      type="submit"
-      className="absolute right-4 top-1/2 -translate-y-1/2"
-      aria-label="검색"
-    >
-      {/* 흰색 돋보기 아이콘 */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
-      </svg>
-    </button>
-  </form>
-)
+    }
+  }
+
+  return (
+    <div className="relative">
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        onKeyPress={handleKeyPress}
+        placeholder={placeholder}
+        disabled={disabled}
+        className={`
+          w-full px-4 py-2 rounded-full border-2
+          ${disabled
+            ? 'bg-gray-100 border-gray-200 text-gray-500'
+            : 'border-[#F15A24] focus:outline-none focus:border-[#F15A24]'
+          }
+        `}
+      />
+      {!disabled && onSearch && (
+        <button
+          onClick={onSearch}
+          className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 bg-[#F15A24] text-white rounded-full text-sm"
+        >
+          검색
+        </button>
+      )}
+    </div>
+  )
+}
 
 export default SearchInput
