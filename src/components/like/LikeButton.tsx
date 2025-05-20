@@ -8,7 +8,6 @@ import {
 
 interface LikeButtonProps {
   recipeId: number
-  /** 페이지 최초 렌더링 시 보여줄 카운트(선택) */
   initialLikeCount?: number
   initialIsLiked?: boolean
   className?: string
@@ -27,23 +26,17 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   const [count, setCount] = useState<number>(initialLikeCount)
   const [loading, setLoading] = useState(false)
 
-  /** 최초 마운트 → 상태 동기화 (initial 값이 없다면) */
+  // 서버 데이터 동기화
   useEffect(() => {
-    if (initialIsLiked !== undefined && initialLikeCount !== undefined) return
-    let mounted = true
+    if (initialIsLiked !== undefined) return
     getRecipeLikeStatus(userId, recipeId)
       .then(({ likeCount, isLiked }) => {
-        if (mounted) {
-          setCount(likeCount)
-          setLiked(isLiked)
-        }
+        setCount(likeCount)
+        setLiked(isLiked)
       })
       .catch(console.error)
-    return () => {
-      mounted = false
-    }
   }, [recipeId])
-
+  
   /** 클릭 핸들러 */
   const handleClick = async () => {
     if (loading) return
@@ -72,14 +65,12 @@ const LikeButton: React.FC<LikeButtonProps> = ({
       disabled={loading}
       aria-label={liked ? '좋아요 취소' : '좋아요'}
       className={`
-        flex items-center text-2xl
-        ${liked ? 'text-red-500' : 'text-gray-400'}
-        hover:opacity-80 transition
-        disabled:opacity-50
+        flex items-center gap-1 text-2xl
+        hover:opacity-80 transition disabled:opacity-50
         ${className}
       `}
     >
-      <span className="mr-1">❤️</span>
+      <span>{liked ? '❤️' : '🤍'}</span>
       <span className="text-lg">{count}</span>
     </button>
   )
