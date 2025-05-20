@@ -16,7 +16,7 @@ import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
 import { getMainData, MainResponse, EventBanner } from '../../services/mainService'
 import { Recipe, CategorySearchRequest } from '../../types/recipe'
-import { searchRecipesByCategory, getDefaultRecipes } from '../../services/recipeService'
+import { searchRecipesByCategory } from '../../services/recipeService'
 import RecipeSwiper from '../../components/recipe/RecipeSwiper'
 import { SearchMode } from '../../types/SearchPanel.types'
 
@@ -38,7 +38,6 @@ const Home = () => {
   
   const [main, setMain] = useState<MainResponse | null>(null)
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([])
-  const [defaultRecipes, setDefaultRecipes] = useState<Recipe[]>([])
 
   // 카테고리 필터 변경 시 자동으로 검색 실행
   useEffect(() => {
@@ -53,15 +52,6 @@ const Home = () => {
         setMain(res)
       })
       .catch(err => console.error('메인 데이터 오류:', err))
-  }, [])
-
-  // 기본 레시피 목록 가져오기
-  useEffect(() => {
-    getDefaultRecipes()
-      .then(res => {
-        setDefaultRecipes(res.content)
-      })
-      .catch(err => console.error('기본 레시피 목록 오류:', err))
   }, [])
 
   /* 데모 인기 급상승 텍스트 ------------------------------ */
@@ -162,17 +152,6 @@ const Home = () => {
               <AdsBlock ad={main?.ads?.[0] ?? null} />
             </div>
           </div>
-
-          {/* 기본 레시피 목록 */}
-          {defaultRecipes.length > 0 && (
-            <div className="mb-6">
-              <h3 className="font-bold mb-4">추천 레시피</h3>
-              <RecipeSwiper
-                recipes={defaultRecipes}
-                onCardClick={id => navigate(`/recipe/${id}`)}
-              />
-            </div>
-          )}
 
           <HomeRecipeList />
 
