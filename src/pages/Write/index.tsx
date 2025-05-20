@@ -35,12 +35,12 @@ const Write: React.FC = () => {
     difficulty:    []
   })
   const [category, setCategory] = useState<Record<CategoryKey, string>>({
-    dishType:       'ALL',
-    situationType:  'ALL',
-    ingredientType: 'ALL',
-    methodType:     'ALL',
-    cookingTime:    'ALL',
-    difficulty:    'ALL'
+    dishType:       '전체',
+    situationType:  '전체',
+    ingredientType: '전체',
+    methodType:     '전체',
+    cookingTime:    '전체',
+    difficulty:    '전체'
   })
 
   // 1) 마운트 시 카테고리 옵션 fetch
@@ -48,14 +48,14 @@ const Write: React.FC = () => {
     getCategoryOptions()
       .then(opts => {
         setCategoryOptions(opts)
-        // 기본값으로 ALL(전체)이 있으면 그대로, 없으면 첫 번째 value 사용
+        // 기본값으로 '전체'가 있으면 그대로, 없으면 첫 번째 label 사용
         setCategory(prev => {
           const next: typeof prev = {} as any
           (Object.keys(opts) as CategoryKey[]).forEach(key => {
             next[key] =
-              prev[key] === 'ALL' && opts[key].some(o => o.value === 'ALL')
-                ? 'ALL'
-                : opts[key][0]?.value ?? ''
+              prev[key] === '전체' && opts[key].some(o => o.label === '전체')
+                ? '전체'
+                : opts[key][0]?.label ?? ''
           })
           return next
         })
@@ -111,8 +111,8 @@ const Write: React.FC = () => {
         situationType:  category.situationType,
         ingredientType: category.ingredientType,
         methodType:     category.methodType, 
-        cookingTime: categoryOptions.cookingTime.find(opt => opt.value === category.cookingTime)?.label || '',
-        difficulty: categoryOptions.difficulty.find(opt => opt.value === category.difficulty)?.label || '',
+        cookingTime:    category.cookingTime,
+        difficulty:     category.difficulty,
       }
       console.log("[dto] ", dto)
 
@@ -164,7 +164,7 @@ const Write: React.FC = () => {
               className="w-full p-3 rounded-full bg-[#F9F9F9] focus:outline-none"
             >
               {categoryOptions[key].map(opt => (
-                <option key={opt.value} value={opt.value}>
+                <option key={opt.value} value={opt.label}>
                   {opt.label}
                 </option>
               ))}

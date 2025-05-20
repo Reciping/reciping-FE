@@ -45,9 +45,7 @@ const SearchPanel: React.FC<Props> = ({
           onChange={onSearchKeywordChange}
           onSearch={onSearch}
           placeholder={
-            selectedMode === 'category'
-              ? '검색어를 입력하고 검색 버튼을 눌러주세요'
-              : selectedMode === 'ingredient'
+            selectedMode === 'ingredient'
               ? '재료를 입력해주세요'
               : selectedMode === 'menu'
               ? '메뉴를 입력해주세요'
