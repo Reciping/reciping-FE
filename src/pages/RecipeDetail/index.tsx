@@ -117,25 +117,25 @@ const RecipeDetail: React.FC = () => {
           {/* dish */}
           {dishType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-              {findLabel(categoryOpts.dish, dishType)}
+              {findLabel(categoryOpts.dishType, dishType)}
             </span>
           )}
           {/* situation */}
           {situationType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-              {findLabel(categoryOpts.situation, situationType)}
+              {findLabel(categoryOpts.situationType, situationType)}
             </span>
           )}
           {/* ingredient */}
           {ingredientType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-              {findLabel(categoryOpts.ingredient, ingredientType)}
+              {findLabel(categoryOpts.ingredientType, ingredientType)}
             </span>
           )}
           {/* method */}
           {methodType !== 'ALL' && (
             <span className="bg-[#F15A24] text-white px-3 py-1 rounded-full text-xs">
-              {findLabel(categoryOpts.method, methodType)}
+              {findLabel(categoryOpts.methodType, methodType)}
             </span>
           )}
 

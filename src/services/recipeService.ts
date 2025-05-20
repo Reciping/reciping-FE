@@ -17,7 +17,8 @@ import {
   CategoryOption,
   CategoryOptionsResponse,
   CategorySearchRequest,
-  CategorySearchResponse
+  CategorySearchResponse,
+  RecipeCreateRequest
 } from '../types/recipe'
 
 /**
@@ -128,4 +129,30 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
   return recipeApiClient
     .post<boolean>('/api/v1/bookmarks/toggle', { userId, recipeId })
     .then(res => res.data)
+}
+
+/**
+ * 레시피 생성
+ * POST /api/v1/recipes
+ * @param dto - RecipeCreateRequest
+ * @param file - 이미지 파일
+ * @param userId - X-USER-ID header
+ * @returns 성공 여부(boolean)
+ */
+export const createRecipe = async (
+  dto: RecipeCreateRequest,
+  file: File | null,
+  userId: number
+): Promise<boolean> => {
+  const formData = new FormData()
+  formData.append('requestDto', new Blob([JSON.stringify(dto)], { type: 'application/json' }))
+  if (file) formData.append('file', file)
+
+  const res = await recipeApiClient.post('/api/v1/recipes', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'X-USER-ID': String(userId),
+    },
+  })
+  return res.status === 200 || res.status === 201
 } 

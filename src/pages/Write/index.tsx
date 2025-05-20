@@ -6,6 +6,9 @@ import PageLayout from '../../components/layout/PageLayout'
 import Navbar         from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
 import Footer         from '../../components/common/Footer'
+import { CategoryOptionsResponse, RecipeCreateRequest } from '../../types/recipe'
+import { getCategoryOptions, createRecipe } from '../../services/recipeService'
+
 
 const MAX_CONTENT_LENGTH = 10000
 
@@ -24,20 +27,20 @@ const Write: React.FC = () => {
 
   // --- 카테고리 옵션 & 선택 ---
   const [categoryOptions, setCategoryOptions] = useState<CategoryOptionsResponse>({
-    dish:       [],
-    situation:  [],
-    ingredient: [],
-    method:     [],
-    cookingTime: [],
-    difficulty: []
+    dishType:       [],
+    situationType:  [],
+    ingredientType: [],
+    methodType:     [],
+    cookingTime:    [],
+    difficulty:    []
   })
   const [category, setCategory] = useState<Record<CategoryKey, string>>({
-    dish:       'ALL',
-    situation:  'ALL',
-    ingredient: 'ALL',
-    method:     'ALL',
-    cookingTime: 'All',
-    difficulty: 'All'
+    dishType:       'ALL',
+    situationType:  'ALL',
+    ingredientType: 'ALL',
+    methodType:     'ALL',
+    cookingTime:    'ALL',
+    difficulty:    'ALL'
   })
 
   // 1) 마운트 시 카테고리 옵션 fetch
@@ -100,31 +103,26 @@ const Write: React.FC = () => {
         .map(t => t.trim())
         .filter(t => t)
 
-      const dto = {
+      const dto: RecipeCreateRequest = {
         title:   title.trim(),
         content: content.trim(),
         tags,
-        // 선택된 카테고리 value
-        dishType:       category.dish,
-        situationType:  category.situation,
-        ingredientType: category.ingredient,
-        methodType:     category.method, 
-        // label을 전송해야 하는 카테고리
+        dishType:       category.dishType,
+        situationType:  category.situationType,
+        ingredientType: category.ingredientType,
+        methodType:     category.methodType, 
         cookingTime: categoryOptions.cookingTime.find(opt => opt.value === category.cookingTime)?.label || '',
         difficulty: categoryOptions.difficulty.find(opt => opt.value === category.difficulty)?.label || '',
       }
-      
+      console.log("[dto] ", dto)
 
-      const formData = new FormData()
-      formData.append(
-        'requestDto',
-        new Blob([JSON.stringify(dto)], { type: 'application/json' })
-      )
-      if (file) formData.append('file', file)
-
-      const userId = await createRecipe(formData, 1123)
-      alert('레시피가 성공적으로 등록되었습니다.')
-      navigate(`/recipe/${userId}`)
+      const success = await createRecipe(dto, file, 1123)
+      if (success) {
+        alert('레시피가 성공적으로 등록되었습니다.')
+        navigate(`/`)
+      } else {
+        alert('레시피 등록에 실패했습니다.')
+      }
     } catch (err) {
       console.error(err)
       alert('레시피 등록에 실패했습니다.')

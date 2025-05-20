@@ -106,12 +106,12 @@ export interface CategoryOption {
 }
 
 export interface CategoryOptionsResponse {
-  dishTypes: CategoryOption[]
-  situationTypes: CategoryOption[]
-  ingredientTypes: CategoryOption[]
-  methodTypes: CategoryOption[]
-  cookingTimes: CategoryOption[]
-  difficulties: CategoryOption[]
+  dishType: CategoryOption[]
+  situationType: CategoryOption[]
+  ingredientType: CategoryOption[]
+  methodType: CategoryOption[]
+  cookingTime: CategoryOption[]
+  difficulty: CategoryOption[]
 }
 
 export interface CategorySearchRequest {
@@ -149,4 +149,21 @@ export interface Step {
   order: number
   description: string
   imageUrl: string
+}
+
+export interface RecipeCreateRequest {
+  title: string;
+  content: string;
+  cookingTime: string;
+  difficulty: string;
+  dishType: string;
+  situationType: string;
+  methodType: string;
+  ingredientType: string;
+  objectName?: string;
+  keyName?: string;
+  filePath?: string;
+  imageUrl?: string;
+  tags: string[];
+  shouldRemoveImage?: boolean;
 } 

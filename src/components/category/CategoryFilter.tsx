@@ -11,12 +11,12 @@ interface Props {
 
 // API 응답 키를 CategoryFilters 키에 맞게 변환
 const normalizeOptions = (raw: CategoryOptionsResponse) => ({
-  dishType:       raw.dishTypes,
-  situationType:  raw.situationTypes,
-  ingredientType: raw.ingredientTypes,
-  methodType:     raw.methodTypes,
-  cookingTime:    raw.cookingTimes,
-  difficulty:     raw.difficulties,
+  dishType:       raw.dishType,
+  situationType:  raw.situationType,
+  ingredientType: raw.ingredientType,
+  methodType:     raw.methodType,
+  cookingTime:    raw.cookingTime,
+  difficulty:     raw.difficulty,
 })
 
 const CategoryFilter: React.FC<Props> = ({ value, onChange }) => {
