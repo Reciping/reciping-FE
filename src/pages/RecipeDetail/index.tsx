@@ -8,6 +8,7 @@ import PageLayout from '../../components/layout/PageLayout'
 import Navbar    from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
 import Footer    from '../../components/common/Footer'
+import LikeButton from '../../components/like/LikeButton'
 
 import nonImage from '../../assets/nonImage.jpeg'
 
@@ -180,11 +181,11 @@ const RecipeDetail: React.FC = () => {
 
         {/* 좋아요 + 북마크 */}
         <div className="flex justify-center items-center gap-4 mb-12">
-          {/* 좋아요(하트) */}
-          <div className="flex items-center text-2xl text-red-500">
-            <span className="mr-1">❤️</span>
-            <span className="text-lg">{data!.recipe.likeCount}</span>
-          </div>
+          <LikeButton 
+            recipeId={data.recipe.id}
+            initialLikeCount={data.recipe.likeCount}
+          />
+
           {/* 북마크 버튼 */}
           <button
             onClick={handleBookmark}
