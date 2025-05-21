@@ -22,14 +22,19 @@ import NaverSearchIframe from '../../components/NaverSearchIframe'
 import eventPlaceholder from '../../assets/event.jpg'   // 실제 경로에 맞게 수정
 
 import {
-  searchRecipes,
-  searchRecipesByCategory
-} from '../../services/recipeService'
+  searchNaturalService,
+  searchMenuService,
+  searchIngredientsService,
+} from '../../services/searchService'
 
 import {
   getMainData,
   MainResponse,
 } from '../../services/mainService'
+
+import {
+    searchRecipesByCategory
+} from '../../services/recipeService'
 
 // SearchRecipeList 컴포넌트는 더 이상 직접 사용하지 않습니다.
 // import SearchRecipeList from '../../components/recipe/SearchRecipeList'
@@ -45,8 +50,9 @@ import { SearchMode } from '../../types/SearchPanel.types'
 import {
   Recipe,
   SearchParams,
-  SearchResponse,
 } from '../../types/recipe'
+
+import { SearchResponse } from '../../types/searchTypes'
 
 export type SearchPageState = {
   recipes?: Recipe[]
@@ -81,56 +87,104 @@ const SearchResults = () => {
       setLoading(true)
       setError(null)
       try {
-        switch (searchType) {
+        let result: SearchResponse | null = null;
+        const keyword = searchParams.get('keyword') || '';
+
+        switch (selectedMode) {
           case 'category':
             const payload: CategorySearchRequest = { ...categoryFilters }
-            const { content } = await searchRecipesByCategory(payload, 0, 20)
-            setRecipes(content)
+            const categoryResult = await searchRecipesByCategory(payload, 0, 20)
+            if (categoryResult && categoryResult.content) {
+                setRecipes(categoryResult.content);
+            } else {
+                setRecipes([]);
+            }
             break
-          case 'natural':
-            // TODO: 자연어 검색 API 연동
-            break
-          case 'menu':
-            // TODO: 메뉴 기반 검색 API 연동
-            break
-          case 'ingredient':
-            // TODO: 재료 기반 검색 API 연동
-            break
-          default:
-            setError('잘못된 검색 유형입니다.')
+            case null:
+              if (keyword) {
+                 result = await searchNaturalService({ query: keyword, size: 20 });
+              }
+              break;
+            case 'menu':
+              if (keyword) {
+                 result = await searchMenuService({ keyword: keyword, size: 20 });
+              }
+              break;
+            case 'ingredient':
+              if (keyword) {
+                const ingredients = keyword
+                  .split(',')
+                  .map(item => item.trim())
+                  .filter(item => item.length > 0);
+
+                if (ingredients.length > 0) {
+                  result = await searchIngredientsService({
+                    ingredients,
+                    size: 20
+                  });
+                }
+              }
+              break;
+            default:
+               setError('잘못된 검색 유형입니다.');
+               setRecipes([]);
+               break;
+          }
+
+           if (selectedMode !== 'category' && result && result.recipes) {
+              setRecipes(result.recipes);
+          } else if (selectedMode !== 'category' && (!result || !result.recipes)) {
+              setRecipes([]);
+          }
+
+        } catch (e) {
+          console.error(e);
+          setError('검색 중 오류가 발생했습니다.');
+          setRecipes([]);
+        } finally {
+          setLoading(false);
         }
-      } catch (e) {
-        console.error(e)
-        setError('검색 중 오류가 발생했습니다.')
-      } finally {
-        setLoading(false)
-      }
-    }
-
+      };
+    
     fetchResults()
-  }, [searchType, searchParams])
+  }, [location.pathname, location.search])
 
-  const handleSearch = () => {
-    if (selectedMode === null || (selectedMode === 'category' && searchKeyword)) {
-      // 자연어 검색
-      const qs = new URLSearchParams()
-      qs.set('keyword', searchKeyword)
-      qs.set('page', '1')
-      navigate(`/search/natural?${qs.toString()}`, { state: { main }})
-    } else if (selectedMode === 'menu') {
-      // 메뉴 기반 검색
-      const qs = new URLSearchParams()
-      qs.set('keyword', searchKeyword)
-      qs.set('page', '1')
-      navigate(`/search/menu?${qs.toString()}`, { state: { main }})
-    } else if (selectedMode === 'ingredient') {
-      // 재료 기반 검색
-      const qs = new URLSearchParams()
-      qs.set('keyword', searchKeyword)
-      qs.set('page', '1')
-      navigate(`/search/ingredient?${qs.toString()}`, { state: { main }})
+// 검색 버튼 클릭 핸들러
+  // 선택된 모드에 따라 적절한 URL로 navigate
+  const handleSearchButtonClick = () => {
+    const qs = new URLSearchParams();
+    if (searchKeyword) {
+         qs.set('keyword', searchKeyword);
     }
-  }
+     qs.set('page', '1'); // 페이지는 일단 1로 고정
+
+    switch (selectedMode) {
+        case null:
+            navigate(`/search/natural?${qs.toString()}`, { state: { main } });
+            break;
+        case 'menu':
+             navigate(`/search/menu?${qs.toString()}`, { state: { main } });
+            break;
+        case 'ingredient':
+             navigate(`/search/ingredient?${qs.toString()}`, { state: { main } });
+            break;
+        case 'category':
+             // 카테고리 모드에서 검색 버튼을 누르면 현재 필터 상태로 카테고리 검색 URL로 이동
+            Object.entries(categoryFilters).forEach(([key, value]) => {
+                if (value !== '전체') {
+                    qs.set(key, value);
+                }
+            });
+             navigate(`/search/category?${qs.toString()}`, { state: { main } });
+             break;
+         default:
+             // 알 수 없는 모드 처리 (에러 또는 기본 동작)
+             console.error('Unknown selectedMode:', selectedMode);
+             // 기본적으로 자연어 검색으로 리다이렉트 할 수도 있습니다.
+             navigate(`/search/natural?${qs.toString()}`, { state: { main } });
+             break;
+    }
+};
 
   const handleCategoryFiltersChange = (newFilters: typeof categoryFilters) => {
     setCategoryFilters(newFilters)
@@ -158,14 +212,14 @@ const SearchResults = () => {
             onSearchKeywordChange={e => setSearchKeyword(e.target.value)}
             categoryFilters={categoryFilters}
             onCategoryFiltersChange={handleCategoryFiltersChange}
-            onSearch={handleSearch}
+            onSearch={handleSearchButtonClick}
           />
 
           {loading ? (
             <div className="text-center py-8">검색 결과를 불러오는 중...</div>
           ) : error ? (
             <div className="text-center py-8 text-red-500">{error}</div>
-          ) : recipes.length === 0 ? (
+          ) : (Array.isArray(recipes) && recipes.length === 0 || recipes === undefined) ? (
             <div className="text-center py-8">검색 결과가 없습니다.</div>
           ) : (
             <div className="mb-6">
