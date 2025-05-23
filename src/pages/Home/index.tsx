@@ -11,7 +11,7 @@ import AdsBlock from '../../components/ads/AdsBlock'
 import Footer from '../../components/common/Footer'
 import eventPlaceholder from '../../assets/event.jpg'   // 실제 경로에 맞게 수정
 import RecommendedRecipeList from '../../components/recipe/RecommendedRecipeList'
-
+import FloatingAd from '../../components/ads/FloatingAd'
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
 import { getMainData, MainResponse, EventBanner } from '../../services/mainService'
@@ -117,6 +117,10 @@ const Home = () => {
   return (
     <PageLayout>
       <Navbar />
+
+    {/* 좌우 고정 광고 */}
+    <FloatingAd position="left" imageUrl={'../../assets/splash1.png'} linkUrl="https://example.com/left" />
+    <FloatingAd position="right" imageUrl={'../../assets/splash2.png'} linkUrl="https://example.com/right" />
 
       <div className="py-8">
         <Container>
