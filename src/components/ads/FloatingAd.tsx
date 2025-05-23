@@ -23,7 +23,7 @@ const FloatingAd: React.FC<FloatingAdProps> = ({ position, imageUrl, linkUrl }) 
   }, [])
 
   const baseClasses = 'fixed z-40 w-32 hidden xl:block transition-all duration-200 ease-out'
-  const sideClass = position === 'left' ? 'left-4' : 'right-4'
+  const sideClass = position === 'left' ? 'left-16' : 'right-16'
 
   return (
     <div className={`${baseClasses} ${sideClass}`} style={{ top }}>
