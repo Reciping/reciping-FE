@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { addTokenInterceptor } from './interceptors'
 
 export const mainApiClient = axios.create({
   baseURL:
@@ -6,6 +7,8 @@ export const mainApiClient = axios.create({
     'http://localhost:8080',
   timeout: 10_000,
 })
+
+addTokenInterceptor(mainApiClient)
 
 mainApiClient.interceptors.request.use(
   config => {
