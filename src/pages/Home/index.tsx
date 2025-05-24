@@ -19,6 +19,7 @@ import { Recipe, CategorySearchRequest } from '../../types/recipe'
 import { searchRecipesByCategory } from '../../services/recipeService'
 import RecipeSwiper from '../../components/recipe/RecipeSwiper'
 import { SearchMode } from '../../types/SearchPanel.types'
+import { getChatRecommendations } from '../../services/chatService'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -38,6 +39,7 @@ const Home = () => {
   
   const [main, setMain] = useState<MainResponse | null>(null)
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([])
+  const [aiRecommendedRecipes, setAiRecommendedRecipes] = useState<Recipe[]>([]);
 
   // 카테고리 필터 변경 시 자동으로 검색 실행
   useEffect(() => {
@@ -52,6 +54,13 @@ const Home = () => {
         setMain(res)
       })
       .catch(err => console.error('메인 데이터 오류:', err))
+
+    getChatRecommendations()
+      .then(res => {
+        setAiRecommendedRecipes(res.recommendedRecipes);
+      })
+      .catch(err => console.error('AI 추천 레시피 오류:', err));
+
   }, [])
 
   /* 데모 인기 급상승 텍스트 ------------------------------ */
@@ -160,9 +169,9 @@ const Home = () => {
           <HomeRecipeList />
 
           {/* AI 추천 블록 ───── */}
-          {main && (
+          {aiRecommendedRecipes.length > 0 && (
             <RecommendedRecipeList
-              recipes={main.recommendedRecipes ?? []}
+              recipes={aiRecommendedRecipes}
               onCardClick={id => navigate(`/recipe/${id}`)}
             />
           )}
