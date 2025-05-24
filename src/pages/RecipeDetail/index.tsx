@@ -9,6 +9,7 @@ import Navbar    from '../../components/layout/Navbar'
 import ContentWrapper from '../../components/common/ContentWrapper'
 import Footer    from '../../components/common/Footer'
 import LikeButton from '../../components/like/LikeButton'
+import CommentSection from '../../components/comment/CommentSection'
 
 import nonImage from '../../assets/nonImage.jpeg'
 
@@ -204,32 +205,7 @@ const RecipeDetail: React.FC = () => {
         </div>
 
         {/* Comments */}
-        <section>
-          <h2 className="font-semibold mb-4">Comments :</h2>
-          {comments.content.length === 0 ? (
-            <p className="text-center text-gray-500 mb-6">등록된 댓글이 없습니다.</p>
-          ) : (
-            <ul className="space-y-4 mb-6">
-              {comments.content.map(c => (
-                <li key={c.id} className="flex items-start space-x-3">
-                  {/* TODO: 실제 avatarUrl 로 교체 */}
-                  <div className="w-8 h-8 bg-gray-300 rounded-full" />
-                  <div className="bg-[#FFF5F0] p-3 rounded-xl">
-                    <p className="text-sm">{c.content}</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {new Date(c.createdAt).toLocaleString()}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="flex justify-center">
-            <button className="px-6 py-2 bg-[#F15A24] text-white rounded-full">
-              댓글 남기기
-            </button>
-          </div>
-        </section>
+        <CommentSection comments={comments} recipeId={Number(id)} />
       </ContentWrapper>
 
       <Footer />
