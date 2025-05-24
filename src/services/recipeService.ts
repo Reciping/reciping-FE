@@ -98,9 +98,6 @@ export const getRecipeDetail = (
   recipeApiClient
     .get<RecipeDetailResponse>(`/api/v1/recipes/${id}`, {
       params: { page, size },
-      headers: {
-        'X-USER-ID' : '1123'
-      }
     })
     .then(res => res.data)
 
@@ -136,7 +133,6 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
  * POST /api/v1/recipes
  * @param dto - RecipeCreateRequest
  * @param file - 이미지 파일
- * @param userId - X-USER-ID header
  * @returns 성공 여부(boolean)
  */
 export const createRecipe = async (
@@ -151,7 +147,6 @@ export const createRecipe = async (
   const res = await recipeApiClient.post('/api/v1/recipes', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      'X-USER-ID': String(userId),
     },
   })
   return res.status === 200 || res.status === 201

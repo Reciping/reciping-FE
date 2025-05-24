@@ -15,7 +15,7 @@ mainApiClient.interceptors.request.use(
     const userId =
       localStorage.getItem('userId')  // 로그인 시 저장해둔 값
       ?? '1123'                       // 또는 하드코드 테스트 ID
-    config.headers['X-USER-ID'] = userId
+    // config.headers['X-USER-ID'] = userId
     return config
   },
   error => Promise.reject(error),
