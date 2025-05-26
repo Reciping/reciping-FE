@@ -1,4 +1,6 @@
 import { authApiClient } from '../api/authApiClient'
+import { eventApiClient } from '../api/eventApiClient'
+import { EventBanner } from '../types/event'
 
 // 📑 응답 데이터 타입
 export interface PreviewImage {
@@ -50,5 +52,21 @@ export const getEvents = async (
       )
     }
     throw new Error('알 수 없는 오류가 발생했습니다.')
+  }
+}
+
+export const getEventBanners = async (
+  position = 'MAIN_TOP',
+  size = 20,
+): Promise<EventBanner[]> => {
+  try {
+    const response = await eventApiClient.get<GetEventsResponse>(
+      '/api/v1/main',
+      { params: { position, size } }
+    )
+    return response.data.data ?? []
+  } catch (error) {
+    console.error('Error fetching event banners:', error)
+    return []
   }
 } 
