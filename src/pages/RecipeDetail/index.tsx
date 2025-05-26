@@ -92,13 +92,22 @@ const RecipeDetail: React.FC = () => {
       <Navbar />
 
       <ContentWrapper className="mb-12">
-        {/* 뒤로가기 */}
-        <button
-          onClick={() => navigate(-1)}
-          className="text-xl text-gray-600 hover:text-black mb-4"
-        >
-          ←
-        </button>
+        {/* Header row with Back button and User ID text */}
+        <div className="flex items-center mb-4 relative"> {/* Use flex and relative positioning */}
+          {/* 뒤로가기 */}
+          <button
+            onClick={() => navigate(-1)}
+            className="text-xl text-gray-600 hover:text-black absolute left-0 top-1/2 transform -translate-y-1/2" // Position absolutely to the left
+            aria-label="뒤로가기"
+          >
+            ←
+          </button>
+
+          {/* User ID text centered in the available space */}
+          <div className="flex-1 text-center"> {/* Occupy remaining space and center text */}
+            <p className="text-lg font-semibold">{data.recipe.userId}의 레시피</p> {/* The text */}
+          </div>
+        </div>
 
         {/* 이미지 */}
         <div className="flex justify-center items-center mb-4">
