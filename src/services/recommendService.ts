@@ -9,11 +9,12 @@ interface ChatRecommendationsResponse {
 export const getChatRecommendations = async (): Promise<ChatRecommendationsResponse> => {
   try {
     // Assuming the chat API returns an object with recommendedRecipeList
-    const { data } = await recipeApiClient.post<{
+    const { data } = await recipeApiClient.get<{
       recommendedRecipeList?: Recipe[];
       // Add other raw chat response properties
-    }>('/api/v1/chat', { /* Add body content if needed */ }); // TODO: Add actual request body if required by chat API
+    }>('/api/v1/recipes/recommend', { /* Add body content if needed */ });
 
+    console.log(data)
     return {
       recommendedRecipes: data.recommendedRecipeList ?? [],
       // Map other properties as needed
