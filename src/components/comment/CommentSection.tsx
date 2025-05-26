@@ -10,15 +10,19 @@ interface CommentSectionProps {
 const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) => {
   const [newComment, setNewComment] = useState('');
   const [commentList, setCommentList] = useState<CommentItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const userId = 1123;
 
   useEffect(() => {
-    fetchComments(recipeId);
-  }, [recipeId]);
+    fetchComments(recipeId, currentPage);
+  }, [recipeId, currentPage]);
 
-  const fetchComments = async (id: number) => {
-    const fetchedComments = await getCommentsByRecipeId(id);
-    setCommentList(fetchedComments);
+  const fetchComments = async (id: number, page: number) => {
+    const size = 20;
+    const fetchedCommentPage = await getCommentsByRecipeId(id, page, size);
+    setCommentList(fetchedCommentPage.content);
+    setTotalPages(fetchedCommentPage.totalPages);
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +37,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
     if (success) {
       setNewComment('');
       alert('댓글이 등록되었습니다.');
-      fetchComments(recipeId);
+      fetchComments(recipeId, currentPage);
     } else {
       alert('댓글 등록에 실패했습니다.');
     }
@@ -42,6 +46,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
   const formatCommentDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString();
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -64,6 +72,35 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
           ))}
         </ul>
       )}
+
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-2 mt-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 0}
+            className="px-4 py-2 border rounded-full disabled:opacity-50"
+          >
+            이전
+          </button>
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`px-4 py-2 border rounded-full ${currentPage === index ? 'bg-[#F15A24] text-white' : ''}`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages - 1}
+            className="px-4 py-2 border rounded-full disabled:opacity-50"
+          >
+            다음
+          </button>
+        </div>
+      )}
+
       <div className="flex justify-center mt-4">
         <input
           type="text"

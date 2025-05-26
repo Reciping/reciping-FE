@@ -21,8 +21,8 @@ export const createComment = async (payload: CreateCommentPayload): Promise<bool
 export const getCommentsByRecipeId = async (
   recipeId: number,
   page: number = 0, // Default to 0-based page
-  size: number = 100 // Default size
-): Promise<CommentItem[]> => {
+  size: number = 20 // Set default size to 20
+): Promise<CommentPage> => { // Change return type to Promise<CommentPage>
   try {
     const response = await commentApiClient.get<CommentPage>(
       `/api/v1/comments/recipe/${recipeId}`,
@@ -34,9 +34,19 @@ export const getCommentsByRecipeId = async (
         }
       }
     );
-    return response.data.content; // Return the array of comments
+    return response.data; // Return the entire CommentPage object
   } catch (error) {
     console.error('Error fetching comments:', error);
-    return []; // Return empty array on error
+    return { // Return a default CommentPage on error to match return type
+      content: [],
+      number: page,
+      size: size,
+      totalElements: 0,
+      numberOfElements: 0,
+      first: true,
+      last: true,
+      totalPages: 0,
+      hasContent: false,
+    };
   }
 }; 
