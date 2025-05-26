@@ -61,11 +61,14 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
         <ul className="space-y-4 mb-6">
           {commentList.map(c => (
             <li key={c.id} className="flex items-start space-x-3">
-              <img
-                src="/src/assets/avatar.png"
-                alt="Avatar"
-                className="w-8 h-8 bg-gray-300 rounded-full"
-              />
+              <div className="flex flex-col items-center">
+                <img
+                  src="/src/assets/avatar.png"
+                  alt="Avatar"
+                  className="w-8 h-8 bg-gray-300 rounded-full"
+                />
+                <p className="text-xs text-gray-600 mt-1">{c.userId}</p>
+              </div>
               <div className="bg-[#FFF5F0] p-3 rounded-xl flex-1">
                 <p className="text-sm">{c.content}</p>
                 <p className="text-xs text-gray-500 mt-1">
