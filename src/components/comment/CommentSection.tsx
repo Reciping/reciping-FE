@@ -19,7 +19,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
   }, [recipeId, currentPage]);
 
   const fetchComments = async (id: number, page: number) => {
-    const size = 20;
+    const size = 10;
     const fetchedCommentPage = await getCommentsByRecipeId(id, page, size);
     setCommentList(fetchedCommentPage.content);
     setTotalPages(fetchedCommentPage.totalPages);
@@ -82,15 +82,26 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
           >
             이전
           </button>
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index)}
-              className={`px-4 py-2 border rounded-full ${currentPage === index ? 'bg-[#F15A24] text-white' : ''}`}
-            >
-              {index + 1}
-            </button>
-          ))}
+          {Array.from({ length: totalPages }).map((_, index) => {
+            const pageNumber = index;
+            const shouldDisplay =
+              pageNumber >= Math.max(0, currentPage - 3) &&
+              pageNumber <= Math.min(totalPages - 1, currentPage + 3);
+
+            if (!shouldDisplay) {
+              return null;
+            }
+
+            return (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index)}
+                className={`px-4 py-2 border rounded-full ${currentPage === index ? 'bg-[#F15A24] text-white' : ''}`}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages - 1}

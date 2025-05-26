@@ -21,7 +21,7 @@ export const createComment = async (payload: CreateCommentPayload): Promise<bool
 export const getCommentsByRecipeId = async (
   recipeId: number,
   page: number = 0, // Default to 0-based page
-  size: number = 20 // Set default size to 20
+  size: number = 10 // Set default size to 20
 ): Promise<CommentPage> => { // Change return type to Promise<CommentPage>
   try {
     const response = await commentApiClient.get<CommentPage>(
