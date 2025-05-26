@@ -12,13 +12,11 @@ export interface EventBanner {
 interface RawMainResponse {
   ads: Ad[]
   events: { data: EventBanner[] }
-  recommendedRecipeList: Recipe[]
 }
   
 export interface MainResponse {
   ads: Ad[]
   events: EventBanner[]
-  recommendedRecipes: Recipe[]
 }
 
 export const getMainData = async (
@@ -32,6 +30,5 @@ export const getMainData = async (
   return {
     ads: data.ads ?? [],
     events: data.events?.data ?? [],
-    recommendedRecipes: data.recommendedRecipeList ?? [],
   }
 }

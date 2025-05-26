@@ -117,9 +117,9 @@ const Write: React.FC = () => {
       console.log("[dto] ", dto)
 
       const success = await createRecipe(dto, file, 1123)
-      if (success) {
+      if (success && typeof success !== 'boolean') {
         alert('레시피가 성공적으로 등록되었습니다.')
-        navigate(`/`)
+        navigate(`/recipe/${success.data.id}`)
       } else {
         alert('레시피 등록에 실패했습니다.')
       }

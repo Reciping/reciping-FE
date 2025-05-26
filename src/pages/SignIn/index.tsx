@@ -15,6 +15,7 @@ const SignIn = () => {
     try {
       const res = await signIn(form)
       const token = res.headers['authorization']
+      console.log(res)
       if (token) {
         localStorage.setItem('token', token) // 세션 유지용
         alert('로그인 성공!')

@@ -98,9 +98,6 @@ export const getRecipeDetail = (
   recipeApiClient
     .get<RecipeDetailResponse>(`/api/v1/recipes/${id}`, {
       params: { page, size },
-      headers: {
-        'X-USER-ID' : '1123'
-      }
     })
     .then(res => res.data)
 
@@ -136,23 +133,30 @@ export const toggleBookmark = (userId: number, recipeId: number): Promise<boolea
  * POST /api/v1/recipes
  * @param dto - RecipeCreateRequest
  * @param file - 이미지 파일
- * @param userId - X-USER-ID header
  * @returns 성공 여부(boolean)
  */
 export const createRecipe = async (
   dto: RecipeCreateRequest,
   file: File | null,
   userId: number
-): Promise<boolean> => {
+): Promise<{ data: { id: number } } | boolean> => {
   const formData = new FormData()
   formData.append('requestDto', new Blob([JSON.stringify(dto)], { type: 'application/json' }))
   if (file) formData.append('file', file)
 
-  const res = await recipeApiClient.post('/api/v1/recipes', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      'X-USER-ID': String(userId),
-    },
-  })
-  return res.status === 200 || res.status === 201
+  try {
+    const res = await recipeApiClient.post('/api/v1/recipes', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    if (res.status === 200 || res.status === 201) {
+      return res.data;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('Error creating recipe:', error);
+    return false;
+  }
 } 
