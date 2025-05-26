@@ -14,7 +14,6 @@ import RecommendedRecipeList from '../../components/recipe/RecommendedRecipeList
 import FloatingAd from '../../components/ads/FloatingAd'
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
-import { getMainData, MainResponse, EventBanner } from '../../services/mainService'
 import { getPublicAds } from '../../services/adsService'
 import { Recipe, CategorySearchRequest } from '../../types/recipe'
 import { searchRecipesByCategory } from '../../services/recipeService'
@@ -22,6 +21,8 @@ import RecipeSwiper from '../../components/recipe/RecipeSwiper'
 import { SearchMode } from '../../types/SearchPanel.types'
 import { getChatRecommendations } from '../../services/recommendService'
 import { Ad } from '../../types/ads'
+import { getEventBanners } from '../../services/eventService'
+import { EventBanner } from '../../types/event'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -39,10 +40,10 @@ const Home = () => {
     difficulty: '전체',
   })
   
-  const [main, setMain] = useState<MainResponse | null>(null)
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([])
   const [aiRecommendedRecipes, setAiRecommendedRecipes] = useState<Recipe[]>([]);
   const [ads, setAds] = useState<Ad[]>([]);
+  const [events, setEvents] = useState<EventBanner[]>([]);
 
   // 카테고리 필터 변경 시 자동으로 검색 실행
   useEffect(() => {
@@ -52,11 +53,11 @@ const Home = () => {
   }, [categoryFilters])
 
   useEffect(() => {
-    getMainData('MAIN_TOP', 20)
+    getEventBanners('MAIN_TOP', 20)
       .then(res => {
-        setMain(res)
+        setEvents(res)
       })
-      .catch(err => console.error('메인 데이터 오류:', err))
+      .catch(err => console.error('이벤트 데이터 오류:', err))
 
     getChatRecommendations()
       .then(res => {
@@ -87,7 +88,7 @@ const Home = () => {
           qs.set(key, value)
         }
       })
-      navigate(`/search/category?${qs.toString()}`, { state: { main }})
+      navigate(`/search/category?${qs.toString()}`)
     } catch (e) {
       console.error(e)
       alert('카테고리 검색 중 오류가 발생했습니다.')
@@ -100,7 +101,7 @@ const Home = () => {
       const qs = new URLSearchParams()
       qs.set('keyword', searchKeyword)
       qs.set('page', '1')
-      navigate(`/search/natural?${qs.toString()}`, { state: { main }})
+      navigate(`/search/natural?${qs.toString()}`)
     } catch (e) {
       console.error(e)
       alert('자연어 검색 중 오류가 발생했습니다.')
@@ -117,13 +118,13 @@ const Home = () => {
       const qs = new URLSearchParams()
       qs.set('keyword', searchKeyword)
       qs.set('page', '1')
-      navigate(`/search/menu?${qs.toString()}`, { state: { main }})
+      navigate(`/search/menu?${qs.toString()}`)
     } else if (selectedMode === 'ingredient') {
       // 재료 기반 검색
       const qs = new URLSearchParams()
       qs.set('keyword', searchKeyword)
       qs.set('page', '1')
-      navigate(`/search/ingredient?${qs.toString()}`, { state: { main }})
+      navigate(`/search/ingredient?${qs.toString()}`)
     }
   }
 
@@ -157,8 +158,8 @@ const Home = () => {
           {/* 광고 & 기본 레시피 리스트 */}
           <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
             {/* 이벤트 배너 – 파사드에서 받은 첫 이미지를 사용 */}
-            {main?.events[0] ? (
-              <EventBlock event={main.events[0]} />
+            {events[0] ? (
+              <EventBlock event={events[0]} />
             ) : (
               <div className="h-40 rounded-2xl bg-white shadow flex items-center justify-center">
                     <img
