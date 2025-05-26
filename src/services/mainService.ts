@@ -1,6 +1,5 @@
 import { mainApiClient } from '../api/mainApiClient'
 import { Recipe } from '../types/recipe'
-import { Ad } from '../types/ads' // Assuming Ad type is in src/types
 
 // Keeping the type definitions relevant to the service
 export interface EventBanner {
@@ -10,12 +9,10 @@ export interface EventBanner {
 }
   
 interface RawMainResponse {
-  ads: Ad[]
   events: { data: EventBanner[] }
 }
   
 export interface MainResponse {
-  ads: Ad[]
   events: EventBanner[]
 }
 
@@ -28,7 +25,6 @@ export const getMainData = async (
     { params: { position, size } },
   )
   return {
-    ads: data.ads ?? [],
     events: data.events?.data ?? [],
   }
 }

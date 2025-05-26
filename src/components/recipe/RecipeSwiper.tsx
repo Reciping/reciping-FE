@@ -87,8 +87,8 @@ const RecipeSwiper: React.FC<Props> = ({ recipes, onCardClick }) => {
           <SwiperSlide key={idx}>
             {/* 5칸 그리드 + 얇은 세로 구분선 스타일 */}
             <div className="grid grid-cols-5 divide-x divide-[#F2E6DE]">
-              {group.map(r => (
-                <div className="px-4" key={r.id}>
+              {group.map((r, index) => (
+                <div className="px-4" key={index}>
                   <RecipeCard
                     imageUrl={r.imageUrl?.trim() ? r.imageUrl : nonImage}
                     title={r.title}
