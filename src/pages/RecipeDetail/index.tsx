@@ -100,6 +100,11 @@ const RecipeDetail: React.FC = () => {
           ←
         </button>
 
+        {/* Add user ID text here */}
+        <div className="text-center mb-4"> {/* Container for centered text */}
+          <p className="text-lg font-semibold">{data.recipe.userId}의 레시피</p> {/* The text */}
+        </div>
+
         {/* 이미지 */}
         <div className="flex justify-center items-center mb-4">
           <img
