@@ -15,11 +15,13 @@ import FloatingAd from '../../components/ads/FloatingAd'
 import HomeRecipeList from '../../components/recipe/HomeRecipeList'
 
 import { getMainData, MainResponse, EventBanner } from '../../services/mainService'
+import { getPublicAds } from '../../services/adsService'
 import { Recipe, CategorySearchRequest } from '../../types/recipe'
 import { searchRecipesByCategory } from '../../services/recipeService'
 import RecipeSwiper from '../../components/recipe/RecipeSwiper'
 import { SearchMode } from '../../types/SearchPanel.types'
 import { getChatRecommendations } from '../../services/recommendService'
+import { Ad } from '../../types/ads'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -40,6 +42,7 @@ const Home = () => {
   const [main, setMain] = useState<MainResponse | null>(null)
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([])
   const [aiRecommendedRecipes, setAiRecommendedRecipes] = useState<Recipe[]>([]);
+  const [ads, setAds] = useState<Ad[]>([]);
 
   // 카테고리 필터 변경 시 자동으로 검색 실행
   useEffect(() => {
@@ -60,6 +63,12 @@ const Home = () => {
         setAiRecommendedRecipes(res.recommendedRecipes);
       })
       .catch(err => console.error('AI 추천 레시피 오류:', err));
+
+    getPublicAds()
+      .then(fetchedAds => {
+        setAds(fetchedAds);
+      })
+      .catch(err => console.error('광고 데이터 오류:', err));
 
   }, [])
 
@@ -162,7 +171,7 @@ const Home = () => {
 
              {/* 광고 이미지 */}
             <div className="bg-white rounded-lg flex-1 flex items-center overflow-x-auto gap-4 shadow">
-              <AdsBlock ad={main?.ads?.[0] ?? null} />
+              <AdsBlock ad={ads?.[0] ?? null} />
             </div>
           </div>
 
