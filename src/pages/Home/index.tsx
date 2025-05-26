@@ -19,7 +19,7 @@ import { Recipe, CategorySearchRequest } from '../../types/recipe'
 import { searchRecipesByCategory } from '../../services/recipeService'
 import RecipeSwiper from '../../components/recipe/RecipeSwiper'
 import { SearchMode } from '../../types/SearchPanel.types'
-import { getChatRecommendations } from '../../services/chatService'
+import { getChatRecommendations } from '../../services/recommendService'
 
 const Home = () => {
   const navigate = useNavigate()
