@@ -1,27 +1,25 @@
 import { recipeApiClient } from '../api/recipeApiClient'; // Assuming a new apiClient for chat
 import { Recipe } from '../types/recipe'; // Reusing Recipe type for recommended recipes
 
-interface ChatRecommendationsResponse {
+interface AIRecommendationsResponse {
   recommendedRecipes: Recipe[];
   // Add other chat-related response properties if any
 }
 
-export const getChatRecommendations = async (): Promise<ChatRecommendationsResponse> => {
+export const getChatRecommendations = async (): Promise<AIRecommendationsResponse> => {
   try {
-    // Assuming the chat API returns an object with recommendedRecipeList
     const { data } = await recipeApiClient.get<{
-      recommendedRecipeList?: Recipe[];
-      // Add other raw chat response properties
+      recipes: Recipe[];
+      page: number;
+      totalPages: number;
     }>('/api/v1/recipes/recommend', { /* Add body content if needed */ });
 
     console.log(data)
     return {
-      recommendedRecipes: data.recommendedRecipeList ?? [],
-      // Map other properties as needed
+      recommendedRecipes: data.recipes ?? [],
     };
   } catch (error) {
     console.error('Error fetching chat recommendations:', error);
-    // Handle error appropriately, maybe return a default structure or throw
-    return { recommendedRecipes: [] }; // Return empty array on error
+    return { recommendedRecipes: [] }; 
   }
 };
