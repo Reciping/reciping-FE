@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CommentItem } from '../../types/recipe';
 import { createComment, getCommentsByRecipeId } from '../../services/commentService';
 
@@ -8,6 +9,8 @@ interface CommentSectionProps {
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) => {
+  const navigate = useNavigate();
+  
   const [newComment, setNewComment] = useState('');
   const [commentList, setCommentList] = useState<CommentItem[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -30,6 +33,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
   };
 
   const handleAddComment = async () => {
+    const jwtToken = localStorage.getItem('token');
+    if (!jwtToken){
+      alert('로그인이 필요한 기능입니다.');
+      // navigate('/loginselect');
+      return;
+    }
+
     if (newComment.trim() === '') return;
 
     const success = await createComment({ recipeId, userId, content: newComment });

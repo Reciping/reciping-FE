@@ -2,7 +2,7 @@
 
 export type SexType = 'FEMALE' | 'MALE';
 export type AgeType = 'TEENS' | 'TWENTIES' | 'THIRTIES' | 'FORTIES' | 'FIFTIES' | 'SIXTIES' | 'SEVENTIES_PLUS';
-export type InterestKeywordType = 'VEGAN' | 'HIGH_PROTEIN' | 'LOW_CARB' | string;
+export type InterestKeywordType = 'SOLO_COOKING' | 'FINE_DINING' | 'DIET' | 'HEALTHY' | 'VEGAN' | 'KIDS';
 
 export interface UserInfo {
   id: number;

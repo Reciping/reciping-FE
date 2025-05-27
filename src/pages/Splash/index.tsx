@@ -16,12 +16,12 @@ const Splash = () => {
 
   const handleStart = () => {
     localStorage.setItem('hasSeenSplash', 'true')
-    navigate('/login')
+    navigate('/loginselect')
   }
 
   const handleSkip = () => {
     localStorage.setItem('hasSeenSplash', 'true')
-    navigate('/login')
+    navigate('/loginselect')
   }
 
   return (

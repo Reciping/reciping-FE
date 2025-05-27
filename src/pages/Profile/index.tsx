@@ -20,7 +20,9 @@ const ageMap: Record<string, string> = {
   TWENTIES: '20대',
   THIRTIES: '30대',
   FORTIES: '40대',
-  FIFTIES_PLUS: '50대 이상',
+  FIFTIES: '50대',
+  SIXTIES: '60대',
+  SEVENTIES_PLUS: '70대 이상'
 };
 const interestMap: Record<string, string> = {
   VEGAN: '비건',
@@ -49,7 +51,7 @@ const Profile: React.FC = () => {
       } catch (err: any) {
         if (err.response?.status === 403) {
           setError('로그인이 필요합니다. 잡시 후 로그인 화면으로 이동합니다.');
-          setTimeout(() => navigate('/login'), 2000);
+          setTimeout(() => navigate('/loginselect'), 2000);
         }
         setError(err.message);
       } finally {
@@ -61,7 +63,7 @@ const Profile: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     alert('로그아웃 되었습니다.');
-    navigate('/login');
+    navigate('/loginselect');
   };
 
   const userInfo = data?.userInfo;

@@ -1,7 +1,7 @@
 // src/pages/RecipeDetail/index.tsx
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getRecipeDetail, toggleBookmark, getCategoryOptions } from '../../services/recipeService'
+import { getRecipeDetail, getCategoryOptions } from '../../services/recipeService'
 import { RecipeDetailResponse, CategoryOptionsResponse } from '../../types/recipe'
 
 import PageLayout from '../../components/layout/PageLayout'
@@ -10,6 +10,7 @@ import ContentWrapper from '../../components/common/ContentWrapper'
 import Footer    from '../../components/common/Footer'
 import LikeButton from '../../components/like/LikeButton'
 import CommentSection from '../../components/comment/CommentSection'
+import BookmarkButton from '../../components/recipe/BookmarkButton'
 
 import nonImage from '../../assets/nonImage.jpeg'
 
@@ -71,17 +72,6 @@ const RecipeDetail: React.FC = () => {
     return list.find(opt => opt.value === code)?.label || '전체'
   }
 
-  // 북마크 버튼 클릭 핸들러
-  const handleBookmark = async () => {
-    try {
-      // TODO: 실제 userId 를 로그인한 유저 정보로 대체하세요
-      const nowBookmarked = await toggleBookmark(1123, data!.recipe.id)
-      setBookmarked(nowBookmarked)       // 서버가 준 true/false 로 상태 갱신
-    } catch (e) {
-      console.error(e)
-      alert('북마크 토글 중 오류가 발생했습니다.')
-    }
-  }  
   const displayImage = imageUrl && imageUrl.trim() !== ''
   ? imageUrl
   : nonImage
@@ -197,20 +187,10 @@ const RecipeDetail: React.FC = () => {
           />
 
           {/* 북마크 버튼 */}
-          <button
-            onClick={handleBookmark}
-            aria-label={bookmarked ? '북마크 해제' : '북마크'}
-            className={`
-              p-3 rounded-full transition
-              ${bookmarked
-                ? 'bg-[#F15A24] text-white'
-                : 'bg-white text-[#F15A24] ring-2 ring-inset ring-[#F15A24]'
-              }
-              hover:opacity-80
-            `}
-          >
-            {bookmarked ? '북마크 해제' : '북마크 하기'}
-          </button>
+          <BookmarkButton 
+            recipeId={data.recipe.id} 
+            initialBookmarkedStatus={data.recipe.bookmarked}
+          />
         </div>
 
         {/* Comments */}
