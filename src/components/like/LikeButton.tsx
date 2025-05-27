@@ -1,5 +1,6 @@
 // src/components/like/LikeButton.tsx
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import {
     createLike,
     removeLike,
@@ -19,6 +20,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     initialIsLiked,
     className = '',
 }) => {
+  const navigate = useNavigate();
   // TODO: 실제 로그인 유저 ID를 전역 상태(예: Recoil, Redux, Context)에서 불러오세요
   const userId = 1123
 
@@ -39,6 +41,14 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   
   /** 클릭 핸들러 */
   const handleClick = async () => {
+    // Check for JWT token in local storage
+    const jwtToken = localStorage.getItem('token');
+    if (!jwtToken) {
+      alert('로그인이 필요한 기능입니다.');
+      // navigate('/loginselect');
+      return;
+    }
+
     if (loading) return
     setLoading(true)
     try {
