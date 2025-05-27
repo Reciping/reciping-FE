@@ -19,9 +19,8 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
     const jwtToken = localStorage.getItem('token'); // Assuming the token is stored with key 'jwtToken'
     if (!jwtToken) {
       alert('로그인이 필요한 기능입니다.');
-      // Optionally navigate to login page instead of alert:
       // navigate('/loginselect'); 
-      return; // Stop the function if no token is found
+      return;
     }
 
     try {
