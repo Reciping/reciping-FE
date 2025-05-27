@@ -6,7 +6,7 @@ import AdminLogin from '../../pages/AdminLogin'
 
 export const authRoutes = [
   {
-    path: '/login',
+    path: '/loginselect',
     element: <PublicRoute><LoginSelect /></PublicRoute>,
   },
   {
