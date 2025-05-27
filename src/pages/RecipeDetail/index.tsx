@@ -73,6 +73,14 @@ const RecipeDetail: React.FC = () => {
 
   // 북마크 버튼 클릭 핸들러
   const handleBookmark = async () => {
+    // Check for JWT token in local storage
+    const jwtToken = localStorage.getItem('jwtToken'); // Assuming the token is stored with key 'jwtToken'
+    if (!jwtToken) {
+      // alert('로그인이 필요한 기능입니다.'); // Remove alert
+      navigate('/loginselect'); // Navigate to login page
+      return; // Stop the function if no token is found
+    }
+
     try {
       // TODO: 실제 userId 를 로그인한 유저 정보로 대체하세요
       const nowBookmarked = await toggleBookmark(1123, data!.recipe.id)
