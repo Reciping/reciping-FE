@@ -5,7 +5,7 @@ import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/common/Footer'
 import PageLayout from '../../components/layout/PageLayout'
 import ContentWrapper from '../../components/common/ContentWrapper'
-import {updateProfile} from '../../services/userService'
+import { updateProfile } from '../../services/userService'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()
@@ -28,8 +28,21 @@ const ProfileEdit = () => {
             alert('모든 항목을 입력해주세요.')
             return
         }
-        alert('수정이 완료되었습니다.')
-        navigate('/profile')
+        if (form.password.length < 8) {
+            alert('비밀번호는 8자 이상으로 입력해주세요.')
+            return
+        }
+        try{
+            await updateProfile(form)
+            alert('수정이 완료되었습니다.')
+            navigate('/profile')
+        } catch (err:any){
+            if (err.response?.status === 400) {
+                alert('입력 오류 : ${err.response.data.message}')
+            } else{
+                alert('수정 중 오류가 발생했습니다.')
+            }
+        }
     }
 
     return (
