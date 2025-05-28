@@ -10,7 +10,7 @@ const EventBlock: React.FC<Props> = ({ event }) => (
     href={event.previewImage.filePath}
     target="_blank"
     rel="noopener noreferrer"
-    className="block bg-white rounded-2xl overflow-hidden shadow h-40"
+    className="block w-full h-full bg-white rounded-2xl overflow-hidden shadow"
   >
     <img
       src={event.previewImage.filePath}
@@ -19,5 +19,6 @@ const EventBlock: React.FC<Props> = ({ event }) => (
     />
   </a>
 )
+
 
 export default EventBlock
