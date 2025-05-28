@@ -11,7 +11,6 @@ import AdsBlock from "../../components/ads/AdsBlock";
 import Footer from "../../components/common/Footer";
 import eventPlaceholder from "../../assets/event.jpg";
 import RecommendedRecipeList from "../../components/recipe/RecommendedRecipeList";
-import FloatingAd from "../../components/ads/FloatingAd";
 import HomeRecipeList from "../../components/recipe/HomeRecipeList";
 
 import { getPublicAds } from "../../services/adsService";
@@ -132,22 +131,6 @@ const Home = () => {
     <PageLayout>
       <Navbar />
 
-      {/* 좌우 고정 광고 */}
-      {adsByPosition["MAIN_LEFT_SIDEBAR"]?.[0] && (
-        <FloatingAd
-          position="left"
-          imageUrl={adsByPosition["MAIN_LEFT_SIDEBAR"][0].imageUrl}
-          linkUrl={adsByPosition["MAIN_LEFT_SIDEBAR"][0].targetUrl}
-        />
-      )}
-      {adsByPosition["MAIN_RIGHT_SIDEBAR"]?.[0] && (
-        <FloatingAd
-          position="right"
-          imageUrl={adsByPosition["MAIN_RIGHT_SIDEBAR"][0].imageUrl}
-          linkUrl={adsByPosition["MAIN_RIGHT_SIDEBAR"][0].targetUrl}
-        />
-      )}
-
       <div className="py-8">
         <Container>
           <LogoTitle />
@@ -160,7 +143,7 @@ const Home = () => {
             onCategoryFiltersChange={setCategoryFilters}
             onSearch={handleSearch}
           />
-          
+
           {/* 상단 이벤트/광고 영역 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {/* 이벤트 */}
@@ -189,20 +172,19 @@ const Home = () => {
 
           {/* 홈 레시피 리스트 */}
           <HomeRecipeList />
-         
-          {/* 중간 광고 - 독립적인 영역 */}
+
+          {/* 중간 광고 */}
           {adsByPosition["MAIN_MIDDLE"]?.[0] && (
-            <div className="mb-6">
-              <div className="w-full max-w-4xl mx-auto h-[100px]">
+            <div className="mb-8">
+              <div className="w-full max-w-6xl mx-auto h-[120px]">
                 <AdsBlock
                   ad={adsByPosition["MAIN_MIDDLE"][0]}
                   aspectRatio="auto"
-                  className="h-full w-full"
+                  className="h-full w-full rounded-2xl"
                 />
               </div>
             </div>
           )}
-
           {/* AI 추천 레시피 */}
           {aiRecommendedRecipes.length > 0 && (
             <RecommendedRecipeList
@@ -222,7 +204,7 @@ const Home = () => {
                 ))}
               </ol>
             </div>
-            
+
             {/* 당근 추천 영역 */}
             <div className="bg-white p-6 rounded-2xl shadow flex flex-col justify-between">
               <div>
@@ -240,19 +222,6 @@ const Home = () => {
               </button>
             </div>
           </div>
-
-          {/* 하단 광고 - 별도 영역으로 분리 */}
-          {adsByPosition["MAIN_BOTTOM"]?.[0] && (
-            <div className="mb-6">
-              <div className="w-full max-w-2xl mx-auto h-[150px]">
-                <AdsBlock
-                  ad={adsByPosition["MAIN_BOTTOM"][0]}
-                  aspectRatio="auto"
-                  className="h-full w-full"
-                />
-              </div>
-            </div>
-          )}
         </Container>
       </div>
       <Footer />
