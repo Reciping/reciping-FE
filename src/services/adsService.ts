@@ -7,12 +7,12 @@ interface ServeAdsResponse {
   ads: Ad[];
 }
 
-export const getPublicAds = async (): Promise<Ad[]> => {
+export const getPublicAds = async (): Promise<Record<string, Ad[]>> => {
   try {
-    const response = await adsApiClient.get<ServeAdsResponse>('/api/v1/ads/public/serve');
-    return response.data.ads ?? [];
+    const response = await adsApiClient.get<Record<string, Ad[]>>('/api/v1/ads/public/serve')
+    return response.data
   } catch (error) {
-    console.error('Error fetching public ads:', error);
-    return [];
+    console.error('광고 불러오기 실패:', error)
+    return {}
   }
-};
+}

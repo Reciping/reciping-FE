@@ -7,4 +7,4 @@ export const adsApiClient = axios.create({
   timeout: 10_000,
 })
 
-addTokenInterceptor(adsApiClient) 
+addTokenInterceptor(adsApiClient)
