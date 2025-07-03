@@ -4,7 +4,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import { Recipe } from '../../types/recipe'
 import RecipeCard from './RecipeCard'
-import nonImage from '../../assets/nonImage.jpeg'
+import nonImage from '../../../public/assets/nonImage.png'
+
 import 'swiper/css'
 import 'swiper/css/navigation'
 

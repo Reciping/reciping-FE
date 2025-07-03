@@ -73,7 +73,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
             <li key={c.id} className="flex items-start space-x-3">
               <div className="flex flex-col items-center">
                 <img
-                  src="/src/assets/avatar.png"
+                  src="/public/assets/avatar.png"
                   alt="Avatar"
                   className="w-8 h-8 bg-gray-300 rounded-full"
                 />
