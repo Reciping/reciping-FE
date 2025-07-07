@@ -12,7 +12,7 @@ import LikeButton from '../../components/like/LikeButton'
 import CommentSection from '../../components/comment/CommentSection'
 import BookmarkButton from '../../components/recipe/BookmarkButton'
 
-import nonImage from '../../assets/nonImage.jpeg'
+import { ASSET_URLS } from '../../constants/assets'
 
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -74,7 +74,7 @@ const RecipeDetail: React.FC = () => {
 
   const displayImage = imageUrl && imageUrl.trim() !== ''
   ? imageUrl
-  : nonImage
+  : ASSET_URLS.nonImage
 
 
   return (

@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import { Recipe } from '../../types/recipe'
 import RecipeCard from './RecipeCard'
-import nonImage from '../../assets/nonImage.jpeg'
+import { ASSET_URLS } from '../../constants/assets'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
@@ -90,7 +90,7 @@ const RecipeSwiper: React.FC<Props> = ({ recipes, onCardClick }) => {
               {group.map((r, index) => (
                 <div className="px-4" key={index}>
                   <RecipeCard
-                    imageUrl={r.imageUrl?.trim() ? r.imageUrl : nonImage}
+                    imageUrl={r.imageUrl?.trim() ? r.imageUrl : ASSET_URLS.nonImage}
                     title={r.title}
                     likeCount={r.likeCount}
                     onClick={() => onCardClick?.(r.id)}

@@ -19,7 +19,7 @@ import AdsBlock from '../../components/ads/AdsBlock'
 import UserRecipeList from '../../components/user/UserRecipeList'
 import { CategorySearchRequest } from '../../types/recipe'
 import NaverSearchIframe from '../../components/NaverSearchIframe'
-import eventPlaceholder from '../../assets/event.jpg'   // 실제 경로에 맞게 수정
+import { ASSET_URLS } from '../../constants/assets'
 
 import {
   searchNaturalService,
