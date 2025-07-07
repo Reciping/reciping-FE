@@ -9,7 +9,6 @@ import LogoTitle from "../../components/common/LogoTitle";
 import SearchPanel from "../../components/search/SearchPanel";
 import AdsBlock from "../../components/ads/AdsBlock";
 import Footer from "../../components/common/Footer";
-import eventPlaceholder from "../../assets/event.jpg";
 import RecommendedRecipeList from "../../components/recipe/RecommendedRecipeList";
 import HomeRecipeList from "../../components/recipe/HomeRecipeList";
 
@@ -21,6 +20,7 @@ import { getChatRecommendations } from "../../services/recommendService";
 import { Ad } from "../../types/ads";
 import { getEventBanners } from "../../services/eventService";
 import { EventBanner } from "../../types/event";
+import { ASSET_URLS } from "../../constants/assets";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -153,7 +153,7 @@ const Home = () => {
               ) : (
                 <div className="h-full rounded-2xl bg-white shadow flex items-center justify-center">
                   <img
-                    src={eventPlaceholder}
+                    src={ASSET_URLS.eventPlaceholder}
                     alt="이벤트 준비 중"
                     className="w-full h-full object-cover rounded-2xl"
                   />

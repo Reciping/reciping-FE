@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import recipingFront from '../../assets/recipingFront.png' // 캐릭터 이미지 경로
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/common/Footer'
 import PageLayout from '../../components/layout/PageLayout'
 import ContentWrapper from '../../components/common/ContentWrapper'
 import { updateProfile } from '../../services/userService'
+import { ASSET_URLS } from '../../constants/assets'
 
 const ProfileEdit = () => {
     const navigate = useNavigate()
@@ -138,7 +138,7 @@ const ProfileEdit = () => {
                     </button>
 
                     {/* 캐릭터 이미지 */}
-                    <img src={recipingFront} alt="recipingFront" className="absolute -bottom-10 right-0 w-40" />
+                    <img src={ASSET_URLS.recipingFront} alt="recipingFront" className="absolute -bottom-10 right-0 w-40" />
                 </div>
             </ContentWrapper>
 

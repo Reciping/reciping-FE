@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import logoutIcon from '../../assets/logout.png';
+// import logoutIcon from '../../assets/logout.png';
 import Footer from '../../components/common/Footer';
 import Navbar from '../../components/layout/Navbar';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import ContentWrapper from '../../components/common/ContentWrapper';
 
 import { getMyPage } from '../../services/userService';
 import type { MyPageData } from '../../types/mypage';
+import { ASSET_URLS } from '../../constants/assets';
 
 type Tab = 'myRecipes' | 'myBookmarks';
 
@@ -89,7 +90,7 @@ const Profile: React.FC = () => {
             className="text-gray-600 hover:text-black p-2 rounded"
             aria-label="로그아웃"
           >
-            <img src={logoutIcon} alt="logout" className="w-5 h-5" />
+            <img src={ASSET_URLS.logout} alt="logout" className="w-5 h-5" />
           </button>
         </div>
 

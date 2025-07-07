@@ -6,10 +6,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
-
-import splash1 from '../../assets/splash1.png'
-import splash2 from '../../assets/splash2.png'
-import splash3 from '../../assets/splash3.png'
+import { ASSET_URLS } from '../../constants/assets'
 
 const Splash = () => {
   const navigate = useNavigate()
@@ -45,14 +42,14 @@ const Splash = () => {
       >
         <SwiperSlide>
           <div className="h-full flex flex-col justify-center items-center text-center">
-            <img src={splash1} alt="splash1" className="w-40 h-40 mb-6 mx-auto" />
+            <img src={ASSET_URLS.splash1} alt="splash1" className="w-40 h-40 mb-6 mx-auto" />
             <p>보다 쉽게 레시피를 검색하는</p>
           </div>
         </SwiperSlide>
         
         <SwiperSlide>
           <div className="h-full flex flex-col justify-center items-center text-center">
-            <img src={splash2} alt="splash2" className="w-40 h-40 mb-6 mx-auto" />
+            <img src={ASSET_URLS.splash2} alt="splash2" className="w-40 h-40 mb-6 mx-auto" />
             <p>냉장고에 있는 재료만 입력해도</p>
             <p className="font-semibold mt-1">만들 수 있는 레시피를 추천해줘요</p>
           </div>
@@ -60,7 +57,7 @@ const Splash = () => {
 
         <SwiperSlide>
           <div className="h-full flex flex-col justify-center items-center text-center">
-            <img src={splash3} alt="splash3" className="w-40 h-40 mb-6 mx-auto" />
+            <img src={ASSET_URLS.splash3} alt="splash3" className="w-40 h-40 mb-6 mx-auto" />
             <p>회원들과 내 레시피를 공유하고</p>
             <p className="font-semibold mt-1">AI기반 개인 맞춤 추천 레시피를 받아봐요</p>
             <button

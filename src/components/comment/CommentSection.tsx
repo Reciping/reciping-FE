@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CommentItem } from '../../types/recipe';
 import { createComment, getCommentsByRecipeId } from '../../services/commentService';
+import { ASSET_URLS } from '../../constants/assets';
 
 interface CommentSectionProps {
   comments: { content: CommentItem[] };
@@ -73,8 +74,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, recipeId }) =
             <li key={c.id} className="flex items-start space-x-3">
               <div className="flex flex-col items-center">
                 <img
-                  src="/public/assets/avatar.png"
-                  alt="Avatar"
+                  src={ASSET_URLS.avatar}
+                  alt="아바타"
                   className="w-8 h-8 bg-gray-300 rounded-full"
                 />
                 <p className="text-xs text-gray-600 mt-1">{c.userId}</p>

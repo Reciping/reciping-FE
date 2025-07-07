@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/layout/Navbar'
 import PageLayout from '../../components/layout/PageLayout'
 import ContentWrapper from '../../components/common/ContentWrapper'
-import recipingFront from '../../assets/recipingFront.png'
+// import recipingFront from '../../assets/recipingFront.png'
 import Footer from '../../components/common/Footer'
 
+import { ASSET_URLS } from '../../constants/assets'
 
 const EventPage: React.FC = () => {
   const navigate = useNavigate()
@@ -51,7 +52,7 @@ const EventPage: React.FC = () => {
 
       {/* 캐릭터 이미지 */}
       <img
-        src={recipingFront}
+        src={ASSET_URLS.recipingFront}
         alt="reciping 캐릭터"
         className="absolute bottom-4 right-8 w-40"
       />
