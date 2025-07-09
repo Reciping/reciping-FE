@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve the application using a Node.js server
-FROM nginx:18-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -33,4 +33,4 @@ COPY --from=builder /app/build ./build
 EXPOSE 80
 
 # Start the server
-CMD [ "npm", "start"]
+CMD [ "npm", "start" ]
