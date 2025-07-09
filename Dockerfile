@@ -27,7 +27,7 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Copy the built assets from the builder stage
-COPY --from=builder /app/build ./build
+COPY --from=builder /app/dist ./build
 
 # Expose the port 'serve' will listen on
 EXPOSE 80
