@@ -1,6 +1,9 @@
 # Stage 1: Build the React application
 FROM node:18-alpine AS builder
 
+# ARG to receive the version number from the docker build command
+ARG VITE_APP_VERSION=unknown
+
 WORKDIR /app
 
 # Copy package.json and package-lock.json (or yarn.lock)
@@ -13,6 +16,7 @@ RUN npm install
 COPY . .
 
 # Build the application
+ENV VITE_APP_VERSION=${VITE_APP_VERSION}
 RUN npm run build
 
 # Stage 2: Serve the application using a Node.js server
