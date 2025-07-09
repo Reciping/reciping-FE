@@ -16,7 +16,7 @@ RUN npm install
 COPY . .
 
 # Build the application
-ENV VITE_APP_VERSION=${VITE_APP_VERSION}
+ENV VITE_APP_VERSION=$VITE_APP_VERSION
 RUN npm run build
 
 # Stage 2: Serve the application using a Node.js server
