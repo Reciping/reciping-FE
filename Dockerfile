@@ -15,17 +15,22 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve the application using Nginx
-FROM nginx:stable-alpine
+# Stage 2: Serve the application using a Node.js server
+FROM nginx:18-alpine
+
+WORKDIR /app
+
+# Copy package files to install production dependencies
+COPY package*.json ./
+
+# Install 'serve' and other production dependencies
+RUN npm install --omit=dev
 
 # Copy the built assets from the builder stage
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /app/build ./build
 
-# Copy the custom Nginx configuration for SPA
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
+# Expose the port 'serve' will listen on
 EXPOSE 80
 
-# Start Nginx when the container launches
-CMD ["nginx", "-g", "daemon off;"]
+# Start the server
+CMD [ "npm", "start"]
