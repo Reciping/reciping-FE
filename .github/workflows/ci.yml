@@ -3,7 +3,7 @@ name: Reciping-FE CI - Build and Push to ECR
 on:
   push:
     branches:
-      - main # main 브랜치에 푸시될 때 워크플로우를 실행합니다.
+      - develop # develop 브랜치에 푸시될 때 워크플로우를 실행합니다.
 
 env:
   AWS_REGION: ap-northeast-2
@@ -33,7 +33,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }} # 각 커밋 해시를 이미지 태그로 사용
+          IMAGE_TAG: develop-${{ github.sha }} # 각 커밋 해시를 이미지 태그로 사용
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
