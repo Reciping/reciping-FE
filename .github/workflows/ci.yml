@@ -1,4 +1,4 @@
-name: Reciping-FE CI (Develop)
+name: Reciping-FE CI & Release (Develop)
 
 on:
   push:
@@ -11,12 +11,34 @@ env:
 
 jobs:
   build-and-push:
-    name: Build and Push to ECR
+    name: Build, Tag, and Release to ECR
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          # 모든 태그와 히스토리를 가져오기 위해 fetch-depth: 0 설정
+          fetch-depth: 0
+
+      - name: Set up Git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Get latest version tag and increment
+        id: get-next-tag
+        run: |
+            latest_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
+            echo "Latest tag: $latest_tag"
+
+            if [ -z "$latest_tag" ]; then
+                latest_tag="v0.0.0"
+            fi
+
+            next_tag=$(echo $latest_tag | awk -F. -v OFS=. '{print $1, $2, $3+1}')
+            echo "Next version tag: $next_tag"
+            echo "next_tag=$next_tag" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -30,11 +52,14 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: develop-${{ github.sha }} # 각 커밋 해시를 이미지 태그로 사용
+          IMAGE_TAG: ${{ steps.get-next-tag.outputs.next_tag }}
         run: |
-          # Pass the version as a build argument to Docker
           docker build --build-arg VITE_APP_VERSION=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Create and push new Git tag
+        run: |
+          git tag ${{ steps.get-next-tag.outputs.next_tag }}
+          git push origin ${{ steps.get-next-tag.outputs.next_tag }}
