@@ -33,7 +33,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: develop-${{ github.ref_name }}
+          IMAGE_TAG: develop-${{ github.sha }} # 각 커밋 해시를 이미지 태그로 사용
         run: |
           # Pass the version as a build argument to Docker
           docker build --build-arg VITE_APP_VERSION=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
