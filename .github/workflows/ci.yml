@@ -10,7 +10,7 @@ env:
   ECR_REPOSITORY: reciping-fe-service
 
 jobs:
-  build-and-push:
+  build-and-release:
     name: Build, Tag, and Release to ECR
     runs-on: ubuntu-latest
 
@@ -29,16 +29,17 @@ jobs:
       - name: Get latest version tag and increment
         id: get-next-tag
         run: |
-            latest_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
-            echo "Latest tag: $latest_tag"
+          latest_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
+          echo "Latest tag: $latest_tag"
 
-            if [ -z "$latest_tag" ]; then
-                latest_tag="v0.0.0"
-            fi
+          if [ -z "$latest_tag" ]; then
+            latest_tag="v0.0.0"
+          fi
 
-            next_tag=$(echo $latest_tag | awk -F. -v OFS=. '{print $1, $2, $3+1}')
-            echo "Next version tag: $next_tag"
-            echo "next_tag=$next_tag" >> "$GITHUB_OUTPUT"
+          # awk를 사용하여 패치 버전만 1 증가시킵니다. (예: v1.2.3 -> v1.2.4)
+          next_tag=$(echo $latest_tag | awk -F. -v OFS=. '{print $1, $2, $3+1}')
+          echo "Next version tag: $next_tag"
+          echo "next_tag=$next_tag" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
