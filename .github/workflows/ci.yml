@@ -1,9 +1,7 @@
-name: Reciping-FE CI - Build and Push to ECR
+name: Reciping-FE CI (Develop)
 
 on:
   push:
-    tags:
-      - "v*.*.*" # v1.0.0 같은 태그를 푸시하면 실행
     branches:
       - develop # develop 브랜치에 푸시될 때 워크플로우를 실행합니다.
 
@@ -35,7 +33,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.ref_name }} # v1.0.0 같은 태그
+          IMAGE_TAG: develop-${{ github.sha }} # 각 커밋 해시를 이미지 태그로 사용
         run: |
           # Pass the version as a build argument to Docker
           docker build --build-arg VITE_APP_VERSION=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
