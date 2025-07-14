@@ -1,39 +1,52 @@
-name: Reciping-FE Release (Main)
+name: Reciping-FE Deploy Trigger (main)
 
 on:
   push:
-    tags:
-      - 'v*.*.*' # v1.0.0, v1.2.3 같은 버전 태그가 푸시될 때 실행
-
-env:
-  AWS_REGION: ap-northeast-2
-  ECR_REPOSITORY: reciping-fe-service
+    branches:
+      - main # main 브랜치에 푸시/머지될 때 배포를 트리거합니다.
 
 jobs:
-  build-and-push-release:
-    name: Build and Push Release Image to ECR
+  trigger-deploy:
+    name: Update K8s Manifests to Trigger Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout App Repository
         uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          fetch-depth: 0 # Git 태그 기록을 모두 가져오기 위해 필요합니다.
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+      - name: Get latest version tag
+        id: get-tag
+        run: |
+          # 이 레포지토리의 가장 최신 버전 태그를 찾습니다.
+          latest_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
+          if [ -z "$latest_tag" ]; then
+            echo "Error: No version tag found. A versioned image from 'develop' branch must exist first."
+            exit 1
+          fi
+          echo "Found latest tag to deploy: $latest_tag"
+          echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
 
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.ref_name }} # Git 태그 이름 (e.g., v1.0.1)을 이미지 태그로 사용
-        run: | 
-          # Pass the version as a build argument to Docker
-          docker build --build-arg VITE_APP_VERSION=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Clone Kubernetes manifests repository
+        uses: actions/checkout@v3
+        with:
+          repository: Reciping/reciping-k8s-resources # Helm 차트 레포지토리 주소
+          path: ./reciping-k8s-resources
+          token: ${{ secrets.HELM_REPO_PAT }} # 다른 레포지토리에 쓰기 위한 PAT
+
+      - name: Update image tag in Helm values
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+          yq e '.image.tag = "${{ steps.get-tag.outputs.tag }}"' -i ./reciping-k8s-resources/reciping-fe/values.yaml
+
+      - name: Commit and push to manifests repository
+        run: |
+          cd ./reciping-k8s-resources
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "Deploy reciping-fe to version ${{ steps.get-tag.outputs.tag }}"
+            git push
+          fi
